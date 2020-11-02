@@ -1,6 +1,0 @@
-config = {'user': 'earglass',
-    'password': 'earglass2020',
-    'host': 'sebastianrcnt.iptime.org',
-    'port': 3306,
-    'database': 'earglass'
-}
