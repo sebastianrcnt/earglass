@@ -9,7 +9,7 @@ CREATE PROCEDURE UpdateParticipationStatus
              IN     newComment          text)
 
 BEGIN
-    IF (newStatus = 'accepted' or newStatus = 'rejected') THEN
+    IF (newStatus = 'ongoing' or newStatus = 'reject') THEN
         -- If exists participation row
         IF EXISTS 
         (SELECT * FROM PARTICIPATION

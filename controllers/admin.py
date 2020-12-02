@@ -7,6 +7,8 @@ from database.connection import queryall, queryone
 controller = Blueprint("admin", __name__)
 
 # /
+
+
 @controller.route("/", methods=["GET"])
 def get_admin_page():
     tasks = services.admin.get_all_tasks()
@@ -15,7 +17,8 @@ def get_admin_page():
     submitters = queryall("SELECT * FROM USER WHERE FK_UserTypeName = '제출자'")
     for submitter in submitters:
         user_index = submitter['idUSER']
-        participating_tasks = queryall("SELECT FK_TaskName FROM PARTICIPATION WHERE FK_idUSER=%s AND Status = 'ongoing'", (user_index, ))
+        participating_tasks = queryall(
+            "SELECT FK_TaskName FROM PARTICIPATION WHERE FK_idUSER=%s AND Status = 'ongoing'", (user_index, ))
         submitter['Tasks'] = participating_tasks
 
     # 평가자들이 참여하는 태스크 목록
@@ -23,7 +26,7 @@ def get_admin_page():
     for estimator in estimators:
         user_index = estimator['idUSER']
         participating_tasks = queryall("SELECT P.TaskName FROM EVALUATION AS E  \
-            LEFT JOIN PARSING_DSF AS P ON E.FK_idPARSING_DSF = P.idPARSING_DSF WHERE E.FK_idEstimator=%s AND E.Status = 'ongoing' " , (user_index, ))
+            LEFT JOIN PARSING_DSF AS P ON E.FK_idPARSING_DSF = P.idPARSING_DSF WHERE E.FK_idEstimator=%s AND E.Status = 'ongoing' ", (user_index, ))
         estimator['Tasks'] = participating_tasks
 
     users = submitters + estimators
@@ -31,42 +34,79 @@ def get_admin_page():
 
 # TASK
 # /task
+
+
 @controller.route("/add_task", methods=["GET"])
 def get_add_task_page():
     '''태스크 추가 페이지'''
     return render_template("admin/add_task.html")
 
+
 @controller.route("/tasks/<task_name>", methods=["GET"])
 def get_task_page(task_name):
-    '''태스크 상세/수정 페이지'''
+    '''태스크 상세페이지'''
     task = services.admin.task_info(task_name)
     origin_data_types = services.admin.task_info_origin_data_type(task_name)
+    print(origin_data_types)
     task_participation = services.admin.show_task_participation_list(task_name)
 
     return render_template("admin/task_info.html", task=task, origin_data_types=origin_data_types, task_participation=task_participation)
 
+
+@controller.route("/tasks/agreement", methods=["GET"])
+def confirm_agreement():
+    """
+    태스크 참여 신청 처리
+    """
+    # TODO 관리자인지 확인 필요
+
+    print(request.args)
+    user_id = request.args.get('user_id', False)
+    user_index = services.users.get_user_by_id(user_id)["idUSER"]
+    task_name = request.args.get('task_name', False)
+    agree = request.args.get('agree', "")
+    agree = bool(agree)
+    comment=""
+
+    print(user_id, user_index, task_name, agree, "asdas")
+
+    if not (user_id and task_name and agree):
+        flash("잘못된 승인절차입니다.")
+        return redirect(f"/admin/tasks/{task_name}")
+    
+    if agree:
+        new_status = "ongoing"
+        services.admin.update_participation_status(task_name, user_index, new_status, comment)
+        flash("승인 되었습니다.")
+        return redirect(f"/admin/tasks/{task_name}")
+    else:
+        new_status = "reject"
+        services.admin.update_participation_status(task_name, user_index, new_status, comment)
+        flash("거절 되었습니다.")
+        return redirect(f"/admin/tasks/{task_name}")
+
+
 @controller.route("/tasks", methods=["POST"])
 def add_task():
     '''태스크 추가 엔드포인트'''
-    task_name = request.form.get("task_name")
-    description = request.form.get("description")
-    min_period = request.form.get("min_period")
-    status = request.form.get("status")
-    task_data_table_name = request.form.get("task_data_table_name")
-    deadline = request.form.get("deadline")
-    max_duplicated_row_ratio = request.form.get("max_duplicated_row_ratio")
-    max_null_ratio_per_column = request.form.get("max_null_ratio_per_column")
-    pass_criteria = request.form.get("pass_criteria")
+    js = request.get_json()
+    print(js)
 
-    services.admin.add_task(task_name, description, min_period, status, task_data_table_name, deadline, max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria)
+    # js는 이렇게 생겼음
+    # {'taskName': '', 'description': '', 'minPeriod': '', 'tableName': '', 'defaultFields': ['defaultField1', 'defaultField2'], 'originDataTypes': {'dataType1': { 'subField1': 'defaultField1', 'subField2': 'defaultField2'}, 'dataType2': {'subField3': 'defaultField1', 'subField4': 'defaultField2'}}, 'maxTupleRatio': 0, 'maxNullRatioPerColumn': 0, 'criteriaDescription': ''}
+
+
+    
     # TODO add task
-    return "Uncompleted"
+    return "incomplete"
+
 
 @controller.route("/tasks/<task_name>", methods=["POST"])
 def edit_task(task_name):
     '''태스크 수정 엔드포인트'''
     # TODO edit task
     return "Uncompleted"
+
 
 @controller.route("/tasks", methods=["DELETE"])
 def delete_task():
@@ -87,9 +127,14 @@ def get_admin_submitter_page(submitter_index):
 
     return render_template("admin/submitter.html", user=user, participations=participations)
 
+
 @controller.route("/estimators/<estimator_index>", methods=["GET"])
 def get_admin_estimator_page(estimator_index):
     # TODO estimator detail page
+    # user = services.users.get_user_by_index(estimator_index)
+    # participations = services.submitter.participating_tasklist(submitter_index)
+    # if not user:
+    #     flash("해당 id에 대한 유저가 존재하지 않습니다")
+    #     return redirect("/admin/")
     return render_template("admin/estimator.html")
 # Create Read Update Delete(CRUD)
-

@@ -13,23 +13,34 @@
     <!-- TODO template task info -->
     <div class="form-group">
         <label class="form-group col-md-2">TaskName</label>
-        <input placeholder="name" type="text" class="form-group col-md-2" disabled>
+        <input placeholder="{{ task['TaskName'] }}" type="text" class="form-group col-md-2" readonly>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">Description</label>
-        <textarea style="margin-left:15px;"cols="30" rows="10" class="form-control" disabled>Description</textarea>
+        <textarea style="margin-left:15px;"cols="30" rows="10" class="form-control" readonly>{{ task['Description'] }}</textarea>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">최소 업로드 주기</label>
-        <input placeholder="2" type="text" class="form-group col-md-2" disabled> week
+        <input placeholder="{{ task['MinPeriod'] }}" type="text" class="form-group col-md-2" readonly> week
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">테이블 이름</label>
-        <input placeholder="aaaaa" type="text" class="form-group col-md-2" disabled>
+        <input placeholder="{{ task['TaskDataTableName'] }}" type="text" class="form-group col-md-2" readonly>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">스키마</label>
-        <input placeholder="aaaaa" type="text" class="form-group col-md-2" disabled>
+        {% for schema in task['TaskDataTableSchemaInfo'].split(',') %}
+        <input placeholder="{{ schema[8:] }}" type="text" class="form-group col-md-2" readonly>
+        {% endfor %}
+        <!-- <input placeholder="{{ task['TaskDataTableSchemaInfo'] }}" type="text" class="form-group col-md-2" readonly><input placeholder="{{ task['TaskDataTableSchemaInfo'] }}" type="text" class="form-group col-md-2" readonly> -->
+    </div>
+    <div class="form-group">
+        <label class="form-group col-md-2">최대 허용 중복 컬럼 비율</label>
+        <input placeholder="{{ task['MaxDuplicatedRowRatio'] }}" type="text" class="form-group col-md-2" readonly>
+    </div>
+    <div class="form-group">
+        <label class="form-group col-md-2">최대 허용 Null 컬럼 비율</label>
+        <input placeholder="{{ task['MaxNullRatioPerColumn'] }}" type="text" class="form-group col-md-2" readonly>
     </div>
 </br>
 <h5 style="margin-top: 20px;"><b>원본 데이터 타입</b></h5>
@@ -79,10 +90,16 @@
                     {{ participation['UserScore'] }}
                 </td>
                 <td>
-                    <button id="task_participation" name="approve" type="submit" class="btn btn-primary">승인</button>
+                    {% if participation['Status'] == "waiting" %}
+                    <a id="task_participation" href="/admin/tasks/agreement?user_id={{ participation['Id'] }}&task_name={{ task['TaskName'] }}&agree=True" name="approve" type="submit" class="btn btn-primary">승인</a>
+                    {% elif participation['Status'] == "ongoing" %}
+                    <a class="btn btn-primary">참가중</a>
+                    {% endif %}
                 </td>
                 <td>
-                    <button id="task_participation" name="reject" type="submit" class="btn btn-primary">거절</button>
+                    {% if participation['Status'] == "waiting" %}
+                    <a id="task_participation" href="/admin/tasks/agreement?user_id={{ participation['Id'] }}&task_name={{ task['TaskName'] }}&agree=" name="reject" type="submit" class="btn btn-primary">거절</a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

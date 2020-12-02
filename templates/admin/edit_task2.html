@@ -2,14 +2,17 @@
 
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 
-<h1>ADD Task</h1>
+<h1>Task Detail</h1>
+<p> Task: {{ task }}</p>
+<p> ODT: {{ origin_data_types }}</p>
+<p> Participation: {{ task_participation }}</p>
 <br />
 <br />
 <form id="app" @submit.prevent="submit()">
     <!-- TODO add task handling -->
     <div class="form-group">
         <label>태스크 이름</label>
-        <input type="text" v-model="taskName" class="form-control" required />
+        <input type="text" v-model="taskName" class="form-control" required/>
     </div>
     <div class="form-group">
         <label>설명</label>
@@ -268,25 +271,19 @@
             },
             deleteSubField(dataTypeName, subField) {
                 Vue.delete(this.originDataTypes[dataTypeName], subField);
-                this.$forceUpdate();
             },
             validateSchema() {
                 for (let dataTypeName in this.originDataTypes) {
                     const originDataType = this.originDataTypes[dataTypeName];
                     const defaultFields = Object.values(originDataType);
-                    const defaultFieldsSet = new Set(Object.values(originDataType));
-                    const defaultFieldsSet2 = new Set(this.defaultFields); // user
+                    for (let defaultField of defaultFields) {
+                        if (!defaultFields.includes(defaultField)) {
+                            return false;
+                        }
+                    }
                 }
                 return true;
             },
-            /*
-            defaultFields: [], // ["defaultField1", "defaultField2"],
-            originDataTypes: {
-                // dataTypeName: { subField1: defaultField1, subField2L: defaultField2}
-                // dataType1: { subField1: "defaultField1", subField2: "defaultField2" },
-                // dataType2: { subField3: "defaultField1", subField4: "defaultField2" },
-            },
-            */
             print(something) {
                 console.log(something);
             },

@@ -1,7 +1,7 @@
 {% block body %}
-<p style="text-align: right;">
+<!-- <p style="text-align: right;">
   <input id="search-task" type="text" placeholder="🔎 태스크 이름으로 검색">
-</p>
+</p> -->
 <table class="table table-striped table-bordered" id="target-table-1">
     <thead>
         <th>Index</th>
@@ -67,6 +67,11 @@
     }
 </style>
 <script>
+  $(document).ready(function() {
+      $("#target-table-1").DataTable();
+  })
+</script>
+<!-- <script>
 console.log("start")
 $(document).ready(() => {
   $("#search-task").on('change', (event) => {
@@ -88,5 +93,5 @@ $(document).ready(() => {
     }
   })
 })
-</script>
+</script> -->
 {% endblock %}
