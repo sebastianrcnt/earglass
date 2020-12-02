@@ -130,3 +130,26 @@ def edit():
     user = services.users.get_user_by_id(user_id)
     print(user)
     return render_template("auth/modify_my.html",user=user)
+    
+@controller.route("/my/withdrawal", methods=["GET"])
+def get_withdrawal_page():
+    user_id = request.cookies.get("user_id")
+    user = services.users.get_user_by_id(user_id)
+    user_pw = user['Password']
+
+    return render_template("auth/withdrawal.html", user=user)
+
+@controller.route("/withdrawal", methods=["POST"])
+def withdrawal():
+    user_id = request.cookies.get("user_id")
+    user = services.users.get_user_by_id(user_id)
+    user_pw = user['Password']
+    password = request.form.get("password")
+    if user_pw==password:
+        log = services.users.withdrawal(user_id, user_pw)
+        print(log)
+        flash("성공적으로 탈퇴되었습니다")
+        return redirect("/")
+    else:
+        flash("비밀번호가 틀렸습니다")
+    return render_template("/auth/withdrawal.html",user=user)
