@@ -152,29 +152,11 @@
             subFieldBuffer: {},
             subFieldMapBuffer: {},
         },
-        created() {
-            const formData = sessionStorage.getItem("add-task-form");
-            if (formData) {
-                formData = JSON.parse(formData);
-                const {
-                    taskName,
-                    description,
-                    minPeriod,
-                    tableName,
-                    defaultFields,
-                    originDataTypes,
-                    maxTupleRatio,
-                    maxNullRatioPerColumn,
-                    criteriaDescription
-                } = formData;
-
-                this = { ...this, ...formData };
-            }
-        },
+        created() {},
         methods: {
             submit() {
                 const data = this.pack();
-                console.log(data);
+                console.log(JSON.stringify(data, null, 2));
             },
             // Senders
             pack() {
