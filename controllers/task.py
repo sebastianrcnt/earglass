@@ -17,4 +17,8 @@ def task_detail():
     my_submit = services.submitter.my_submission_list(task_name, user_index)
 
     odsf_type = services.submitter.all_origin_data_type(task_name)
+
+    # sort_by_origin_data_type=services.submitter.sort_by_origin_data_type(task_name,user_index,)
+
+    print(odsf_type)
     return render_template("task/task_detail.html", opt=tab, task_info=task_info, leaderboard=leaderboard, my_submit=my_submit, odsf_type=odsf_type)

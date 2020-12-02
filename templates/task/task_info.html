@@ -15,7 +15,11 @@
         </tr>
         <tr>
             <th>원본데이터</th>
-            <td>{{task_info.get("TaskDataTableSchemaInfo", "None")}}</td>
+            <td>
+            {% for type in odsf_type%}
+            {{type["DataTypeName"]}}
+            {% endfor %}
+            </td>
         </tr>
         <tr>
             <th>최대 중복 튜플비율</th>
