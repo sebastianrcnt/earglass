@@ -47,7 +47,7 @@ def edit_user():
     # [{'InsertNewUserSuccessMessage': 'Insert new User successfully'}]
     try:
         # try sign up
-        log = services.users.modify_user_info(data["id"], data["password"], data["name"], data["birth"], data["phonenumber"], data["address"])
+        log = services.users.modify_user_info(data["id"],data["userscore"], data["password"], data["name"], data["birth"], data["phonenumber"], data["address"])
         print(log)
         log_type = log[0].keys()[0]
         log_value = log[0].items()[0]

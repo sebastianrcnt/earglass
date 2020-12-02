@@ -39,10 +39,11 @@ def get_add_task_page():
 @controller.route("/tasks/<task_name>", methods=["GET"])
 def get_task_page(task_name):
     '''태스크 상세/수정 페이지'''
-    print(task_name)
     task = services.admin.task_info(task_name)
     origin_data_types = services.admin.task_info_origin_data_type(task_name)
-    return render_template("admin/task_info.html", task=task, origin_data_types=origin_data_types)
+    task_participation = services.admin.show_task_participation_list(task_name)
+
+    return render_template("admin/task_info.html", task=task, origin_data_types=origin_data_types, task_participation=task_participation)
 
 @controller.route("/tasks", methods=["POST"])
 def add_task():

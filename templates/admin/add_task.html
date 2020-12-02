@@ -4,8 +4,8 @@
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 
 <h1>ADD Task</h1>
-</br>
-</br>
+<br />
+<br />
 <form id="app">
     <!-- TODO add task handling -->
     <div class="form-group">
@@ -110,7 +110,7 @@
         <textarea style="margin-left: 15px;" cols="30" rows="10" class="form-control" name="pass_criteria_description"
             placeholder="description"></textarea>
     </div>
-    </br>
+    <br />
     <button type="submit" class="btn btn-primary float-right mb-4">Task 생성</button>
 </form>
 <script>
@@ -133,7 +133,31 @@
             subFieldBuffer: {},
             subFieldMapBuffer: {}
         },
+        created() {
+            const formData = sessionStorage.getItem("add-task-form");
+            if (formData) {
+                formData = JSON.parse(formData);
+                const { taskName, description, minPeriod, tableName, defaultFields, originDataTypes } = formData;
+                this.taskName = taskName;
+                this.description = description;
+                this.minPeriod = minPeriod
+            }
+        },
         methods: {
+            // Senders
+            pack() {
+                const { taskName, description, minPeriod, tableName, defaultFields, originDataTypes } = this.data;
+                const packed = {
+                    taskName,
+                    description,
+                    minPeriod,
+                    tableName,
+                    defaultFields,
+                    originDataTypes
+                }
+                sessionStorage.setItem("add-task-form", JSON.stringify(packed));
+                return packed;
+            },
             getUsedDefaultFields() {
                 let usedDefaultFields = [];
                 for (let dataTypeName in this.originDataTypes) {
