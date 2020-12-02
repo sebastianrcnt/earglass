@@ -14,7 +14,7 @@
             <td>{{task_info.get("MinPeriod", "None")}}</td>
         </tr>
         <tr>
-            <th>원본데이터</th>
+            <th>원본데이터타입명</th>
             <td>
             {% for type in odsf_type%}
             {{type["DataTypeName"]}}
@@ -22,11 +22,11 @@
             </td>
         </tr>
         <tr>
-            <th>최대 중복 튜플비율</th>
+            <th>최대 중복 튜플비율<font style="color: grey">(%)</font></th>
             <td>{{task_info.get("MaxDuplicatedRowRatio", "None")}}</td>
         </tr>
         <tr>
-            <th>최대 column별 null 비율</th>
+            <th>최대 column별 null 비율<font style="color: grey">(%)</font></th>
             <td>{{task_info.get("MaxNullRatioPerColumn", "None")}}</td>
         </tr>
         <tr>

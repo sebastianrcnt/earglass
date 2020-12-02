@@ -10,9 +10,13 @@ def get_user():
     # 쿠키가 있다 -> 로그인된 유저라면
     user_id = request.cookies.get("user_id")
     user = services.users.get_user_by_id(user_id)
+    print(user['FK_UserTypeName'])
 
     if user:  # 로그인 된 경우
-        return render_template("auth/my.html", user=user)
+        if user['FK_UserTypeName'] == "관리자" :
+            return render_template("auth/admin_my.html", user=user)
+        else :
+            return render_template("auth/my.html", user=user)
     else:
         flash("로그인되지 않았습니다")
         return redirect("/")
@@ -47,14 +51,11 @@ def edit_user():
     # [{'InsertNewUserSuccessMessage': 'Insert new User successfully'}]
     try:
         log = services.users.modify_user_info(user_id, data["password"], data["name"], data["birth"], data["phonenumber"], data["address"])
-        print(log)
         log_type = log[0].keys()[0]
         log_value = log[0].items()[0]
-        print(log_type, log_value)
     except:
         pass
-    # services.users.modify_user_info(user_id, data["password"], data["name"], data["birth"], data["phonenumber"], data["address"])
-    return redirect("/users/")
+    return redirect("/")
 
 
 # Auth Stuff
@@ -129,6 +130,36 @@ def edit():
     user = services.users.get_user_by_id(user_id)
     print(user)
     return render_template("auth/modify_my.html",user=user)
+
+@controller.route("/admin_edit", methods=["GET"])
+def get_admin_edit_page():
+    user_id = request.cookies.get("user_id")
+    user = services.users.get_user_by_id(user_id)
+    print(user)
+    return render_template("auth/modify_admin.html",user=user)
+
+@controller.route("/admin_edit", methods=["POST"])
+def admin_edit():
+    user_id = request.cookies.get("user_id")
+    user = services.users.get_user_by_id(user_id)
+
+    get_data = request.form
+    password = get_data['password']
+    name = user['Name']
+    birth = user['BirthDate']
+    phonenumber = user['PhoneNum']
+    address = user['Address']
+
+    print(user)
+    print(user_id, password, name, birth, phonenumber, address)
+
+    try :
+        log = services.users.modify_user_info(user_id, password, name, birth, phonenumber, address)
+        print(log)
+    except:
+        pass
+
+    return redirect("/users/")
     
 @controller.route("/my/withdrawal", methods=["GET"])
 def get_withdrawal_page():
