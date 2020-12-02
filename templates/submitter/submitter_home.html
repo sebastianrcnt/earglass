@@ -42,14 +42,14 @@
                 <td class="text-center">
                     {% if task["Status"] == "ongoing" %}
                     <button type="button" class="btn btn-primary mr-2 " disabled>참여중</button>
+                    <a type="button" class="btn btn-primary mr-2"
+                        href='/task/detail?task_name={{ task["TaskName"] }}'>상세</a>
                     {% elif task["Status"] == "waiting" %}
                     <button type="button" class="btn btn-primary mr-2 " disabled>승인대기중</button>
                     {% else %}
                     <a type="button" class="btn btn-primary mr-2"
                         href='/submitter/agreement?task_name={{ task["TaskName"] }}'>참여신청</a>
                     {% endif %}
-                    <a type="button" class="btn btn-primary mr-2"
-                        href='/task/detail?task_name={{ task["TaskName"] }}'>상세</a>
                 </td>
             </tr>
 

@@ -1,0 +1,17 @@
+{% extends "./partials/layout.html" %}
+{% block body %}
+
+<h1 class="d-inline-block">회원 탈퇴</h1>
+<br><br><br><br><br>
+<form method="POST" action="/users/withdrawal">
+    <div class="form-group">
+        <label class="form-group col-md-2">Id</label>
+        <input value="{{ user['Id'] }}" type="text" class="form-group col-md-2" required name="id" readonly>
+    </div>
+    <div class="form-group">
+        <label class="form-group col-md-2">비밀번호</label>
+        <input value="" type="text" class="form-group col-md-2" required name="password">
+    </div>
+    <button type="submit" class="btn btn-primary">회원탈퇴</button>
+</form>
+    {% endblock %}
