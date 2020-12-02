@@ -13,7 +13,7 @@ def validate_odsf_schema(file, odsf_type_id):
     """
     Check validate of file schema
     """
-    odsf = read_csv_to_df(file)
+    odsf = read_odsf_to_df(file)
     
     file_schema = set(odsf.columns)
     odsf_type = services.submitter.odsf_type_schema_info(odsf_type_id)
@@ -31,7 +31,7 @@ def validate_odsf_data(file, MNR, MDR):
     input : filename is odsf, MaxNullRatioPerColumn, MaxDuplicatedRowRatio
     output : boolean
     """
-    odsf = read_csv_to_df(file)
+    odsf = read_odsf_to_df(file)
     
     # statistic analysis
     null_info = null_count(odsf)

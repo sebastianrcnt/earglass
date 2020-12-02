@@ -5,7 +5,7 @@
 <h1>ADD Task</h1>
 <br />
 <br />
-<form id="app" @submit.prevent="submit()">
+<form id="app" @submit.prevent="submit()" action="/admin/tasks" method="POST">
     <!-- TODO add task handling -->
     <div class="form-group">
         <label>태스크 이름</label>
@@ -166,6 +166,7 @@
                     console.log(JSON.stringify(data, null, 2));
                     axios.post('/admin/tasks', data).then((res) => {
                         console.log(res.data)
+                        
                     }).catch((err) => {
                         console.log(err);
                     })

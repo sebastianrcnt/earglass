@@ -7,13 +7,25 @@
 {% block body %}
 <h1>Task Info</h1>
 <br><br>
+<style>
+    input::placeholder {color:black;}
+    input::-ms-input-placeholder {color: black;}
+    input::-webkit-input-placeholder {color:black;}    
+    input::-moz-placeholder {color:black} 
+
+    textarea::placeholder {color:black;}
+    textarea::-ms-input-placeholder {color: black;}
+    textarea::-webkit-input-placeholder {color:black;}    
+    textarea::-moz-placeholder {color:black} 
+</style>
+
 <div class="form-group">
     <label class="form-group col-md-2">Task Name</label>
     <input placeholder="{{tasks['TaskName']}}" type="text" class="form-group col-md-2" disabled>
 </div>
 <div class="form-group">
     <label class="form-group col-md-2">Description</label>
-    <textarea style="margin-left:15px" cols="10" rows="5" placeholder="{{tasks['Description']}}" type="text" class="form-control" disabled></textarea>
+    <textarea cols="30" rows="10" placeholder="{{tasks['Description']}}" type="text" class="form-group col-md-8" disabled></textarea>
 </div>
 
 <div class="form-group">

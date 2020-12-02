@@ -29,7 +29,7 @@ def system_score(file):
     input : filename is odsf
     output : system score
     """
-    odsf = read_csv_to_df(file)
+    odsf = read_odsf_to_df(file)
     
     score_info = dict()
     # statistic analysis

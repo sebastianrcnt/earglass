@@ -68,8 +68,6 @@ def confirm_agreement():
     agree = bool(agree)
     comment=""
 
-    print(user_id, user_index, task_name, agree, "asdas")
-
     if not (user_id and task_name and agree):
         flash("잘못된 승인절차입니다.")
         return redirect(f"/admin/tasks/{task_name}")
@@ -121,7 +119,7 @@ def add_task():
     description = js["description"]
     min_period = js["minPeriod"]
     task_data_table_name = js["tableName"]
-    defaultFields = js["defaultFields"]
+    defaultFields = ",".join(js["defaultFields"])
     originDataTypes = js["originDataTypes"]
     max_duplicated_row_ratio = js["maxTupleRatio"]
     max_null_ratio_per_column = js["maxNullRatioPerColumn"]
@@ -129,18 +127,27 @@ def add_task():
 
     add_task(task_name, description, min_period, status, task_data_table_name, max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria, defaultFields)
 
+    for data_type_name, columns in originDataTypes.items():
+        schema_info = list(columns.keys())
+        schema_info = ",".join(schema_info)
+        mapping_info = str(columns)
 
-
+        services.admin.add_origin_data_type(task_name, data_type_name, schema_info, mapping_info)
     
+    # save task data table
+    task_data_df = pd.DataFrame(columns=js["defaultFields"])
+    services.utils.save_df("table_data", task_data_table_name, task_data_df)
+
     # TODO add task
-    return "incomplete"
+    redirect_url = f"/admin/tasks/{task_name}"
+    return redirect(redirect_url)
 
 
 @controller.route("/tasks/<task_name>", methods=["POST"])
 def edit_task(task_name):
     '''태스크 수정 엔드포인트'''
     # TODO edit task
-    return "Uncompleted"
+    return "/"
 
 
 @controller.route("/tasks", methods=["DELETE"])
@@ -172,5 +179,10 @@ def get_admin_estimator_page(estimator_index):
     if not user:
         flash("해당 id에 대한 유저가 존재하지 않습니다")
         return redirect("/admin/")
+    
+    # preprocessing
+    for task in tasks:
+        task["ParsingFile"] = task["ParsingFile"].split("/")[-1]
+
     return render_template("admin/estimator.html",user=user,tasks=tasks)
 # Create Read Update Delete(CRUD)

@@ -12,7 +12,8 @@ CREATE PROCEDURE InsertNewTask
              IN newTaskDataTableName    varchar(100),
              IN newMaxDuplicatedRowRatio    Float,
              IN newMaxNullRatioPerColumn    Float,
-             IN newPassCriteria             text)
+             IN newPassCriteria             text,
+             IN newTaskDataTableSchemaInfo  text)
 
 checkdupli:BEGIN
 
@@ -48,11 +49,11 @@ checkdupli:BEGIN
         -- Insert new Customer data.
 	    INSERT INTO TASK (TaskName, Description, MinPeriod, Status,
         TaskDataTableName, FK_idManager, MaxDuplicatedRowRatio,
-        MaxNullRatioPerColumn, PassCriteria)
+        MaxNullRatioPerColumn, PassCriteria, TaskDataTableSchemaInfo)
            VALUES(newTaskName, newDescription,
 		  		  newMinPeriod, newStatus, newTaskDataTableName,
                     varIdManager, newMaxDuplicatedRowRatio,
-                    newMaxNullRatioPerColumn, newPassCriteria);
+                    newMaxNullRatioPerColumn, newPassCriteria, newTaskDataTableSchemaInfo);
 
         SELECT 'Insert new task successfully'
             AS InsertNewTaskSuccessMessage;

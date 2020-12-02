@@ -15,7 +15,7 @@ def to_pdsf(file):
     input : filename is odsf
     output : pdsf locate
     """
-    odsf = read_csv_to_df(file)
+    odsf = read_odsf_to_df(file)
         
     # statistic analysis
     statistic_data = null_count(odsf)
@@ -43,7 +43,9 @@ def to_pdsf(file):
     # combine dataframe to pdsf
     pdsf = pd.concat([pdsf_statistic_df, n_df, h_df, odsf]).reset_index(drop=True)
     
-    pdsf_filename = os.path.join(UPLOAD_DIR + "/pdsf/", file)
-    pdsf.to_csv(pdsf_filename, index=False, encoding='utf-8')
+    save_df("pdsf", file, pdsf)
+    # pdsf_filename = os.path.join(UPLOAD_DIR + "/pdsf/", file)
+    # pdsf.to_csv(pdsf_filename, index=False, encoding='utf-8')
     
     return pdsf_filename
+

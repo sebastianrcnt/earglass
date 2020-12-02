@@ -91,5 +91,9 @@ def next_submit_num(user_index, task_name):
     WHERE SubmitterID = %s and TaskName = %s"
     return queryone(sql, (user_index, task_name,))
 
-# def my_submit_file_num(user_id):
-#     '''
+def my_submit_file_num(user_index, task_name):
+    '''현재 submit num 반환'''
+    sql = "SELECT MAX(SubmitNum) AS TotalSubmitNum\
+    FROM PARSING_DSF\
+    WHERE SubmitterID = %s and TaskName = %s"
+    return queryone(sql, (user_index, task_name,))
