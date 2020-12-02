@@ -1,6 +1,18 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
-
+<style media="screen">
+    .wrap{
+      width: 1000px;
+      height: 500px;
+      overflow-x: scroll;
+      white-space:nowrap;
+      overflow: auto;
+    }
+    .wrap img{
+        width:300px;
+        height:100%;
+    }
+</style>
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 
 <h1 class="d-inline-block">Estimator Info</h1>
@@ -11,6 +23,10 @@
     <div class="form-group">
         <label class="form-group col-md-2">idUSER</label>
         <input placeholder="{{ user['idUSER'] }}" type="text" class="form-group col-md-2" disabled>
+    </div>
+    <div class="form-group">
+        <label class="form-group col-md-2">Id</label>
+        <input placeholder="gyusika" type="text" class="form-group col-md-2" disabled value="{{ user['Id'] }}">
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">역할</label>
@@ -33,9 +49,50 @@
         <input placeholder="{{ user['Address'] }}" type="text" class="form-group col-md-2" disabled>
     </div>
     </br>
-    <h5><b>평가완료된 파일 목록</b></h5>
+
+
+    
     </br>
-    <table style="margin-left: 5px; margin-bottom: 20px;" class="table table-striped table-bordered" id="target-table">
+
+    <!-- ------------------------------->
+    <div style="margin-left: 5px; margin-bottom: 20px;"     class="container screen wrap ">
+        <h3> 평가 완료 목록</h3>
+        <br><br>
+        <table class="table table-striped table-bordered" id="target-table">
+            <thead>
+                <th>Index</th>
+                <th>태스크명</th>
+                <th>제출자 ID</th>
+                <th>평가점수</th>
+                <th>P/NP</th>
+                <th>평가날짜</th>
+                <th>파일명</th>
+            </thead>
+            <tbody>
+                {%for task in tasks%}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        <a href="/admin/tasks/{{ task['TaskName'] }}">{{ task['TaskName'] }}</a>
+                    </td>
+                    <td>{{task["SubmitterID"]}}</td>
+                    <td>{{task["Score"]}}</td>
+                    <td>{{task["Pass"]}}</td>
+                    <td>{{task["EndTime"]}}</td>
+                    <td>{{task["ParsingFile"]}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</form>
+
+
+
+
+
+    <!-- <table style="margin-left: 5px; margin-bottom: 20px;" class="table table-striped table-bordered" id="target-table">
+        
         <thead>
             <th>Index</th>
             <th>데스크명</th>
@@ -76,10 +133,9 @@
                 </td>
             </tr>
         </tbody>
-    </table>
+    </table> -->
     </br>
     <!-- 참여현황으로 sort되도록 jquery 적용해야함 -->
-</form>
 </br>
 </br>
 </br>

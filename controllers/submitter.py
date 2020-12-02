@@ -117,7 +117,7 @@ def submit_task():
     system_score = system.statistic.system_score(fname)["sys_score"]
     system_score = float(system_score)
     
-    services.submitter.submit_pdsf(task_name, pdsf_file, origin_data_type_id, user_index, period, round, origin_dsf_id, system_score)
+    services.submitter.submit_pdsf(task_name, pdsf_file, origin_data_type_id, user_index, period, origin_dsf_id, round, system_score)
     flash("제출이 완료되었습니다.")
 
     return redirect("/")

@@ -15,6 +15,12 @@
     <label class="form-group col-md-2">Description</label>
     <textarea style="margin-left:15px" cols="30" rows="10" placeholder="{{tasks['Description']}}" type="text" class="form-control" disabled></textarea>
 </div>
+
+<div class="form-group">
+    <label class="form-group col-md-2">평가자 채점 기준</label>
+    <input placeholder="{{tasks['PassCriteria']}}" type="text" class="form-group col-md-9" disabled>
+</div>
+
 <div class="form-group">
     <label class="form-group col-md-2">최소 업로드 주기</label>
     <input placeholder="{{tasks['MinPeriod']}}" type="text" class="form-group col-md-2" disabled>
@@ -28,8 +34,11 @@
     <label class="form-group col-md-2">Task Data Table Name</label>
     <input placeholder="{{tasks['TaskDataTableName']}}" type="text" class="form-group col-md-9" disabled>
 </div>
+
 <div class="form-group">
     <label style="vertical-align: middle;" class="form-group col-md-2">Task Data Table Schema Info</label>
-    <input placeholder="{{tasks['TaskDataTableSchemaInfo']}}" type="text" class="form-group col-md-9" disabled>
+    {% for schema in tasks['TaskDataTableSchemaInfo'].split(',') %}
+    <input placeholder="{{ schema[8:] }}" type="text" class="form-group col-md-2" disabled>
+    {% endfor %}
 </div>
 {% endblock %}

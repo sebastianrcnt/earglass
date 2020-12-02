@@ -1,7 +1,9 @@
-from flask import Blueprint, render_template, redirect, request, make_response, flash
+from flask import Blueprint, render_template, redirect, request, make_response, flash, Response
 import services
 from services import users
 from pprint import pprint
+from io import StringIO
+import pandas as pd
 
 controller = Blueprint("estimator", __name__)
 
@@ -51,31 +53,30 @@ def evaluate():
 
 @controller.route("/task/download")
 def csv_file_download_with_stream():
-    """승수형이 submitter download한거 복사함 일단"""
-    idPARSING_DSF = int(request.args.get('idPARSING_DSF', 0))
+    """
+    pdsf csv file download
+    """
+    idPARSING_DSF = int(request.args.get('pdsf_id', 0))
     if idPARSING_DSF != 0:
-        pdsf_type = services.estimator.pdsf_file_info(idPARSING_DSF)
+        print(idPARSING_DSF)
+        pdsf = services.estimator.pdsf_file_info(idPARSING_DSF)
     else:
         return redirect("/my_task")
 
-    filename = f"{pdsf_type['TaskName']}_{pdsf_type['ParsingFile']}"
-
-    # schema에 맞는 df 생성
-    schema = json.loads(pdsf_type['MappingInfo'])
-    schema = list(schema.keys())
-    temp_df = pd.DataFrame(columns=schema)
-
-    # dataframe을 저장할 IO stream 
-    output_stream = StringIO()
+    filename = pdsf["ParsingFile"]
+    fname = filename.split("/")[-1]
+    temp_df = pd.read_csv(filename, encoding='utf-8')
 
     # 그 결과를 앞서 만든 IO stream에 저장
-    temp_df.to_csv(output_stream)
+    output_stream = StringIO()
+
+    temp_df.to_csv(output_stream, index=False, encoding='utf-8')
     response = Response(
         output_stream.getvalue(),
         mimetype='text/csv',
         content_type='application/octet-stream',
     )
 
-    response.headers["Content-Disposition"] = f"attachment; filename={filename}.csv"
+    response.headers["Content-Disposition"] = f"attachment; filename={fname}"
 
     return response

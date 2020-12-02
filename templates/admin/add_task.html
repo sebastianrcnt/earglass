@@ -122,7 +122,7 @@
             <h5><b>평가자 정성평가 Pass 기준설명</b></h5>
         </label>
         <textarea style="margin-left: 15px" cols="30" rows="10" class="form-control" name="pass_criteria_description"
-            placeholder="description" v-model="criteriaDescription"></textarea required>
+            placeholder="description" v-model="criteriaDescription" required></textarea>
     </div>
     <br />
     <button type="submit" class="btn btn-primary float-right mb-4">
@@ -130,6 +130,11 @@
     </button>
 </form>
 <script>
+    // Errors
+    class UnusedDefaultFieldsExistsError extends Error { }
+    class DefaultFieldsMissingError extends Error { }
+    class OriginDataTypesMissingError extends Error { }
+
     const app = new Vue({
         el: "form#app",
         data: {
@@ -155,13 +160,27 @@
         created() { },
         methods: {
             submit() {
-                const data = this.pack();
-                console.log(JSON.stringify(data, null, 2));
-                axios.post('/admin/tasks', data).then((res) => {
-                    console.log(res.data)
-                }).catch((err) => {
-                    console.log(err);
-                })
+                try {
+                    this.validateSchema();
+                    const data = this.pack();
+                    console.log(JSON.stringify(data, null, 2));
+                    axios.post('/admin/tasks', data).then((res) => {
+                        console.log(res.data)
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                } catch (e) {
+                    console.error(e);
+                    if (e instanceof UnusedDefaultFieldsExistsError) {
+                        alert("아직 사용되지 않은 기본 필드가 남아있습니다.")
+                    } else if (e instanceof OriginDataTypesMissingError) {
+                        alert("하나 이상의 원본 데이터 타입이 필요합니다")
+                    } else if (e instanceof DefaultFieldsMissingError) {
+                        alert("하나 이상의 기본 필드가 필요합니다")
+                    } else {
+                        throw e;
+                    }
+                }
             },
             // Senders
             pack() {
@@ -271,13 +290,21 @@
                 this.$forceUpdate();
             },
             validateSchema() {
+                if (this.defaultFields.length === 0) {
+                    throw new DefaultFieldsMissingError();
+                } else if (Object.keys(this.originDataTypes).length === 0) {
+                    throw new OriginDataTypesMissingError();
+                }
+
                 for (let dataTypeName in this.originDataTypes) {
                     const originDataType = this.originDataTypes[dataTypeName];
                     const defaultFields = Object.values(originDataType);
-                    const defaultFieldsSet = new Set(Object.values(originDataType));
-                    const defaultFieldsSet2 = new Set(this.defaultFields); // user
+                    for (let defaultField of this.defaultFields) {
+                        if (!defaultFields.includes(defaultField)) {
+                            throw new UnusedDefaultFieldsExistsError();
+                        }
+                    }
                 }
-                return true;
             },
             /*
             defaultFields: [], // ["defaultField1", "defaultField2"],

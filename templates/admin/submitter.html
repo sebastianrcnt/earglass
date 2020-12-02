@@ -49,10 +49,10 @@
             {% for participation in participations %}
             <tr>
                 <td>
-                    1
+                    {{ loop.index }}
                 </td>
                 <td>
-                    {{ participation['TaskName'] }}
+                    <a href="/admin/tasks/{{ participation['TaskName'] }}">{{ participation['TaskName'] }}</a>
                 </td>
                 <td>
                     {{ participation['Submit_num'] }}
@@ -69,7 +69,6 @@
 </br>
 </br>
 
-{{participations}}
     <!-- 참여현황으로 sort되도록 jquery 적용해야함 -->
 </form>
 </br>

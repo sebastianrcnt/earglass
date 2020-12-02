@@ -39,12 +39,14 @@
             {%for task in tasks%}
             <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ task["TaskName"] }}</td>
+                <td>
+                    <a href="/estimator/estimator_task_info?task_name={{task['TaskName']}}">{{task["TaskName"]}}</a>
+                </td>
                 <td>{{ task["SubmitterID"] }}</td>
                 <td>{{ task["Deadline"] }}</td>
                 <form method="POST" action="/estimator/evaluate?idPARSING_DSF={{ task['idPARSING_DSF']}}">
                     <td>
-                        <a class="btn btn-primary" href="/estimator/task/dowmload?idPARSING_DSF={{ task['idPARSING_DSF']}}" role="button">다운로드</a>
+                        <a class="btn btn-primary" href="/estimator/task/download?pdsf_id={{ task['idPARSING_DSF']}}" role="button">다운로드</a>
                     </td>
                     <td>
                         <div class="form group">

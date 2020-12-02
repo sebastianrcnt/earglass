@@ -31,6 +31,7 @@
             <th>평가점수</th>
             <th>P/NP</th>
             <th>평가날짜</th>
+            <th>파일명</th>
         </thead>
         <tbody>
             {%for task in tasks%}
@@ -43,6 +44,7 @@
                 <td>{{task["Score"]}}</td>
                 <td>{{task["Pass"]}}</td>
                 <td>{{task["EndTime"]}}</td>
+                <td>{{task["ParsingFile"]}}</td>
             </tr>
             {%endfor%}
         </tbody>

@@ -83,3 +83,6 @@ def all_origin_data_type(task_name):
     """해당 task의 모든 원본 데이터 타입 리스트 반환"""
     sql = "SELECT * FROM ORIGIN_DATA_TYPE WHERE TaskName = %s"
     return queryall(sql, (task_name, ))
+
+# def my_submit_file_num(user_id):
+#     '''

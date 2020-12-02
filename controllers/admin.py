@@ -95,6 +95,37 @@ def add_task():
     # js는 이렇게 생겼음
     # {'taskName': '', 'description': '', 'minPeriod': '', 'tableName': '', 'defaultFields': ['defaultField1', 'defaultField2'], 'originDataTypes': {'dataType1': { 'subField1': 'defaultField1', 'subField2': 'defaultField2'}, 'dataType2': {'subField3': 'defaultField1', 'subField4': 'defaultField2'}}, 'maxTupleRatio': 0, 'maxNullRatioPerColumn': 0, 'criteriaDescription': ''}
 
+#     {
+#   "taskName": "태스크 이름",
+#   "description": "설명설명",
+#   "minPeriod": "",
+#   "tableName": "",
+#   "defaultFields": [
+#     "컬럼1",
+#     "컬럼2",
+#     "컬럼3"
+#   ],
+#   "originDataTypes": {
+#     "원데타1": {
+#       "컬컬럼럼1": "컬럼1",
+#       "컬컬럼럼2": "컬럼2",
+#       "컬컬럼럼3": "컬럼3"
+#     },
+#     "원데타2": {
+#       "유유승승수수": "컬럼1",
+#       "이이학학림림": "컬럼2",
+#       "정정규규식식": "컬럼3"
+#     }
+#   },
+#   "maxTupleRatio": "10",
+#   "maxNullRatioPerColumn": "20",
+#   "criteriaDescription": "이렇게 이렇게 이렇게 해주세용"
+# }
+
+#     task_name = js["taskName"]
+#     task_name = js["task_name"]
+
+
 
     
     # TODO add task
@@ -131,10 +162,11 @@ def get_admin_submitter_page(submitter_index):
 @controller.route("/estimators/<estimator_index>", methods=["GET"])
 def get_admin_estimator_page(estimator_index):
     # TODO estimator detail page
-    # user = services.users.get_user_by_index(estimator_index)
+    user = services.users.get_user_by_index(estimator_index)
+    tasks = services.estimator.evaluated_list(estimator_index)
     # participations = services.submitter.participating_tasklist(submitter_index)
-    # if not user:
-    #     flash("해당 id에 대한 유저가 존재하지 않습니다")
-    #     return redirect("/admin/")
-    return render_template("admin/estimator.html")
+    if not user:
+        flash("해당 id에 대한 유저가 존재하지 않습니다")
+        return redirect("/admin/")
+    return render_template("admin/estimator.html",user=user,tasks=tasks)
 # Create Read Update Delete(CRUD)
