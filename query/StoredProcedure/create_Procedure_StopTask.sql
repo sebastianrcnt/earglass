@@ -34,23 +34,27 @@ checkrow:BEGIN
                 EndTime = NOW()
             WHERE FK_idPARSING_DSF IN (SELECT idPARSING_DSF
                                         FROM PARSING_DSF
-                                        WHERE TaskName = currentTaskName);
+                                        WHERE TaskName = currentTaskName)
+            AND (Score IS NULL
+            OR Pass IS NULL);
 
         UPDATE PARSING_DSF
             SET TotalStatus = 'notEstimated'
             WHERE AverageScore is NULL
-            AND Pass is NULL;
+            AND Pass is NULL
+            AND TaskName = currentTaskName;
 
         UPDATE PARSING_DSF
             SET TotalStatus = 'done'
             WHERE TotalScore is not NULL
-            AND Pass is not NULL;
+            AND Pass is not NULL
+            AND TaskName = currentTaskName;
 
         UPDATE PARTICIPATION
             SET Status = 'done'
             WHERE FK_TaskName = currentTaskName;
 
-        SELECT 'Stoppoing task successfully'
+        SELECT 'Stopping task successfully'
             AS StopTaskSuccessMessage;
 
     END IF;

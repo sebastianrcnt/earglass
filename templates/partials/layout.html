@@ -33,7 +33,9 @@
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     {% for message in messages %}
-    <div class="alert">{{ message }}</div>
+    <script type="text/javascript">
+        alert("{{messages[-1]}}");
+    </script>
     {% endfor %}
     {% endif %}
     {% endwith %}

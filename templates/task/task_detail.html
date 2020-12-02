@@ -88,9 +88,36 @@
 
     // Show the specific tab content
     document.getElementById(pageName).style.display = "block";
+    if (pageName == 'My Submit'){
+      document.getElementById("defaultOpenTab").click();
+    }
 
     // Add the specific color to the button used to open the tab content
     elmnt.style.backgroundColor = color;
+  }
+
+  function openTab(element) {
+    // Hide all elements with class="tabcontent" by default */
+    var i, pdsf;
+    pdsf = document.getElementsByClassName("pdsf");
+    for (i = 0; i < pdsf.length; i++) {
+      pdsf[i].style.display = "none";
+    }
+
+    // Remove the background color of all tablinks/buttons
+    // tablinks = document.getElementsByClassName("dropdown-item");
+    // for (i = 0; i < tablinks.length; i++) {
+    //   tablinks[i].style.backgroundColor = "";
+    // }
+
+    var title;
+    title = element.getAttribute( 'title' );
+
+    // Show the specific tab content
+    document.getElementById(title).style.display = "block";
+
+    // Add the specific color to the button used to open the tab content
+    // elmnt.style.backgroundColor = color;
   }
 
   // Get the element with id="defaultOpen" and click on it

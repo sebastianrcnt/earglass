@@ -87,11 +87,11 @@ def sort_task_participation_list(task_name, status):
     return queryall(sql, (task_name, status, ))
 
 
-def add_task(task_name, description, min_period, status, task_data_table_name,
+def add_task(task_name, description, min_period, task_data_table_name,
          max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria, schema_info):
     '''태스크 추가'''
-    return callproc('InsertNewTask', (task_name, description, min_period, status, task_data_table_name,
-         max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria, schema_info,))
+    return callproc('InsertNewTask', (task_name, description, int(min_period), task_data_table_name,
+         float(max_duplicated_row_ratio), float(max_null_ratio_per_column), pass_criteria, schema_info,))
 
 
 def get_all_tasks():
@@ -140,7 +140,7 @@ def get_all_tasks():
 
 def add_origin_data_type(task_name, data_type_name, schema_info, mapping_info):
     '''해당 task의 원본 데이터 타입 정보 추가'''
-    return callproc('InsertOriginDataType', (task_name, date_type_name, schema_info, mapping_info))
+    return callproc('InsertOriginDataType', (task_name, data_type_name, schema_info, mapping_info))
 
 # def remove_origin_data_type(task_name, data_type_name):
 #     '''해당 task name에서 특정 origin data type 삭제'''

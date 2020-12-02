@@ -45,13 +45,15 @@ BEGIN
             SELECT MAX(SubmitNum) INTO varSubmitNum
             FROM PARSING_DSF
             WHERE TaskName = curTaskName
-            AND SubmitterID = varSubmitterID;
+            AND SubmitterID = varSubmitterID
+            AND SubmitNum IS NOT NULL;
 
             -- total score 평균 계산
             SELECT MAX(TotalScore) INTO varMaxTotalScore
             FROM PARSING_DSF
             WHERE TaskName = curTaskName
-            AND TotalStatus = 'done';
+            AND TotalStatus = 'done'
+            AND TotalScore IS NOT NULL;
 
             SELECT AVG(TotalScore) INTO varAvgTotalScore
             FROM PARSING_DSF

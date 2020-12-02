@@ -8,7 +8,6 @@ CREATE PROCEDURE InsertNewTask
             (IN newTaskName             Varchar(45),
              IN newDescription          Varchar(45),
              IN newMinPeriod            Int(11),
-             IN newStatus               varchar(45),
              IN newTaskDataTableName    varchar(100),
              IN newMaxDuplicatedRowRatio    Float,
              IN newMaxNullRatioPerColumn    Float,
@@ -51,7 +50,7 @@ checkdupli:BEGIN
         TaskDataTableName, FK_idManager, MaxDuplicatedRowRatio,
         MaxNullRatioPerColumn, PassCriteria, TaskDataTableSchemaInfo)
            VALUES(newTaskName, newDescription,
-		  		  newMinPeriod, newStatus, newTaskDataTableName,
+		  		  newMinPeriod, 'ongoing', newTaskDataTableName,
                     varIdManager, newMaxDuplicatedRowRatio,
                     newMaxNullRatioPerColumn, newPassCriteria, newTaskDataTableSchemaInfo);
 

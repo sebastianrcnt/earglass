@@ -8,11 +8,11 @@
     <!-- TODO template submitter detail -->
     <div class="form-group">
         <label class="form-group col-md-2">Id</label>
-        <input value="{{ user['Id'] }}" type="text" class="form-group col-md-2" required name="id" readonly>
+        <input value="{{ user['Id'] }}" type="text" class="form-group col-md-2" required name="id" disabled>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">User 점수<font color ="grey">(100점만점)</font></label>
-        <input value="{{ user['UserScore'] }}" type="text" class="form-group col-md-2" required name="userscore" readonly>
+        <input value="{{ user['UserScore'] }}" type="text" class="form-group col-md-2" required name="userscore" disabled>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">비밀번호</label>
@@ -46,6 +46,7 @@
         <input value="{{ user['Gender'] }}" type="text" class="form-group col-md-2" disabled>
     </div>
     <button type="submit" class="btn btn-primary">수정완료</button>
+    <br><br><br><br><br>
 </form>
 
 <!-- <a type="button" class="btn btn-primary mr-2" href='/users'>수정완료</a> -->

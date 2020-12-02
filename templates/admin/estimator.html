@@ -18,6 +18,17 @@
 <h1 class="d-inline-block">Estimator Info</h1>
 </br>
 </br>
+<style>
+    input::placeholder {color:black;}
+    input::-ms-input-placeholder {color: black;}
+    input::-webkit-input-placeholder {color:black;}    
+    input::-moz-placeholder {color:black} 
+
+    textarea::placeholder {color:black;}
+    textarea::-ms-input-placeholder {color: black;}
+    textarea::-webkit-input-placeholder {color:black;}    
+    textarea::-moz-placeholder {color:black} 
+</style>
 <form>
     <!-- TODO template estimator detail -->
     <div class="form-group">
@@ -26,10 +37,10 @@
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">Id</label>
-        <input placeholder="gyusika" type="text" class="form-group col-md-2" disabled value="{{ user['Id'] }}">
+        <input placeholder="{{ user['Id'] }}" type="text" class="form-group col-md-2" disabled>
     </div>
     <div class="form-group">
-        <label class="form-group col-md-2">역할</label>
+        <label class="form-group col-md-2">이름</label>
         <input placeholder="{{ user['Name'] }}" type="text" class="form-group col-md-2" disabled>
     </div>
     <div class="form-group">

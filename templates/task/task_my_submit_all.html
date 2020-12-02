@@ -1,0 +1,59 @@
+<h2>전체 제출 파일 목록</h2>
+<br>
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Index</th>
+      <th>파일의 정보기간</th>
+      <th>회차정보</th>
+      <th>파일명</th>
+      <th>데이터 타입</th>
+      <th>제출 날짜</th>
+      <th>시스템점수</th>
+      <th>실시간 평가점수</th>
+      <th>실시간 종합점수</th>
+      <th> 실시간 Pass 여부</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for pdsf in total_my_submission %}
+    <tr>
+      <td>{{  loop.index }}</td>
+      <td>{{  pdsf["Period"] }}</td>
+      <td>{{  pdsf["Round"] }}</td>
+      <td>{{  pdsf["ParsingFile"] }}</td>
+      <td>{{  pdsf["DataTypeName"] }}</td>
+      <td>{{  pdsf["DateTime"] }}</td>
+      <td>{{  pdsf["SystemScore"] }}</td>
+      <td>{{  pdsf["AverageScore"] }}</td>
+      <td>{{  pdsf["TotalScore"] }}</td>
+      <td>{{  pdsf["Pass"] }}</td>
+      <td>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            상세보기
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <a class="dropdown-pdsf" href="#">
+              <table>
+                <thead>
+                  <th>전체 튜플 수</th>
+                  <th>중복 튜플 수</th>
+                  <th>column 별 null 비율</th>
+                </thead>
+                <tbody>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tbody>
+              </table>
+            </a>
+          </div>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

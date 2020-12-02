@@ -44,9 +44,9 @@ def save_df(type, file, df):
     try:
         filename = os.path.join(UPLOAD_DIR + f"/{type}/", file)
         df.to_csv(filename, index=False, encoding='utf-8')
-        return True
+        return filename
     except:
-        return False
+        return ""
 
 def add_pdsf_to_taskdata(task_name, user_id, pdsf_id):
 
@@ -71,4 +71,3 @@ def add_pdsf_to_taskdata(task_name, user_id, pdsf_id):
     # save table data
     file = task_data_table_file.split("/")[-1]
     save_df("table_data", file, task_data_df)
-

@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, redirect, request, make_response, flash
 import services
+import system
+import pandas as pd
 from database.connection import queryall, queryone
 
 # writed by seungsu
@@ -50,7 +52,7 @@ def get_task_page(task_name):
     print(origin_data_types)
     task_participation = services.admin.show_task_participation_list(task_name)
 
-    return render_template("admin/task_info.html", task=task, origin_data_types=origin_data_types, task_participation=task_participation)
+    return render_template("admin/task_info.html", task_name=task_name,task=task, origin_data_types=origin_data_types, task_participation=task_participation)
 
 
 @controller.route("/tasks/agreement", methods=["GET"])
@@ -85,9 +87,11 @@ def confirm_agreement():
 
 
 @controller.route("/tasks", methods=["POST"])
-def add_task():
+def task_add():
     '''태스크 추가 엔드포인트'''
     js = request.get_json()
+    print("이게되나?")
+    print(js)
 #     {
 #   "taskName": "태스크 이름",
 #   "description": "설명설명",
@@ -118,14 +122,20 @@ def add_task():
     task_name = js["taskName"]
     description = js["description"]
     min_period = js["minPeriod"]
-    task_data_table_name = js["tableName"]
     defaultFields = ",".join(js["defaultFields"])
     originDataTypes = js["originDataTypes"]
-    max_duplicated_row_ratio = js["maxTupleRatio"]
-    max_null_ratio_per_column = js["maxNullRatioPerColumn"]
+    max_duplicated_row_ratio = float(js["maxTupleRatio"])
+    max_null_ratio_per_column = float(js["maxNullRatioPerColumn"])
     pass_criteria = js["criteriaDescription"]
 
-    add_task(task_name, description, min_period, status, task_data_table_name, max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria, defaultFields)
+    task_data_table_name = f"{task_name}_data_table.csv"
+
+    # save task data table
+    task_data_df = pd.DataFrame(columns=js["defaultFields"])
+    task_data_table_name = system.utils.save_df("table_data", task_data_table_name, task_data_df)
+
+    print(task_name, description, min_period, task_data_table_name, max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria, defaultFields)
+    services.admin.add_task(task_name, description, min_period, task_data_table_name, max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria, defaultFields)
 
     for data_type_name, columns in originDataTypes.items():
         schema_info = list(columns.keys())
@@ -134,20 +144,24 @@ def add_task():
 
         services.admin.add_origin_data_type(task_name, data_type_name, schema_info, mapping_info)
     
-    # save task data table
-    task_data_df = pd.DataFrame(columns=js["defaultFields"])
-    services.utils.save_df("table_data", task_data_table_name, task_data_df)
 
     # TODO add task
     redirect_url = f"/admin/tasks/{task_name}"
     return redirect(redirect_url)
+    # return render_template("admin/add_task.html")
 
-
-@controller.route("/tasks/<task_name>", methods=["POST"])
-def edit_task(task_name):
+@controller.route("/edits", methods=["POST"])
+def edit_task():
     '''태스크 수정 엔드포인트'''
     # TODO edit task
-    return "/"
+    data = request.form
+    task_name=data["TaskName"]
+    task = services.admin.task_info(task_name)
+    origin_data_types = services.admin.task_info_origin_data_type(task_name)
+    print(origin_data_types)
+    task_participation = services.admin.show_task_participation_list(task_name)
+    
+    return render_template("/admin/edit_task.html",task=task,origin_data_types=origin_data_types,task_participation=task_participation)
 
 
 @controller.route("/tasks", methods=["DELETE"])
