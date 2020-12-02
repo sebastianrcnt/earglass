@@ -88,10 +88,10 @@ def sort_task_participation_list(task_name, status):
 
 
 def add_task(task_name, description, min_period, status, task_data_table_name,
-         max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria):
+         max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria, schema_info):
     '''태스크 추가'''
     return callproc('InsertNewTask', (task_name, description, min_period, status, task_data_table_name,
-         max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria,))
+         max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria, schema_info,))
 
 
 def get_all_tasks():

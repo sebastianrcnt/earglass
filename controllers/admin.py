@@ -90,11 +90,6 @@ def confirm_agreement():
 def add_task():
     '''태스크 추가 엔드포인트'''
     js = request.get_json()
-    print(js)
-
-    # js는 이렇게 생겼음
-    # {'taskName': '', 'description': '', 'minPeriod': '', 'tableName': '', 'defaultFields': ['defaultField1', 'defaultField2'], 'originDataTypes': {'dataType1': { 'subField1': 'defaultField1', 'subField2': 'defaultField2'}, 'dataType2': {'subField3': 'defaultField1', 'subField4': 'defaultField2'}}, 'maxTupleRatio': 0, 'maxNullRatioPerColumn': 0, 'criteriaDescription': ''}
-
 #     {
 #   "taskName": "태스크 이름",
 #   "description": "설명설명",
@@ -122,8 +117,17 @@ def add_task():
 #   "criteriaDescription": "이렇게 이렇게 이렇게 해주세용"
 # }
 
-#     task_name = js["taskName"]
-#     task_name = js["task_name"]
+    task_name = js["taskName"]
+    description = js["description"]
+    min_period = js["minPeriod"]
+    task_data_table_name = js["tableName"]
+    defaultFields = js["defaultFields"]
+    originDataTypes = js["originDataTypes"]
+    max_duplicated_row_ratio = js["maxTupleRatio"]
+    max_null_ratio_per_column = js["maxNullRatioPerColumn"]
+    pass_criteria = js["criteriaDescription"]
+
+    add_task(task_name, description, min_period, status, task_data_table_name, max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria, defaultFields)
 
 
 

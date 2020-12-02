@@ -4,6 +4,7 @@ import json
 import pandas as pd
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, redirect, request, make_response, flash, Response
+# fname = f"{task_name}_{}_{}.csv"
 import services
 import system
 from settings import UPLOAD_DIR
@@ -54,6 +55,7 @@ def get_my_task_submitter():
 def submit_task():
 
     user_index = int(request.cookies.get("user_index"))
+    user_id = services.users.get_user_by_index(user_index)["Id"]
     task_name = request.form.get("task_name")
     round = request.form.get("round")
 
@@ -67,7 +69,9 @@ def submit_task():
     file = request.files['file']
 
     # filename rename
-    fname = secure_filename(file.filename)
+    submit_num = services.submitter.next_submit_num(user_index, task_name)['NextSubmitNum']
+    # fname = secure_filename(file.filename)
+    fname = f"{task_name}_{user_id}_{submit_num}.csv"
     path = os.path.join(UPLOAD_DIR + "/odsf/", fname)
 
     try:

@@ -43,11 +43,9 @@ def evaluate():
     user_index=int(request.cookies.get("user_index"))
     if score>100 or score<0:
         flash("점수는 0이상 100사이로 입력해야합니다")
-        print(123)
         return redirect("/")
     else:
         services.estimator.update_evaluation_status(idPARSING_DSF,user_index,score,p_np)
-        print(345)
         return redirect("/")
     return render_template("evaluator/evaluate_home.html")
 

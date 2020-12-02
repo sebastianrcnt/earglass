@@ -5,15 +5,15 @@
 
 
 {% block body %}
-<h1>태스크 정보</h1>
+<h1>Task Info</h1>
 <br><br>
 <div class="form-group">
-    <label class="form-group col-md-2">TaskName</label>
+    <label class="form-group col-md-2">Task Name</label>
     <input placeholder="{{tasks['TaskName']}}" type="text" class="form-group col-md-2" disabled>
 </div>
 <div class="form-group">
     <label class="form-group col-md-2">Description</label>
-    <textarea style="margin-left:15px" cols="30" rows="10" placeholder="{{tasks['Description']}}" type="text" class="form-control" disabled></textarea>
+    <textarea style="margin-left:15px" cols="10" rows="5" placeholder="{{tasks['Description']}}" type="text" class="form-control" disabled></textarea>
 </div>
 
 <div class="form-group">
@@ -26,17 +26,12 @@
     <input placeholder="{{tasks['MinPeriod']}}" type="text" class="form-group col-md-2" disabled>
 </div>
 <div class="form-group">
-    <label class="form-group col-md-2">Status</label>
+    <label class="form-group col-md-2">태스크 상태</label>
     <input placeholder="{{tasks['Status']}}" type="text" class="form-group col-md-2" disabled>
 </div>
 <!-- TODO Sync with admin/task_info -->
 <div class="form-group">
-    <label class="form-group col-md-2">Task Data Table Name</label>
-    <input placeholder="{{tasks['TaskDataTableName']}}" type="text" class="form-group col-md-9" disabled>
-</div>
-
-<div class="form-group">
-    <label style="vertical-align: middle;" class="form-group col-md-2">Task Data Table Schema Info</label>
+    <label style="vertical-align: middle;" class="form-group col-md-2">스키마 정보</label>
     {% for schema in tasks['TaskDataTableSchemaInfo'].split(',') %}
     <input placeholder="{{ schema[8:] }}" type="text" class="form-group col-md-2" disabled>
     {% endfor %}

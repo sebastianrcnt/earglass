@@ -84,5 +84,12 @@ def all_origin_data_type(task_name):
     sql = "SELECT * FROM ORIGIN_DATA_TYPE WHERE TaskName = %s"
     return queryall(sql, (task_name, ))
 
+def next_submit_num(user_index, task_name):
+    '''현재 submit num + 1 반환'''
+    sql = "SELECT (MAX(SubmitNum)+1) AS NextSubmitNum\
+    FROM PARSING_DSF\
+    WHERE SubmitterID = %s and TaskName = %s"
+    return queryone(sql, (user_index, task_name,))
+
 # def my_submit_file_num(user_id):
 #     '''
