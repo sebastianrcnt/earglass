@@ -2,11 +2,15 @@
 <table class='table mt-3'>
     <tbody>
         <tr>
+            <th>Task Name</th>
+            <td>{{task_info.get("TaskName", "None")}}</td>
+        </tr>
+        <tr>
             <th>description</th>
             <td>{{task_info.get("Description", "None")}}</td>
         </tr>
         <tr>
-            <th>최소업로드주기</th>
+            <th>최소업로드주기<font style="color: grey">(시간)</font></th>
             <td>{{task_info.get("MinPeriod", "None")}}</td>
         </tr>
         <tr>

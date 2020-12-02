@@ -33,7 +33,7 @@ def is_done(estimator_index, parsing_dsf_id):
 
 def pdsf_file_info(parsing_dsf_id):
     '''parsing_dsf_id를 주면 해당 row의 typename과 parsingfile 반환'''
-    sql = "SELECT TaskName, ParsingFile FROM PARSING_DSF WHERE idPARSING_DSF = %s"
+    sql = "SELECT TaskName, ParsingFile, TotalStatus, Pass FROM PARSING_DSF WHERE idPARSING_DSF = %s"
     return queryone(sql, (int(parsing_dsf_id,)))
 
 def update_evaluation_status(parsing_dsf_id, estimator_index, score, is_passed):

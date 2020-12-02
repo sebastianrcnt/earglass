@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, request, make_response, flash, Response
 import services
-from services import users
+import system
 from pprint import pprint
 from io import StringIO
 import pandas as pd
@@ -12,7 +12,10 @@ controller = Blueprint("estimator", __name__)
 def get_estimator_home():
     user_index = int(request.cookies.get("user_index"))
     tasks = services.estimator.evaluate_waiting_list(user_index)
-    pprint(tasks)
+
+    for task in tasks:
+        task["SubmitterID"] = services.users.get_user_by_index(task["SubmitterID"])["Id"]
+
     return render_template("estimator/estimator_home.html", tasks=tasks)
 
 
@@ -29,7 +32,6 @@ def get_estimator_task_info():
     # task_name=request.cookies.get("task_name")
     task_name = request.args.get('task_name', 0)
     tasks=services.estimator.task_detail(task_name)
-    print(tasks)
     # tasks = {"name":"im_task","description":"card data please~~ samsung good good", "schema_info":"스키마 인포 어떻게 쓰지이", "deadline":"2020/11/20","pass_cut":"중복 튜플 수에 대해서 널널하게 해도 되니까, null 비율에 엄격하게 해주세용"}
     return render_template("/estimator/estimator_task_info.html",tasks=tasks)
 
@@ -40,14 +42,20 @@ def evaluate():
     score = int(request.form.get("score"))
     p_np = request.form.get("p_np")
     idPARSING_DSF = int(request.args.get('idPARSING_DSF', 0))
-    user_index=int(request.cookies.get("user_index"))
+    user_index = int(request.cookies.get("user_index"))
+    user_id = services.users.get_user_by_index(user_index)["Id"]
     if score>100 or score<0:
         flash("점수는 0이상 100사이로 입력해야합니다")
         return redirect("/")
     else:
         services.estimator.update_evaluation_status(idPARSING_DSF,user_index,score,p_np)
-        return redirect("/")
-    return render_template("evaluator/evaluate_home.html")
+        pdsf = services.estimator.pdsf_file_info(idPARSING_DSF)
+        if pdsf["TotalStatus"] == "done" and pdsf["Pass"] == "P":
+            # task data table 에 추가
+            system.utils.add_pdsf_to_taskdata(pdsf["TaskName"], user_id, pdsf["ParsingFile"])
+
+    flash("평가완료 되었습니다.")
+    return redirect("/")
 
 @controller.route("/task/download")
 def csv_file_download_with_stream():

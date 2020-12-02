@@ -48,14 +48,13 @@ def save_df(type, file, df):
     except:
         return ""
 
-def add_pdsf_to_taskdata(task_name, user_id, pdsf_id):
+def add_pdsf_to_taskdata(task_name, user_id, pdsf_filename):
 
     # task data table dataframe
     task_data_table_file = services.estimator.task_detail(task_name)["TaskDataTableName"]
     task_data_df = pd.read_csv(task_data_table_file, encoding='utf-8')
 
     # pdsf dataframe
-    pdsf_filename = services.estimator.pdsf_file_info(pdsf_id)["ParsingFile"]
     pdsf_df = pd.read_csv(pdsf_filename, encoding='utf-8')
 
     # name column
