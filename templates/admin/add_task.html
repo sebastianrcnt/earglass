@@ -1,16 +1,15 @@
-{% extends "./partials/layout.html" %}
-{% block body %}
+{% extends "./partials/layout.html" %} {% block body %}
 
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 
 <h1>ADD Task</h1>
 <br />
 <br />
-<form id="app">
+<form id="app" @submit.prevent="submit()">
     <!-- TODO add task handling -->
     <div class="form-group">
         <label>태스크 이름</label>
-        <input type="text" v-model="taskName" class="form-control">
+        <input type="text" v-model="taskName" class="form-control" />
     </div>
     <div class="form-group">
         <label>설명</label>
@@ -20,17 +19,21 @@
         <label>기본 데이터 타입</label>
         <div class="form-row">
             <div class="form-group mr-2">
-                <input type="text" class="form-control" placeholder="기본 필드 이름" v-model="defaultFieldBuffer">
+                <input type="text" class="form-control" placeholder="기본 필드 이름" v-model="defaultFieldBuffer" />
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" v-on:click="addDefaultField()">추가하기</button>
+                <button type="button" class="btn btn-primary" v-on:click="addDefaultField()">
+                    추가하기
+                </button>
             </div>
         </div>
         <ul>
             <template v-for="defaultField in defaultFields">
-                <li class='mb-2'>
+                <li class="mb-2">
                     <span>[[ defaultField ]]</span>
-                    <button type="button" class="btn btn-info" v-on:click="deleteDefaultField(defaultField)">삭제</button>
+                    <button type="button" class="btn btn-info" v-on:click="deleteDefaultField(defaultField)">
+                        삭제
+                    </button>
                 </li>
             </template>
         </ul>
@@ -39,10 +42,12 @@
         <label>원본 데이터 타입</label>
         <div class="form-row">
             <div class="form-group mr-2">
-                <input type="text" class="form-control" placeholder="원본 데이터 타입 이름" v-model="originDataTypeBuffer">
+                <input type="text" class="form-control" placeholder="원본 데이터 타입 이름" v-model="originDataTypeBuffer" />
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" v-on:click="addOriginDataType()">추가하기</button>
+                <button type="button" class="btn btn-primary" v-on:click="addOriginDataType()">
+                    추가하기
+                </button>
             </div>
         </div>
     </div>
@@ -53,8 +58,9 @@
                     <div class="form-row">
                         <h6 class="col">[[ dataTypeName ]]</h6>
                         <!-- delete origin data type -->
-                        <button class="btn btn-danger" type="button"
-                            v-on:click="deleteOriginDataType(dataTypeName)">x</button>
+                        <button class="btn btn-danger" type="button" v-on:click="deleteOriginDataType(dataTypeName)">
+                            x
+                        </button>
                     </div>
                 </div>
                 <div class="card-text">
@@ -74,12 +80,14 @@
                                 </template>
                             </select>
                             <button class="btn btn-danger" type="button"
-                                v-on:click="deleteSubField(dataTypeName, subField)">x</button>
+                                v-on:click="deleteSubField(dataTypeName, subField)">
+                                x
+                            </button>
                             <!-- delete subField -->
                         </li>
                     </template>
                     <li class="form-row">
-                        <input type="text" class="col form-control mr-1" v-model="subFieldBuffer[dataTypeName]">
+                        <input type="text" class="col form-control mr-1" v-model="subFieldBuffer[dataTypeName]" />
                         <select class="form-control col mr-1" v-model="subFieldMapBuffer[dataTypeName]">
                             <template v-for="originDefaultField in defaultFields">
                                 <option v-bind:value="originDefaultField">
@@ -87,145 +95,198 @@
                                 </option>
                             </template>
                         </select>
-                        <button class="btn btn-success" type="button" v-on:click="addSubField(dataTypeName)">+</button>
+                        <button class="btn btn-success" type="button" v-on:click="addSubField(dataTypeName)">
+                            +
+                        </button>
                         <!-- add subField -->
                     </li>
                 </div>
             </div>
         </div>
     </div>
-    <h5 style="margin-left: 15px; margin-bottom: 10px;"><b>시스템 Pass 기준 설정</b></h5>
+    <h5 style="margin-left: 15px; margin-bottom: 10px">
+        <b>시스템 Pass 기준 설정</b>
+    </h5>
     <div class="form-group">
         <label class="form-group col-md-3">최대 중복 Tuple 비율(%)</label>
-        <input type="number" min="0" max="100" class="form-group col-md-2" name="tuple_ratio" placeholder="0">
+        <input type="number" min="0" max="100" v-model="maxTupleRatio" class="form-group col-md-2" name="tuple_ratio"
+            placeholder="0" />
     </div>
     <div class="form-group">
         <label class="form-group col-md-3">최대 Column별 Null 비율(%)</label>
-        <input type="number" min="0" max="100" class="form-group col-md-2" name="tuple_ratio" placeholder="0">
+        <input type="number" min="0" max="100" v-model="maxNullRatioPerColumn" class="form-group col-md-2"
+            name="tuple_ratio" placeholder="0" />
     </div>
     <div class="form-group">
         <label class="form-group col-md-4">
             <h5><b>평가자 정성평가 Pass 기준설명</b></h5>
         </label>
-        <textarea style="margin-left: 15px;" cols="30" rows="10" class="form-control" name="pass_criteria_description"
-            placeholder="description"></textarea>
+        <textarea style="margin-left: 15px" cols="30" rows="10" class="form-control" name="pass_criteria_description"
+            placeholder="description" v-model="criteriaDescription"></textarea>
     </div>
     <br />
-    <button type="submit" class="btn btn-primary float-right mb-4">Task 생성</button>
+    <button type="submit" class="btn btn-primary float-right mb-4">
+        Task 생성
+    </button>
 </form>
 <script>
     const app = new Vue({
         el: "form#app",
         data: {
-            taskName: '',
-            description: '',
-            minPeriod: '', // number
-            tableName: '',
-            defaultFields: ['defaultField1', 'defaultField2'],
+            taskName: "",
+            description: "",
+            minPeriod: "", // number
+            tableName: "",
+            defaultFields: ["defaultField1", "defaultField2"],
             originDataTypes: {
                 // dataTypeName: { subField1: defaultField1, subField2L: defaultField2}
-                dataType1: { subField1: 'defaultField1', subField2: 'defaultField2' },
-                dataType2: { subField3: 'defaultField1', subField4: 'defaultField2' }
+                dataType1: { subField1: "defaultField1", subField2: "defaultField2" },
+                dataType2: { subField3: "defaultField1", subField4: "defaultField2" },
             },
+            maxTupleRatio: 0,
+            maxNullRatioPerColumn: 0,
+            criteriaDescription: "",
             // Buffers
-            defaultFieldBuffer: '',
-            originDataTypeBuffer: '',
+            defaultFieldBuffer: "",
+            originDataTypeBuffer: "",
             subFieldBuffer: {},
-            subFieldMapBuffer: {}
+            subFieldMapBuffer: {},
         },
         created() {
             const formData = sessionStorage.getItem("add-task-form");
             if (formData) {
                 formData = JSON.parse(formData);
-                const { taskName, description, minPeriod, tableName, defaultFields, originDataTypes } = formData;
-                this.taskName = taskName;
-                this.description = description;
-                this.minPeriod = minPeriod
+                const {
+                    taskName,
+                    description,
+                    minPeriod,
+                    tableName,
+                    defaultFields,
+                    originDataTypes,
+                    maxTupleRatio,
+                    maxNullRatioPerColumn,
+                    criteriaDescription
+                } = formData;
+                
+                this.data = {
+                    ...this.data, taskName, description, minPeriod, tableName, defaultFields, originDataTypes, maxTupleRatio,
+                    maxNullRatioPerColumn,
+                    criteriaDescription
+                };
             }
         },
         methods: {
+            submit() {
+                const data = this.pack();
+                console.log(data);
+            },
             // Senders
             pack() {
-                const { taskName, description, minPeriod, tableName, defaultFields, originDataTypes } = this.data;
+                const {
+                    taskName,
+                    description,
+                    minPeriod,
+                    tableName,
+                    defaultFields,
+                    originDataTypes,
+                    maxTupleRatio,
+                    maxNullRatioPerColumn,
+                    criteriaDescription
+                } = this.data;
+
                 const packed = {
                     taskName,
                     description,
                     minPeriod,
                     tableName,
                     defaultFields,
-                    originDataTypes
-                }
+                    originDataTypes,
+                    maxTupleRatio,
+                    maxNullRatioPerColumn,
+                    criteriaDescription
+                };
                 sessionStorage.setItem("add-task-form", JSON.stringify(packed));
                 return packed;
             },
             getUsedDefaultFields() {
                 let usedDefaultFields = [];
                 for (let dataTypeName in this.originDataTypes) {
-                    usedDefaultFields.push(...Object.values(this.originDataTypes[dataTypeName]))
+                    usedDefaultFields.push(
+                        ...Object.values(this.originDataTypes[dataTypeName])
+                    );
                 }
                 let usedDefaultFieldsSet = new Set(usedDefaultFields);
-                return usedDefaultFieldsSet
+                return usedDefaultFieldsSet;
             },
             addDefaultField() {
                 if (!this.defaultFieldBuffer) {
-                    alert("빈칸을 채워주세요")
+                    alert("빈칸을 채워주세요");
                 } else if (this.defaultFields.includes(this.defaultFieldBuffer)) {
                     alert("이미 존재하는 기본 필드입니다");
                 } else {
                     this.defaultFields.push(this.defaultFieldBuffer);
-                    this.defaultFieldBuffer = '';
+                    this.defaultFieldBuffer = "";
                 }
             },
             addOriginDataType() {
                 if (!this.originDataTypeBuffer) {
-                    alert("빈칸을 채워주세요")
-                } else if (Object.keys(this.originDataTypes).includes(this.originDataTypeBuffer)) {
+                    alert("빈칸을 채워주세요");
+                } else if (
+                    Object.keys(this.originDataTypes).includes(this.originDataTypeBuffer)
+                ) {
                     alert("이미 존재하는 원본 데이터 타입입니다");
                 } else {
                     this.originDataTypes[this.originDataTypeBuffer] = {};
-                    this.originDataTypeBuffer = '';
+                    this.originDataTypeBuffer = "";
                 }
             },
             addSubField(dataTypeName) {
                 const subField = this.subFieldBuffer[dataTypeName];
                 const subFields = Object.keys(this.originDataTypes[dataTypeName]);
                 const mappedDefaultField = this.subFieldMapBuffer[dataTypeName];
-                console.table({ subField, subFields })
+                console.table({ subField, subFields });
                 if (!subField || !mappedDefaultField) {
-                    alert("빈칸을 채워주세요")
+                    alert("빈칸을 채워주세요");
                 } else if (subFields.includes(subField)) {
-                    alert("이미 존재하는 필드입니다")
+                    alert("이미 존재하는 필드입니다");
                 } else {
-                    console.log(this.subFieldBuffer[dataTypeName], this.subFieldMapBuffer[dataTypeName]);
+                    console.log(
+                        this.subFieldBuffer[dataTypeName],
+                        this.subFieldMapBuffer[dataTypeName]
+                    );
                     this.originDataTypes[dataTypeName][subField] = mappedDefaultField;
                     this.$forceUpdate();
 
-                    this.subFieldBuffer[dataTypeName] = '';
+                    this.subFieldBuffer[dataTypeName] = "";
                     Vue.delete(this.subFieldMapBuffer, dataTypeName);
                 }
             },
             changeDefaultField(dataTypeName, defaultField, subField) {
-                this.originDataTypes[dataTypeName][subField] = defaultField
+                this.originDataTypes[dataTypeName][subField] = defaultField;
             },
             deleteDefaultField(defaultField) {
                 // is ever used?
                 let usedDefaultFieldsSet = this.getUsedDefaultFields();
                 if (usedDefaultFieldsSet.has(defaultField)) {
-                    alert("이미 사용 중인 Default Field입니다. 매핑되는 SubField를 제거해주세요")
+                    alert(
+                        "이미 사용 중인 Default Field입니다. 매핑되는 SubField를 제거해주세요"
+                    );
                 } else {
-                    this.defaultFields = this.defaultFields.filter(field => field != defaultField); // delete defaultField from defaultFields
+                    this.defaultFields = this.defaultFields.filter(
+                        (field) => field != defaultField
+                    ); // delete defaultField from defaultFields
                 }
             },
             deleteOriginDataType(dataTypeName) {
                 Vue.delete(this.originDataTypes, dataTypeName);
             },
             deleteSubField(dataTypeName, subField) {
-                Vue.delete(this.originDataTypes[dataTypeName], subField)
+                Vue.delete(this.originDataTypes[dataTypeName], subField);
             },
             validateSchema() {
                 for (let dataTypeName in this.originDataTypes) {
-                    const originDataType = this.originDataTypes[dataTypeName]
-                    const defaultFields = Object.values(originDataType)
+                    const originDataType = this.originDataTypes[dataTypeName];
+                    const defaultFields = Object.values(originDataType);
                     for (let defaultField of defaultFields) {
                         if (!defaultFields.includes(defaultField)) {
                             return false;
@@ -235,10 +296,10 @@
                 return true;
             },
             print(something) {
-                console.log(something)
-            }
+                console.log(something);
+            },
         },
-        delimiters: ['[[', ']]']
-    })
+        delimiters: ["[[", "]]"],
+    });
 </script>
 {% endblock %}

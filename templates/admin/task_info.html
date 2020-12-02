@@ -46,10 +46,10 @@
                     {{ data_type['DataTypeName']}}
                 </td>
                 <td>
-                    13
+                    {{ data_type['SubmitNum']}}
                 </td>
                 <td>
-                    5
+                    {{ data_type['PassNum']}}
                 </td>
             </tr>
             {% endfor %}
@@ -62,20 +62,21 @@
         <thead>
             <th>현황</th>
             <th>참여자ID</th>
-            <th>평가점수</th>
+            <th>제출자 점수</th>
             <th>승인</th>
             <th>거절</th>
         </thead>
         <tbody>
+            {% for participation in task_participation %}
             <tr>
                 <td>
-                    대기
+                    {{ participation['Status'] }}
                 </td>
                 <td>
-                    gyusika1
+                    {{ participation['Id'] }}
                 </td>
                 <td>
-                    95
+                    {{ participation['UserScore'] }}
                 </td>
                 <td>
                     <button id="task_participation" name="approve" type="submit" class="btn btn-primary">승인</button>
@@ -84,37 +85,7 @@
                     <button id="task_participation" name="reject" type="submit" class="btn btn-primary">거절</button>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    승인
-                </td>
-                <td>
-                    gyusika2
-                </td>
-                <td>
-                    96
-                </td>
-                <td>
-                </td>
-                <td>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    거절
-                </td>
-                <td>
-                    gyusika3
-                </td>
-                <td>
-                    92
-                </td>
-                <td>    
-                </td>
-                </td>
-                <td>
-                </td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </form>

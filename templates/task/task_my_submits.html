@@ -13,7 +13,9 @@
   }
 </style>
 
-
+{% for type_table in data_type_table_list%}
+{{type_table}}
+{% endfor %}
 <div class="screen wrap">
   <h2>{{task_info["TaskName"]}}</h2>
   <br>
