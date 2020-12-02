@@ -52,7 +52,7 @@ def evaluate():
         pdsf = services.estimator.pdsf_file_info(idPARSING_DSF)
         if pdsf["TotalStatus"] == "done" and pdsf["Pass"] == "P":
             # task data table 에 추가
-            system.utils.add_pdsf_to_taskdata(pdsf["TaskName"], user_id, pdsf["ParsingFile"])
+            system.utils.add_pdsf_to_taskdata(pdsf["TaskName"], user_id, idPARSING_DSF)
 
     flash("평가완료 되었습니다.")
     return redirect("/")

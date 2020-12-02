@@ -20,7 +20,7 @@
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">목록</a>
       <div class="dropdown-menu">
-        <button class="dropdown-item" onclick="openTab(this)" title="total_data_file" id="defaultOpenTab">모든 제출 파일</button>
+        <button class="dropdown-item" onclick="openTab(this)" title="total_data_file" id="defaultOpenTab">전체</button>
         {% for type_table in odsf_type%}
         <button class="dropdown-item" onclick="openTab(this)" title="{{ type_table['DataTypeName'] }}">{{ type_table["DataTypeName"] }}</button>
         {% endfor %}

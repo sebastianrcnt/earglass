@@ -27,7 +27,6 @@
             <tr>
                 <th style="width:10%">Index</th>
                 <th style="width:15%">태스크명</th>
-                <th style="width:15%">deadline</th>
                 <th style="width:15%"></th>
             </tr>
         </thead>
@@ -38,7 +37,6 @@
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ task["TaskName"] }}</td>
-                <td>{{ task["Deadline"] }}</td>
                 <td class="text-center">
                     {% if task["Status"] == "ongoing" %}
                     <button type="button" class="btn btn-primary mr-2 " disabled>참여중</button>

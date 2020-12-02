@@ -35,8 +35,8 @@ def leaderboard(task_name):
 def my_submission_list(task_name, user_index):
     """회차, 기간, 제출파일명, 원본데이터타입, 날짜, 시스템점수, 평가자점수(평균), total 점수, pass여부"""
     sql = "SELECT P.Round, P.Period, P.ParsingFile, ODT.DataTypeName, O.DateTime, P.SystemScore, P.AverageScore, P.TotalScore, P.Pass \
-    FROM PARSING_DSF AS P, ORIGIN_DSF AS O LEFT JOIN ORIGIN_DATA_TYPE AS ODT ON O.FK_idORIGIN_DATA_TYPE = ODT.idORIGIN_DATA_TYPE \
-    WHERE P.FK_idORIGIN_DSF = O.idORIGIN_DSF and P.TaskName = %s and P.SubmitterID = %s"
+    FROM ORIGIN_DSF AS O, PARSING_DSF AS P LEFT JOIN ORIGIN_DATA_TYPE AS ODT ON P.OriginDataTypeID = ODT.idORIGIN_DATA_TYPE \
+    WHERE P.FK_idORIGIN_DSF = O.idORIGIN_DSF and P.TaskName = %s and P.SubmitterID = %s ORDER BY P.Round"
     return queryall(sql, (task_name, user_index, ))
 
 def submit_info(task_name):
@@ -67,8 +67,8 @@ def insert_participation(task_name, user_index):
 
 def sort_by_origin_data_type(task_name, user_index, origin_data_type_id):
     """원본 데이터 타입에 따라 내 제출 현황 보여주기"""
-    sql = "SELECT P.Round, P.Period, P.ParsingFile, ODT.DataTypeName, O.DateTime, P.SystemScore, P.AverageScore, P.TotalScore, P.Pass \
-    FROM PARSING_DSF AS P, ORIGIN_DSF AS O LEFT JOIN ORIGIN_DATA_TYPE AS ODT ON O.FK_idORIGIN_DATA_TYPE = ODT.idORIGIN_DATA_TYPE \
+    sql = "SELECT P.Round, P.Period, P.ParsingFile, ODT.DataTypeName,O.DateTime, P.SystemScore, P.AverageScore, P.TotalScore, P.Pass\
+    FROM ORIGIN_DSF AS O, PARSING_DSF AS P LEFT JOIN ORIGIN_DATA_TYPE AS ODT ON P.OriginDataTypeID = ODT.idORIGIN_DATA_TYPE\
     WHERE P.FK_idORIGIN_DSF = O.idORIGIN_DSF and P.TaskName = %s and P.SubmitterID = %s and P.OriginDataTypeID = %s ORDER BY P.Round"
     return queryall(sql, (task_name, user_index, origin_data_type_id, ))
 

@@ -47,6 +47,7 @@ def edit_user():
         return render_template("back.html")
 
     # 디비가 구축되고 나면 해야함!!!
+    # TODO
     # [{'InsertNewUserErrorMessage': 'User ID already exists.'}]
     # [{'InsertNewUserSuccessMessage': 'Insert new User successfully'}]
     try:
