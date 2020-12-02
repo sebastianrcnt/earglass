@@ -167,12 +167,8 @@
                     maxNullRatioPerColumn,
                     criteriaDescription
                 } = formData;
-                
-                this.data = {
-                    ...this.data, taskName, description, minPeriod, tableName, defaultFields, originDataTypes, maxTupleRatio,
-                    maxNullRatioPerColumn,
-                    criteriaDescription
-                };
+
+                this = { ...this, ...formData };
             }
         },
         methods: {
@@ -192,7 +188,8 @@
                     maxTupleRatio,
                     maxNullRatioPerColumn,
                     criteriaDescription
-                } = this.data;
+                } = this;
+
 
                 const packed = {
                     taskName,
@@ -205,6 +202,8 @@
                     maxNullRatioPerColumn,
                     criteriaDescription
                 };
+
+                console.log("packed", packed);
                 sessionStorage.setItem("add-task-form", JSON.stringify(packed));
                 return packed;
             },

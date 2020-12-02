@@ -69,7 +69,7 @@ def sort_by_origin_data_type(task_name, user_index, origin_data_type_id):
     """원본 데이터 타입에 따라 내 제출 현황 보여주기"""
     sql = "SELECT P.Round, P.Period, P.ParsingFile, ODT.DataTypeName, O.DateTime, P.SystemScore, P.AverageScore, P.TotalScore, P.Pass \
     FROM PARSING_DSF AS P, ORIGIN_DSF AS O LEFT JOIN ORIGIN_DATA_TYPE AS ODT ON O.FK_idORIGIN_DATA_TYPE = ODT.idORIGIN_DATA_TYPE \
-    WHERE P.FK_idORIGIN_DSF = O.idORIGIN_DSF and P.TaskName = %s and P.SubmitterID = %s and P.OriginDataTypeID = %s ORDEER BY P.Round"
+    WHERE P.FK_idORIGIN_DSF = O.idORIGIN_DSF and P.TaskName = %s and P.SubmitterID = %s and P.OriginDataTypeID = %s ORDER BY P.Round"
     return queryall(sql, (task_name, user_index, origin_data_type_id, ))
 
 def sort_by_pass(task_name, user_index,p_np):
