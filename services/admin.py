@@ -41,10 +41,10 @@ def update_participation_status(task_name, user_index, new_status, comment):
     return callproc('UpdateParticipationStatus', (task_name, user_index, new_status, comment,))
 
 
-def edit_task(current_task_name, description, min_period, status, task_data_table_name,
+def edit_task(current_task_name, description, min_period, task_data_table_name,
          max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria):
     '''수정된 정보 update'''
-    return callproc('EditTask', (current_task_name, description, min_period, status, task_data_table_name,
+    return callproc('EditTask', (current_task_name, description, min_period, task_data_table_name,
          max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria,))
 
 def task_info(task_name):

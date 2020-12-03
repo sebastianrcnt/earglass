@@ -19,6 +19,7 @@ BEGIN
     DECLARE varOutlierCount          INT(11);
     DECLARE varGoodEvaluationNum    INT(11);
     DECLARE newEstimatorScore       FLOAT;
+    DECLARE currUserScore           Float;
 
     SET curTaskName = NEW.TaskName;
     SET varIndex = 0;
@@ -60,6 +61,13 @@ BEGIN
             AND FK_idPARSING_DSF IN (SELECT idPARSING_DSF
                                     FROM PARSING_DSF
                                     WHERE TaskName = curTaskName);
+            IF varAvgScore IS NULL THEN
+                SET varAvgScore = 0;
+            END IF;
+
+            IF varSTDScore IS NULL THEN
+                SET varSTDScore = 0;
+            END IF;
 
             SET varSmallIndex = 0;
             SET varOutlierCount = 0;
@@ -73,7 +81,8 @@ BEGIN
                 AND Status = 'done'
                 AND FK_idPARSING_DSF IN (SELECT idPARSING_DSF
                                     FROM PARSING_DSF
-                                    WHERE TaskName = curTaskName);
+                                    WHERE TaskName = curTaskName)
+                AND Score IS NOT NULL;
 
                 IF varNormZ > 1 THEN
                     SET varOutlierCount = varOutlierCount + 1;
@@ -101,8 +110,12 @@ BEGIN
                                     + 30*(1-(varOutlierCount/varEvaluationNum))
                                     + 30*varGoodEvaluationNum/varEvaluationNum;
 
+            SELECT UserScore INTO currUserScore
+            FROM USER
+            WHERE idUSER = varFK_idEstimator;
+
             UPDATE USER
-                SET UserScore = 0.85*UserScore + 0.15*newEstimatorScore
+                SET UserScore = 0.85*currUserScore + 0.15*newEstimatorScore
                 WHERE idUSER = varFK_idEstimator;
 
             IF varIndex = varEstimatorNum THEN

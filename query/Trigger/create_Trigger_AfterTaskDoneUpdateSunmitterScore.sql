@@ -16,7 +16,8 @@ BEGIN
     DECLARE     varAvgTotalScore    Float;
     DECLARE     varSubmitNumRatio   Float;
     DECLARE     newSubmitterScore   Float;
-
+    DECLARE     currUserScore       Float;
+    
     SET curTaskName = NEW.TaskName;
     SET varIndex = 0;
 
@@ -59,7 +60,8 @@ BEGIN
             FROM PARSING_DSF
             WHERE TaskName = curTaskName
             AND SubmitterID = varSubmitterID
-            AND TotalStatus = 'done';
+            AND TotalStatus = 'done'
+            AND TotalScore IS NOT NULL;
 
             -- 제출 수 비율
             IF varSubmitNum > 100 THEN
@@ -71,9 +73,13 @@ BEGIN
             SET newSubmitterScore = (varPassNum/varSubmitNum)*40
             + 50*(varAvgTotalScore/varMaxTotalScore)
             + 10*varSubmitNumRatio;
-
+            
+            SELECT UserScore INTO currUserScore
+            FROM USER
+            WHERE idUSER = varSubmitterID;
+            
             UPDATE USER
-                SET UserScore = 0.85*UserScore + 0.15*newSubmitterScore
+                SET UserScore = 0.85*currUserScore + 0.15*newSubmitterScore
                 WHERE idUSER = varSubmitterID;
 
             IF varIndex = varSubmitterNum THEN
@@ -84,5 +90,4 @@ BEGIN
 END; //
 
 DELIMITER ;
-
 
