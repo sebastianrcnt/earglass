@@ -51,7 +51,7 @@ def odsf_type_schema_info(odsf_type_id):
 
 def submit_pdsf(task_name, parsing_file, origin_data_type_id, submitter_id, period, round, origin_dsf_id, system_score):
     '''시스템을 거쳐서 orgin_dsf를 parsing_dsf로 변환하여 저장'''
-    return callproc('InsertParsingDSF', (task_name, parsing_file, origin_data_type_id, submitter_id, period, round, origin_dsf_id, system_score))
+    return callproc('InsertParsingDSF', (task_name, parsing_file, int(origin_data_type_id), submitter_id, period, round, origin_dsf_id, system_score))
 
 def submit_odsf(origin_file, period, task_name, user_index, origin_data_type_id, round):
     """제출자 파일을 받으면 origin_dsf로 저장"""
