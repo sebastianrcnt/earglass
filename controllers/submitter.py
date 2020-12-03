@@ -77,7 +77,7 @@ def submit_task():
     try:
         # new task processing code
         file.save(path)
-        services.submitter.submit_odsf(path, time.strftime('%Y-%m-%d %H:%M:%S'), period, task_name, user_index, origin_data_type_id, round)
+        services.submitter.submit_odsf(path, period, task_name, user_index, origin_data_type_id, round)
         origin_dsf_id = services.submitter.search_odsf_by_filepath(path)['idORIGIN_DSF']
     except:
         flash("파일 업로드가 실패했습니다.")

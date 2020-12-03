@@ -53,9 +53,9 @@ def submit_pdsf(task_name, parsing_file, origin_data_type_id, submitter_id, peri
     '''시스템을 거쳐서 orgin_dsf를 parsing_dsf로 변환하여 저장'''
     return callproc('InsertParsingDSF', (task_name, parsing_file, origin_data_type_id, submitter_id, period, round, origin_dsf_id, system_score))
 
-def submit_odsf(origin_file, datetime, period, task_name, user_index, origin_data_type_id, round):
+def submit_odsf(origin_file, period, task_name, user_index, origin_data_type_id, round):
     """제출자 파일을 받으면 origin_dsf로 저장"""
-    return callproc('InsertOriginDSF', (origin_file, datetime, period, task_name, user_index, origin_data_type_id, round ))
+    return callproc('InsertOriginDSF', (origin_file, period, task_name, user_index, origin_data_type_id, round ))
 
 def search_odsf_by_filepath(odsf_file):
     sql = "SELECT * FROM ORIGIN_DSF WHERE OriginFile = %s"
