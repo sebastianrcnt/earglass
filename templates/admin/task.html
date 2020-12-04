@@ -4,7 +4,6 @@
         <th>태스크명</th>
         <th>제출파일 수</th>
         <th>Pass된 Tuple 수</th>
-        <th>상세</th>
         <th>튜플 다운로드</th>
     </thead>
     <tbody>
@@ -20,10 +19,7 @@
               {{ task['total_passed_row'] }} 
             </td>
             <form>
-                <td>
-                    <a class="btn btn-primary" href="/admin/tasks/{{ task['TaskName'] }}" role="button">상세</a>
-                </td>
-                <td>
+                <td style="text-align: center;">
                     <a class="btn btn-primary" href="/admin/task/download/{{ task['TaskName'] }}" role="button">튜플 다운로드</a>
                     <!-- TODO - download -->
                 </td>

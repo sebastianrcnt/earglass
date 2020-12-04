@@ -138,7 +138,6 @@ def csv_file_download_with_stream():
         return redirect("/my_task")
 
     filename = f"{odsf_type['TaskName']}_{odsf_type['DataTypeName']}"
-
     # schema에 맞는 df 생성
     #승수형 기다리기
     schema = json.loads(odsf_type['MappingInfo'])
@@ -148,15 +147,15 @@ def csv_file_download_with_stream():
 
     # dataframe을 저장할 IO stream 
     output_stream = StringIO()
-
+    
     # 그 결과를 앞서 만든 IO stream에 저장
-    temp_df.to_csv(output_stream, index=False)
+    temp_df.to_csv(output_stream, index=False, encoding='utf-8')
+    
     response = Response(
         output_stream.getvalue(),
         mimetype='text/csv',
         content_type='application/octet-stream',
     )
-
     response.headers["Content-Disposition"] = f"attachment; filename={filename}.csv"
 
     return response

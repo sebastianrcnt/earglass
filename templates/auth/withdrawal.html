@@ -1,12 +1,5 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
-
-<body style="font-family:NanumSquare">
 <h1 class="d-inline-block">회원 탈퇴</h1>
 <br><br><br><br><br>
 <form method="POST" action="/users/withdrawal">
@@ -20,5 +13,4 @@
     </div>
     <button type="submit" class="btn btn-primary">회원탈퇴</button>
 </form>
-</body>
     {% endblock %}

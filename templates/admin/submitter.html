@@ -1,12 +1,6 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
 
-<body style="font-family:NanumSquare">
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 <h1 class="d-inline-block">Submitter Info</h1>
 </br>
@@ -25,40 +19,40 @@
 <form>
     <!-- TODO template submitter detail -->
     <div class="form-group">
-        <label class="form-group col-md-2">idUSER</label>
-        <input placeholder="{{ user['idUSER'] }}" type="text" class="form-group col-md-2" disabled>
+        <label class="form-group col-md-2">Index</label>
+        <input placeholder="{{ user['idUSER'] }}" type="text" class="form-group col-md-4" disabled>
     </div>
     <div class="form-group">
-        <label class="form-group col-md-2">Id</label>
-        <input placeholder="{{ user['Id'] }}" type="text" class="form-group col-md-2" disabled>
+        <label class="form-group col-md-2">아이디</label>
+        <input placeholder="{{ user['Id'] }}" type="text" class="form-group col-md-4" disabled>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">이름</label>
-        <input placeholder="{{ user['Name'] }}" type="text" class="form-group col-md-2" disabled>
+        <input placeholder="{{ user['Name'] }}" type="text" class="form-group col-md-4" disabled>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">성별</label>
-        <input placeholder="{{ user['Gender'] }}" type="text" class="form-group col-md-2" disabled>
+        <input placeholder="{{ user['Gender'] }}" type="text" class="form-group col-md-4" disabled>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">생년월일</label>
-        <input placeholder="{{ user['BirthDate'] }}" type="text" class="form-group col-md-2" disabled>
+        <input placeholder="{{ user['BirthDate'] }}" type="text" class="form-group col-md-4" disabled>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">휴대전화</label>
-        <input placeholder="{{ user['PhoneNum'] }}" type="text" class="form-group col-md-2" disabled>
+        <input placeholder="{{ user['PhoneNum'] }}" type="text" class="form-group col-md-4" disabled>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">주소</label>
-        <input placeholder="{{ user['Address'] }}" type="text" class="form-group col-md-2" disabled>
+        <input placeholder="{{ user['Address'] }}" type="text" class="form-group col-md-4" disabled>
     </div>
     </br>
-    <h5><b>참여중인 Task Info</b></h5>
+    <h5><b>참여중인 태스크 목록</b></h5>
     </br>
     <table style="margin-left: 5px; margin-bottom: 20px;" class="table table-striped table-bordered" id="target-table">
         <thead>
             <th>Index</th>
-            <th>데스크명</th>
+            <th>태스크명</th>
             <th>제출파일 수</th>
             <th>Pass된 Tuple 수</th>
         </thead>
@@ -103,5 +97,4 @@
         $("#target-table").DataTable();
     })
 </script>
-</body>
 {% endblock %}

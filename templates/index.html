@@ -1,26 +1,28 @@
 {% extends "./partials/layout.html" %}
 {% block head %} {% endblock %}
 {% block body %}
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
 
-<body style="font-family:NanumSquare">
 <form method="POST" action="/users/login">
+    <br><br>
+    <div style="text-align: center;">
+    <label style="font-size: large; font-weight: bold;"  class="form-group">로그인</label>
     <div class="form-group">
-        <label for="exampleInputEmail1">ID</label>
-        <input name="username" type="id" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-            placeholder="Enter ID" required>
+        <input style="margin:auto; width:400px; height:50px;" name="username" type="id" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+            placeholder="아이디" required>
     </div>
     <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
+        <input style="font-family:initial; margin:auto; width:400px; height:50px;" name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="비밀번호"
             required>
     </div>
-    <button type="submit" class="btn btn-primary">SignIn</button>
-    <a type="button" class="btn btn-primary" href='/users/signup'>Signup</a>
+    <div class="form-group">
+        <button style="width:400px; height:50px;" type="submit" class="btn btn-primary">로그인</button>
+    </div>
+    <div style="flex-direction: column;" class="form-group">
+        <label class="form-group">Earglass에 계정이 없으신가요?</label>
+        <a style="margin:10px" type="button" class="form-group" href='/users/signup'>회원가입</a>
+    </div>
+    
+</div>
 </form>
-</body>
+
 {% endblock %}

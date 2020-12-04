@@ -1,12 +1,5 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
-
-<body style="font-family:NanumSquare">
 <h1 class="d-inline-block">내 정보 수정</h1>
 <br><br><br><br><br>
 <form method="POST" action="/users/admin_edit">
@@ -16,9 +9,11 @@
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">비밀번호</label>
-        <input value="" type="text" class="form-group col-md-2" required name="password">
+        
+        <input style='font-family:initial' value="{{ user['Password'] }}" type="password" name="password" class="form-group col-md-2" 
+            id="exampleInputPassword1" placeholder= required>
     </div>
-    <button type="submit" class="btn btn-primary">수정완료</button>
+    <button style="margin-left:15px" type="submit" class="btn btn-primary">수정완료</button>
 </form>
-</body>
+
     {% endblock %}

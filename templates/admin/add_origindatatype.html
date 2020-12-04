@@ -1,11 +1,3 @@
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
-
-<body style="font-family:NanumSquare">
-
 <form id="app" @submit.prevent="submit()" action="/admin/origindatatype" class="add-content" method="POST">
     <!-- TODO add task handling -->
     
@@ -76,7 +68,7 @@
         </div>
     </div>
 </form>
-</body>
+
 <script>
     // Errors
     class UnusedDefaultFieldsExistsError extends Error { }

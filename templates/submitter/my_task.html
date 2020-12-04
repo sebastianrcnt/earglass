@@ -1,12 +1,6 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
 
-<body style="font-family:NanumSquare">
 <div class="container">
     <table class="table table-striped table-bordered" id="target-table">
         <thead>
@@ -35,8 +29,8 @@
                 <td>
                     {{ task["Pass_num"] }}
                 </td>
-                <td>
-                    <a class="btn btn-primary" href="/task/detail?tab=info&task_name={{ task['TaskName'] }}">상세보기</a>
+                <td style="text-align: center;">
+                    <a style="margin-right:10px" class="btn btn-primary" href="/task/detail?tab=info&task_name={{ task['TaskName'] }}">상세보기</a>
                     {% if task["Status"] == "ongoing" %}
                     <a class="btn btn-primary" href="/task/detail?tab=submit&task_name={{ task['TaskName'] }}">제출</a>
                     {% elif task["Status"] == "done" %}
@@ -50,7 +44,7 @@
         </tbody>
     </table>
 </div>
-</body>
+
 <script>
     function page_move(url, some_data, task_name) {
         var form = document.createElement("form");

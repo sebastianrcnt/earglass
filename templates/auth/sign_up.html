@@ -1,55 +1,49 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
 
-<body style="font-family:NanumSquare">
-<h2>SignUp Page</h2>
+<h2>회원가입</h2>
 <form method="POST" action="/users/signup">
     <br>
     <div class="form-group">
-        <label for="exampleInputEmail1">ID</label>
+        <label for="exampleInputEmail1">아이디</label>
         <input type="text" name="id" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-            placeholder="Enter ID" required>
+            placeholder="영문대소문자, 숫자 혼합 사용" required>
     </div>
     <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input type="password" name="password" class="form-control" id="exampleInputPassword1"
+        <label for="exampleInputPassword1">비밀번호</label>
+        <input style='font-family:initial' type="password" name="password" class="form-control" id="exampleInputPassword1"
             placeholder="8~24자 영문대소문자, 숫자, 특수문자 혼합 사용" required>
     </div>
     <div class="form-group">
-        <label for="exampleInputEmail1">Name</label>
+        <label for="exampleInputEmail1">이름</label>
         <input type="text" name="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-            placeholder="Enter Name" required>
+            placeholder="홍길동" required>
     </div>
     <div class="form-group">
-        <label for="exampleInputEmail1">Date of Birth</label>
+        <label for="exampleInputEmail1">생년월일</label>
         <input type="text" name="birth" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
             placeholder="YYYYMMDD" required>
     </div>
     <div class="form-group">
-        <label for="exampleInputEmail1">Phone Number</label>
+        <label for="exampleInputEmail1">휴대폰 번호</label>
         <input type="text" name="phonenumber" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
             placeholder="XXX-XXXX-XXXX" required>
     </div>
-
+    
     <fieldset class="form-group">
         <div class="row">
-            <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+            <legend class="col-form-label col-sm-2 pt-0">성별</legend>
             <div class="col-sm-10">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="gender" id="M" value="M" checked>
                     <label class="form-check-label" for="M">
-                        Male
+                        남자
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="gender" id="W" value="W">
                     <label class="form-check-label" for="W">
-                        Female
+                        여자
                     </label>
                 </div>
             </div>
@@ -57,32 +51,31 @@
     </fieldset>
 
     <div class="form-group">
-        <label for="inputAddress">Address</label>
-        <input type="text" name="address" class="form-control" id="inputAddress" placeholder="Address" required>
+        <label for="inputAddress">주소 (선택)</label>
+        <input type="text" name="address" class="form-control" id="inputAddress" placeholder="주소를 입력하세요." required>
     </div>
 
     <fieldset class="form-group">
         <div class="row">
-            <legend class="col-form-label col-sm-2 pt-0">Role</legend>
+            <legend class="col-form-label col-sm-2 pt-0">역할</legend>
             <div class="col-sm-10">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="role" id="Submitter" value="제출자" checked>
                     <label class="form-check-label" for="Submitter">
-                        Submitter
+                        제출자 (Submitter)
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="role" id="Evaluator" value="평가자">
                     <label class="form-check-label" for="Evaluator">
-                        Evaluator
+                        평가자 (Estimator)
                     </label>
                 </div>
             </div>
         </div>
     </fieldset>
 
-    <button type="submit" class="btn btn-primary">Sign Up</button>
+    <button type="submit" class="btn btn-primary">회원가입</button>
     <br><br><br>
 </form>
-</body>
 {% endblock %}

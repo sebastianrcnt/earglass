@@ -1,44 +1,39 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
 
-<body style="font-family:NanumSquare">
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 <h1 class="d-inline-block">내 정보 수정</h1>
-<br><br><br><br><br>
+<br><br><br>
 <form method="POST" action="/users/edit">
     <!-- TODO template submitter detail -->
     <div class="form-group">
-        <label class="form-group col-md-2">Id</label>
-        <input value="{{ user['Id'] }}" type="text" class="form-group col-md-2" required name="id" disabled>
+        <label class="form-group col-md-2">아이디</label>
+        <input value="{{ user['Id'] }}" type="text" class="form-group col-md-3" required name="id" disabled>
     </div>
     <div class="form-group">
-        <label class="form-group col-md-2">User 점수(100점만점)</label>
-        <input value="{{ user['UserScore'] }}" type="text" class="form-group col-md-2" required name="userscore" readonly>
+        <label class="form-group col-md-2">User 점수</label>
+        <input value="{{ user['UserScore'] }}" type="text" class="form-group col-md-3" required name="userscore" disabled>
+        <label style="color:#707070;" class="form-group col-md-2">(100점 만점)</label>
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">비밀번호</label>
-        <input value="{{ user['Password'] }}" type="text" class="form-group col-md-2" required name="password">
+        <input style="font-family: initial;" value="{{ user['Password'] }}" type="password" class="form-group col-md-3" required name="password">
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">이름</label>
-        <input value="{{ user['Name'] }}" type="text" class="form-group col-md-2" required name="name">
+        <input value="{{ user['Name'] }}" type="text" class="form-group col-md-3" required name="name">
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">생년월일</label>
-        <input value="{{ user['BirthDate'] }}" type="text" class="form-group col-md-2" required name="birth">
+        <input value="{{ user['BirthDate'] }}" type="text" class="form-group col-md-3" required name="birth">
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">휴대전화</label>
-        <input value="{{ user['PhoneNum'] }}" type="text" class="form-group col-md-2" required name="phonenumber">
+        <input value="{{ user['PhoneNum'] }}" type="text" class="form-group col-md-3" required name="phonenumber">
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">주소</label>
-        <input value="{{ user['Address'] }}" type="text" class="form-group col-md-2" required name="address">
+        <input value="{{ user['Address'] }}" type="text" class="form-group col-md-3" required name="address">
     </div>
     <!-- <div class="form group">
         <label class="form-group col-md-2">성별</label>
@@ -49,11 +44,11 @@
     </div> -->
     <div class="form-group">
         <label class="form-group col-md-2">성별</label>
-        <input value="{{ user['Gender'] }}" type="text" class="form-group col-md-2" disabled>
+        <input value="{{ user['Gender'] }}" type="text" class="form-group col-md-3" disabled>
     </div>
     <button type="submit" class="btn btn-primary">수정완료</button>
     <br><br><br><br><br>
 </form>
-</body>
+
 <!-- <a type="button" class="btn btn-primary mr-2" href='/users'>수정완료</a> -->
     {% endblock %}

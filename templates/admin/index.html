@@ -22,6 +22,7 @@
     padding: 14px 16px;
     font-size: 17px;
     width: 25%;
+    font-family:'NanumSquare'
   }
 
   .tablink:hover {
@@ -36,13 +37,7 @@
     height: 100%;
   }
 </style>
-<head>
-  <Title >font</Title>
-  <meta charset="utf-8">
-  <link href='../style.css' rel='stylesheet' >
-</head>
 
-<body style="font-family:NanumSquare">
 <div>
   <button class="tablink" onclick="openPage('Task관리', this, 'gray')" id="defaultOpen">Task관리</button>
   <button class="tablink" onclick="openPage('User관리', this, 'gray')">User관리</button>
@@ -88,5 +83,5 @@
     document.getElementById("defaultOpen").click();
   }
 </script>
-</body>
+
 {% endblock %}

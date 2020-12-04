@@ -1,20 +1,13 @@
 {% extends "./partials/layout.html" %} {% block body %}
 
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
-
-<body style="font-family:NanumSquare">
 <h1>Add Task</h1>
 <br />
 <br />
 <form id="app" @submit.prevent="submit()" action="/admin/tasks" method="POST">
     <!-- TODO add task handling -->
     <div class="form-group">
-        <label>태스크 이름</label>
+        <label>태스크명</label>
         <input type="text" v-model="taskName" class="form-control" required />
     </div>
     <div class="form-group">
@@ -22,7 +15,7 @@
         <textarea v-model="description" class="form-control"></textarea required>
     </div>
     <div class="form-group">
-        <label class="form-group mr-5">최소 업로드 주기</label>
+        <label style="margin-top: 15px;" class="form-group mr-5">최소 업로드 주기</label>
         <input type="number" min="0" max="24" v-model="minPeriod" class="form-group col-md-2" name="min_period"
             placeholder="0" required/>
     </div>
@@ -115,7 +108,7 @@
             </div>
         </div>
     </div>
-    <h5 style="margin-left: 15px; margin-bottom: 10px">
+    <h5 style="margin-left: 15px; margin-bottom: 20px">
         <b>시스템 Pass 기준 설정</b>
     </h5>
     <div class="form-group">
@@ -136,11 +129,10 @@
             placeholder="description" v-model="criteriaDescription" required></textarea>
     </div>
     <br />
-    <button type="submit" class="btn btn-primary float-right mb-4">
+    <button  type="submit" class="btn btn-primary float-right mb-4">
         Task 생성
     </button>
 </form>
-</body>
 <script>
     // Errors
     class UnusedDefaultFieldsExistsError extends Error { }

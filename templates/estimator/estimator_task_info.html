@@ -6,13 +6,6 @@
 
 {% block body %}
 
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
-
-<body style="font-family:NanumSquare">
 <h1 >태스크 정보</h1>
 <br><br>
 <style>
@@ -28,34 +21,34 @@
 </style>
 
 <div class="form-group">
-    <label style="font-weight: bold" class="form-group col-md-2">태스크 상태</label>
+    <label class="form-group col-md-2">태스크 상태</label>
     <input placeholder="{{tasks['Status']}}" type="text" class="form-group col-md-2" disabled>
 </div>
 <div class="form-group">
-    <label style="font-weight: bold" class="form-group col-md-2">태스크 이름</label>
-    <input placeholder="{{tasks['TaskName']}}" type="text" class="form-group col-md-5" disabled>
+    <label class="form-group col-md-2">태스크 이름</label>
+    <input style="font-weight: bold;" placeholder="{{tasks['TaskName']}}" type="text" class="form-group col-md-9" disabled>
 </div>
 <div class="form-group">
-    <label style="font-weight: bold" class="form-group col-md-8">태스크 설명</label>
+    <label class="form-group col-md-8">태스크 설명</label>
     <textarea style="margin-left:10px" rows="3" placeholder="{{tasks['Description']}}" type="text" class="form-group col-md-11" disabled></textarea>
 </div>
 <div class="form-group">
-    <label style="font-weight: bold" class="form-group col-md-2">평가자 채점 기준</label>
+    <label class="form-group col-md-2">평가자 채점 기준</label>
     <textarea style="margin-left:10px" rows="3" placeholder="{{tasks['PassCriteria']}}" type="text" class="form-group col-md-11" disabled></textarea>
 </div>
 <div class="form-group">
-    <label style="font-weight: bold" class="form-group col-md-2">최소 업로드 주기</label>
+    <label class="form-group col-md-2">최소 업로드 주기</label>
     <input placeholder="{{tasks['MinPeriod']}}" type="text" class="form-group col-md-2" disabled>
+    <label style="color:#707070" class="form-group col-md-2">시간</label>
 </div>
 <!-- TODO Sync with admin/task_info -->
 <div class="form-group">
-    <label style="font-weight: bold" class="form-grou col-md-2">스키마 정보</label>
+    <label class="form-grou col-md-4">기본 데이터 타입 스키마</label>
     <br>
       {% for schema in tasks['TaskDataTableSchemaInfo'].split(',') %}
     <input style="margin-left:10px; margin-top:3px" value="{{ schema }}" type="text" class="form-group col-md-2" disabled>
     {% endfor %}
 </div>
 <br><br><br><br><br>
-</body>
 {% endblock %}
 

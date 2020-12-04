@@ -1,15 +1,15 @@
 <div class="container">
     <form action="/submitter/submit_task" method="POST" enctype="multipart/form-data">
         <div class="form-group mb-4">
-            <h3>태스크 이름</h3>
+            <h3>태스크명</h3>
             <input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                 value="{{ task_info['TaskName'] }}" name="task_name" readonly>
             <small class="form-text text-muted"></small>
         </div>
-        <h3 class="mt-4">형식 다운로드</h3>
+        <h3 class="mt-4">형식 다운로드</h3><br>
         {% for odsf in odsf_type %}
-        <div style="float: left; margin-right: 15px;">
-            <h5 style="text-align: center;">{{ odsf["DataTypeName"] }}</h5>
+        <div style="float: left; margin-right: 25px; text-align:center;">
+            <h5>{{ odsf["DataTypeName"] }}</h5>
             <a class="btn btn-outline-info"
                 href="/submitter/task/download?odsf_type_id={{ odsf['idORIGIN_DATA_TYPE'] }}">형식
                 다운로드</a>
@@ -41,20 +41,14 @@
             <input type="file" class="form-control-file" name="file" required>
         </div>
         <div class="form-group mb-4">
+            <br>
             <h3>회차 정보</h3>
             <input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="round"
                 placeholder="숫자만 입력 가능합니다." required>
             <small class="form-text text-muted"></small>
         </div>
-        <!-- <div class="form-group mb-4">
-            <h3>기간 정보</h3>
-            <input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="period"
-                placeholder="2020-01-01~2020-06-30" required>
-            <small class="form-text text-muted"></small>
-        </div> -->
         <div>
             <h3>기간 정보</h3>
-            <br>
             <div>
                 <div class="form-group"> 
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">

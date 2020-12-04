@@ -1,12 +1,6 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
-<head>
-    <Title >font</Title>
-    <meta charset="utf-8">
-    <link href='../style.css' rel='stylesheet' >
-</head>
 
-<body style="font-family:NanumSquare">
 <h1 class="d-inline-block">내 정보</h1>
 <br><br><br><br><br>
 <form>
@@ -16,9 +10,9 @@
     </div>
     <div class="form-group">
         <label class="form-group col-md-2">비밀번호</label>
-        <input value="{{ user['Password'] }}" type="text" class="form-group col-md-2" disabled>
+        <input style="font-family: initial;" value="{{ user['Password'] }}" type="password" class="form-group col-md-2" disabled>
     </div>
-<a type="button" class="btn btn-primary mr-2" href='/users/admin_edit'>수정</a>
+<a type="button" style="margin-left:15px" class="btn btn-primary mr-2" href='/users/admin_edit'>수정</a>
 </form>
-</body>
+
     {% endblock %}

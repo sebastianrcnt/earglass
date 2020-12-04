@@ -1,36 +1,36 @@
-<h1>태스크 정보</h1>
+<!-- <h1>태스크 정보</h1> -->
 <table class='table mt-3'>
     <tbody>
         <tr>
-            <th>Task Name</th>
+            <th>태스크명</th>
             <td>{{task_info.get("TaskName", "None")}}</td>
         </tr>
         <tr>
-            <th>description</th>
+            <th>태스크 설명</th>
             <td>{{task_info.get("Description", "None")}}</td>
         </tr>
         <tr>
-            <th>Task 상태</th>
+            <th>태스크 상태</th>
             <td>{{task_info.get("Status", "None")}}</td>
         </tr>
         <tr>
-            <th>최소업로드주기<font style="color: grey">(시간)</font></th>
+            <th>최소 업로드주기<font style="color: grey"> (시간)</font></th>
             <td>{{task_info.get("MinPeriod", "None")}}</td>
         </tr>
         <tr>
-            <th>원본데이터타입명</th>
+            <th>원본 데이터 타입명</th>
             <td>
             {% for type in odsf_type%}
-            {{type["DataTypeName"]}}
+            {{type["DataTypeName"]}} &nbsp;&nbsp;&nbsp;
             {% endfor %}
             </td>
         </tr>
         <tr>
-            <th>최대 중복 튜플비율<font style="color: grey">(%)</font></th>
+            <th>최대 중복 튜플비율<font style="color: grey"> (%)</font></th>
             <td>{{task_info.get("MaxDuplicatedRowRatio", "None")}}</td>
         </tr>
         <tr>
-            <th>최대 column별 null 비율<font style="color: grey">(%)</font></th>
+            <th style="width:250px">최대 column별 null 비율<font style="color: grey"> (%)</font></th>
             <td>{{task_info.get("MaxNullRatioPerColumn", "None")}}</td>
         </tr>
         <tr>
