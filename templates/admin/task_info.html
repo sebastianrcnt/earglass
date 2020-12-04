@@ -44,12 +44,22 @@
         {% endfor %}
     </div>
     <div class="form-group">
-        <label class="form-group">최대 허용 중복 컬럼 비율(%)</label>
+        <label class="form-group">최대 중복 Tuple 비율(%)</label>
         <input value="{{ task['MaxDuplicatedRowRatio'] }}" type="number" min="0" max="100" class="form-control" required>
     </div>
     <div class="form-group">
-        <label class="form-group">최대 허용 Null 컬럼 비율(%)</label>
+        <label class="form-group">최대 column별 null 비율(%)</label>
         <input value="{{ task['MaxNullRatioPerColumn'] }}" type="number" min="0" max="100" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label class="form-group">
+            <h5><b>평가자 정성평가 Pass 기준설명</b></h5>
+        </label>
+        <textarea cols="30" rows="10" class="form-control" name="PassCriteria" required>{{ task['PassCriteria'] }}</textarea>
+    </div>
+    {{  task }}
+    <div class="form-group">
+        <label class="form-group"> </label>
     </div>
 </br>
 <h5 style="margin-top: 20px;"><b>원본 데이터 타입</b></h5>
@@ -63,13 +73,13 @@
             {% for data_type in origin_data_types %}
             <tr>
                 <td>
-                    {{ data_type['DataTypeName']}}
+                    {{ data_type['DataTypeName'] }}
                 </td>
                 <td>
-                    {{ data_type['SubmitNum']}}
+                    {{ data_type['SubmitNum'] }}
                 </td>
                 <td>
-                    {{ data_type['PassNum']}}
+                    {{ data_type['PassNum'] }}
                 </td>
             </tr>
             {% endfor %}
@@ -102,7 +112,7 @@
                     {% if participation['Status'] == "waiting" %}
                     <a id="task_participation" href="/admin/tasks/agreement?user_id={{ participation['Id'] }}&task_name={{ task['TaskName'] }}&agree=True" name="approve" type="submit" class="btn btn-primary">승인</a>
                     {% elif participation['Status'] == "ongoing" %}
-                    <a class="btn btn-primary">참가중</a>
+                    <button type="button" class="btn btn-primary mr-2" disabled>참가중</button>
                     {% endif %}
                 </td>
                 <td>
