@@ -15,7 +15,7 @@ def participating_tasklist(user_index):
     FROM (SELECT T.TaskName, COALESCE(P.Status, '') AS Status\
         FROM TASK AS T LEFT OUTER JOIN PARTICIPATION AS P ON P.FK_TaskName = T.TaskName AND P.FK_idUSER = %s) AS SQ\
     LEFT OUTER JOIN PARSING_DSF AS D ON D.TaskName = SQ.TaskName \
-    WHERE SQ.Status = 'ongoing' GROUP BY SQ.TaskName"
+    WHERE (SQ.Status = 'ongoing' OR SQ.Status = 'done') GROUP BY SQ.TaskName"
     return queryall(sql, (user_index,))
 
 def task_info(task_name):

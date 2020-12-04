@@ -45,11 +45,11 @@
     </div>
     <div class="form-group">
         <label class="form-group">최대 중복 Tuple 비율(%)</label>
-        <input value="{{ task['MaxDuplicatedRowRatio'] }}" type="number" min="0" max="100" class="form-control" required>
+        <input name="MaxDuplicatedRowRatio" value="{{ task['MaxDuplicatedRowRatio'] }}" type="number" min="0" max="100" class="form-control" required>
     </div>
     <div class="form-group">
         <label class="form-group">최대 column별 null 비율(%)</label>
-        <input value="{{ task['MaxNullRatioPerColumn'] }}" type="number" min="0" max="100" class="form-control" required>
+        <input name="MaxNullRatioPerColumn" value="{{ task['MaxNullRatioPerColumn'] }}" type="number" min="0" max="100" class="form-control" required>
     </div>
     <div class="form-group">
         <label class="form-group">
@@ -63,6 +63,7 @@
     </div>
 </br>
 <h5 style="margin-top: 20px;"><b>원본 데이터 타입</b></h5>
+    <a class="btn btn-secondary">원본 데이터 타입 추가</a>
     <table style="margin-left: 5px; margin-bottom: 20px;" class="table table-striped table-bordered" id="target-table">
         <thead>
             <th>원본데이터 타입</th>

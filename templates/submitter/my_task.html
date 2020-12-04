@@ -32,8 +32,10 @@
                     <a class="btn btn-primary" href="/task/detail?tab=info&task_name={{ task['TaskName'] }}">상세보기</a>
                     {% if task["Status"] == "ongoing" %}
                     <a class="btn btn-primary" href="/task/detail?tab=submit&task_name={{ task['TaskName'] }}">제출</a>
+                    {% elif task["Status"] == "done" %}
+                    <button type="button" class="btn btn-primary mr-2" disabled>테스크종료</button>
                     {% else %}
-                    <button type="button" class="btn btn-primary mr-2 " disabled>승인대기중</button>
+                    <button type="button" class="btn btn-primary mr-2" disabled>승인대기중</button>
                     {% endif %}
                 </td>
             </tr>

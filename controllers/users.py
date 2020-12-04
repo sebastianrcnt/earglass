@@ -56,7 +56,7 @@ def edit_user():
         log_value = log[0].items()[0]
     except:
         pass
-    return redirect("/")
+    return redirect("/users/")
 
 
 # Auth Stuff

@@ -19,7 +19,10 @@ def duplicate_tuple(df):
     for k in range(df.shape[0]):
         tmp.add(tuple(df.iloc[k,:]))
     isol_tuple_num = len(tmp)
-    duplicate_rate = 1 - (isol_tuple_num / total_tuple_num)
+    if total_tuple_num==0:
+        duplicate_rate=0
+    else:
+        duplicate_rate = 1 - (isol_tuple_num / total_tuple_num)
     duplicate = {"total_tuple_num": total_tuple_num,"duplicate_num":total_tuple_num - isol_tuple_num, "duplicate_rate":duplicate_rate}
     return duplicate
 
@@ -35,13 +38,18 @@ def system_score(file):
     # statistic analysis
     null_info = null_count(odsf)
     duplicate_info = duplicate_tuple(odsf)
-      
-    score_info['total_tuple_score'] = math.log2(duplicate_info['total_tuple_num'])*(7.5)*(30/100)
-    score_info['duplicate_tuple_score'] = (1 - duplicate_info['duplicate_rate'])*(30)
-    
+    if duplicate_info['total_tuple_num']==0:
+        score_info['total_tuple_score'] = 0
+        score_info['duplicate_tuple_score'] = 0
+    else:
+        score_info['total_tuple_score'] = math.log2(duplicate_info['total_tuple_num'])*(7.5)*(30/100)
+        score_info['duplicate_tuple_score'] = (1 - duplicate_info['duplicate_rate'])*(30)
     null_score_list = []
     for col in null_info.keys():
-        tmp = 1 - (null_info[col] / duplicate_info['total_tuple_num'])
+        if duplicate_info['total_tuple_num']==0:
+            tmp = 0
+        else:
+            tmp = 1 - (null_info[col] / duplicate_info['total_tuple_num'])
         null_score_list.append(tmp)
     
     score_info['col_null_score'] = (sum(null_score_list)/len(null_score_list))*(40)

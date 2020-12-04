@@ -142,6 +142,7 @@ def csv_file_download_with_stream():
     # schema에 맞는 df 생성
     #승수형 기다리기
     schema = json.loads(odsf_type['MappingInfo'])
+    print(schema)
     schema = list(schema.keys())
     temp_df = pd.DataFrame(columns=schema)
 

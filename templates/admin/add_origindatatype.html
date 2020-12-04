@@ -2,19 +2,23 @@
 
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 
-<h1>Task Detail</h1>
+<h1>Add Task</h1>
 <br />
 <br />
-<br />
-<form id="app" @submit.prevent="submit()" >
+<form id="app" @submit.prevent="submit()" action="/admin/tasks" method="POST">
     <!-- TODO add task handling -->
     <div class="form-group">
         <label>태스크 이름</label>
-        <input type="text" v-model="taskName" class="form-control"  required>
+        <input type="text" v-model="taskName" class="form-control" required />
     </div>
     <div class="form-group">
         <label>설명</label>
         <textarea v-model="description" class="form-control"></textarea required>
+    </div>
+    <div class="form-group">
+        <label class="form-group mr-5">최소 업로드 주기</label>
+        <input type="number" min="0" max="24" v-model="minPeriod" class="form-group col-md-2" name="min_period"
+            placeholder="0" required/>
     </div>
     <div class="form-group">
         <label>기본 데이터 타입</label>
@@ -123,7 +127,7 @@
             <h5><b>평가자 정성평가 Pass 기준설명</b></h5>
         </label>
         <textarea style="margin-left: 15px" cols="30" rows="10" class="form-control" name="pass_criteria_description"
-            placeholder="description" v-model="criteriaDescription"></textarea required>
+            placeholder="description" v-model="criteriaDescription" required></textarea>
     </div>
     <br />
     <button type="submit" class="btn btn-primary float-right mb-4">
@@ -131,6 +135,11 @@
     </button>
 </form>
 <script>
+    // Errors
+    class UnusedDefaultFieldsExistsError extends Error { }
+    class DefaultFieldsMissingError extends Error { }
+    class OriginDataTypesMissingError extends Error { }
+
     const app = new Vue({
         el: "form#app",
         data: {
@@ -144,8 +153,8 @@
                 // dataType1: { subField1: "defaultField1", subField2: "defaultField2" },
                 // dataType2: { subField3: "defaultField1", subField4: "defaultField2" },
             },
-            maxTupleRatio: 0,
-            maxNullRatioPerColumn: 0,
+            maxTupleRatio: "",
+            maxNullRatioPerColumn: "",
             criteriaDescription: "",
             // Buffers
             defaultFieldBuffer: "",
@@ -156,13 +165,28 @@
         created() { },
         methods: {
             submit() {
-                const data = this.pack();
-                console.log(JSON.stringify(data, null, 2));
-                axios.post('/admin/tasks', data).then((res) => {
-                    console.log(res.data)
-                }).catch((err) => {
-                    console.log(err);
-                })
+                try {
+                    this.validateSchema();
+                    const data = this.pack();
+                    console.log(JSON.stringify(data, null, 2));
+                    axios.post('/admin/tasks', data).then((response) => {
+                        window.location = "/";
+                        console.log(response.data);
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                } catch (e) {
+                    console.error(e);
+                    if (e instanceof UnusedDefaultFieldsExistsError) {
+                        alert("아직 사용되지 않은 기본 필드가 남아있습니다.")
+                    } else if (e instanceof OriginDataTypesMissingError) {
+                        alert("하나 이상의 원본 데이터 타입이 필요합니다")
+                    } else if (e instanceof DefaultFieldsMissingError) {
+                        alert("하나 이상의 기본 필드가 필요합니다")
+                    } else {
+                        throw e;
+                    }
+                }
             },
             // Senders
             pack() {
@@ -269,19 +293,33 @@
             },
             deleteSubField(dataTypeName, subField) {
                 Vue.delete(this.originDataTypes[dataTypeName], subField);
+                this.$forceUpdate();
             },
             validateSchema() {
+                if (this.defaultFields.length === 0) {
+                    throw new DefaultFieldsMissingError();
+                } else if (Object.keys(this.originDataTypes).length === 0) {
+                    throw new OriginDataTypesMissingError();
+                }
+
                 for (let dataTypeName in this.originDataTypes) {
                     const originDataType = this.originDataTypes[dataTypeName];
                     const defaultFields = Object.values(originDataType);
-                    for (let defaultField of defaultFields) {
+                    for (let defaultField of this.defaultFields) {
                         if (!defaultFields.includes(defaultField)) {
-                            return false;
+                            throw new UnusedDefaultFieldsExistsError();
                         }
                     }
                 }
-                return true;
             },
+            /*
+            defaultFields: [], // ["defaultField1", "defaultField2"],
+            originDataTypes: {
+                // dataTypeName: { subField1: defaultField1, subField2L: defaultField2}
+                // dataType1: { subField1: "defaultField1", subField2: "defaultField2" },
+                // dataType2: { subField3: "defaultField1", subField4: "defaultField2" },
+            },
+            */
             print(something) {
                 console.log(something);
             },

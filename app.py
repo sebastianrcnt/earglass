@@ -8,6 +8,7 @@ import os
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = "earglass"
+app.config['JSON_AS_ASCII'] = False
 
 @app.context_processor
 def inject_user():

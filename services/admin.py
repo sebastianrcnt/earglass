@@ -41,21 +41,21 @@ def update_participation_status(task_name, user_index, new_status, comment):
     return callproc('UpdateParticipationStatus', (task_name, user_index, new_status, comment,))
 
 
-def edit_task(current_task_name, description, min_period, task_data_table_name,
-         max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria):
+def edit_task(TaskName, Description, MinPeriod, MaxDuplicatedRowRatio, MaxNullRatioPerColumn, PassCriteria):
     '''수정된 정보 update'''
-    return callproc('EditTask', (current_task_name, description, min_period, task_data_table_name,
-         max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria,))
+    sql = 'UPDATE TASK SET Description = %s, MinPeriod = %s, MaxDuplicatedRowRatio = %s, MaxNullRatioPerColumn = %s, PassCriteria = %s WHERE TaskName = %s;'
+
+    print((Description, MinPeriod, MaxDuplicatedRowRatio, MaxNullRatioPerColumn, PassCriteria, TaskName))
+    execute(sql, (Description, MinPeriod, MaxDuplicatedRowRatio, MaxNullRatioPerColumn, PassCriteria, TaskName))
 
 def task_info(task_name):
     '''태스크 정보 반환'''
-    sql = "SELECT TaskName, Description, MinPeriod, TaskDataTableName, TaskDataTableSchemaInfo, MaxDuplicatedRowRatio, MaxNullRatioPerColumn \
-        FROM TASK WHERE TaskName = %s"
+    sql = "SELECT * FROM TASK WHERE TaskName = %s"
     return queryone(sql, (task_name, ))
 
 def task_info_origin_data_type(task_name):
     '''태스크 정보에서 원본 데이터 타입 별로 제출 파일 수, Pass된 파일 수 보여주기'''
-    sql = "SELECT ODT.DataTypeName, COUNT(P.idPARSING_DSF) AS SubmitNum, \
+    sql = "SELECT ODT.idORIGIN_DATA_TYPE, ODT.DataTypeName, COUNT(P.idPARSING_DSF) AS SubmitNum, \
             SUM(CASE COALESCE(P.Pass, 'NP') WHEN 'P' THEN 1 ELSE 0 END) AS PassNum \
             FROM ORIGIN_DATA_TYPE AS ODT LEFT OUTER JOIN PARSING_DSF AS P ON P.OriginDataTypeID = ODT.idORIGIN_DATA_TYPE \
             WHERE ODT.TaskName = %s \

@@ -2,18 +2,18 @@ import pymysql
 import sys
 
 from database import config
-config = config.config
+conf = config.config
 
 # PyMySQL Documentation: https://pymysql.readthedocs.io/en/latest/index.html
 
 
 def connect():
     connection = pymysql.connect(
-        user=config['user'],
-        password=config['password'],
-        host=config['host'],
-        port=config['port'],
-        database=config['database'],
+        user=conf['user'],
+        password=conf['password'],
+        host=conf['host'],
+        port=conf['port'],
+        database=conf['database'],
         cursorclass=pymysql.cursors.DictCursor
     )
 

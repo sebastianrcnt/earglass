@@ -52,12 +52,12 @@ def get_task_page(task_name):
     origin_data_types = services.admin.task_info_origin_data_type(task_name)
     task_participation = services.admin.show_task_participation_list(task_name)
 
-    # print(origin_data_types)
-    # odt_list = list(origin_data_types.keys())
-    # count_row_by_odt = system.utils.count_row_by_origin_type(task_name, odt_list)
+    odt_list = []
+    for odt in origin_data_types:
+        odt_list.append(odt['idORIGIN_DATA_TYPE'])
+    count_row_by_odt = system.utils.count_row_by_origin_type(task_name, odt_list)
 
-# , count_row_by_odt=count_row_by_odt
-    return render_template("admin/task_info.html", task_name=task_name,task=task, origin_data_types=origin_data_types, task_participation=task_participation)
+    return render_template("admin/task_info.html", task_name=task_name,task=task, origin_data_types=origin_data_types, task_participation=task_participation, count_row_by_odt=count_row_by_odt)
 
 @controller.route("/tasks/agreement", methods=["GET"])
 def confirm_agreement():
@@ -157,17 +157,15 @@ def edit_task(task_name):
     TaskName = task_name
     Description = request.form.get('Description')
     MinPeriod = request.form.get('MinPeriod')
-    # MinPeriod = float(str(MinPeriod))
-    print('MinPeriod: ', MinPeriod)
+    MinPeriod = float(MinPeriod)
     MaxDuplicatedRowRatio = request.form.get('MaxDuplicatedRowRatio')
-    print('MaxDuplicatedRowRatio: ', MaxDuplicatedRowRatio)
-    # MaxDuplicatedRowRatio = float(str(MaxDuplicatedRowRatio))
+    MaxDuplicatedRowRatio = float(MaxDuplicatedRowRatio)
     MaxNullRatioPerColumn = request.form.get('MaxNullRatioPerColumn')
-    # MaxNullRatioPerColumn = float(str(MaxNullRatioPerColumn))
+    MaxNullRatioPerColumn = float(MaxNullRatioPerColumn)
+    print(type(MaxDuplicatedRowRatio), type(MaxNullRatioPerColumn))
     PassCriteria = request.form.get("PassCriteria")
 
-    print(dict(request.form))
-    # services.admin.edit_task(TaskName, Description, MinPeriod, MaxDuplicatedRowRatio, MaxNullRatioPerColumn, PassCriteria)
+    services.admin.edit_task(TaskName, Description, MinPeriod, MaxDuplicatedRowRatio, MaxNullRatioPerColumn, PassCriteria)
 
     # task_name=data["TaskName"]
     # task = services.admin.task_info(task_name)

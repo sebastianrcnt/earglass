@@ -43,9 +43,10 @@
 </div>
 <!-- TODO Sync with admin/task_info -->
 <div class="form-group">
-    <label style="vertical-align: middle;" class="form-group col-md-2">스키마 정보</label>
-    {% for schema in tasks['TaskDataTableSchemaInfo'].split(',') %}
-    <input placeholder="{{ schema[8:] }}" type="text" class="form-group col-md-2" disabled>
+    <label class="form-group">스키마</label>
+    <br>
+      {% for schema in tasks['TaskDataTableSchemaInfo'].split(',') %}
+    <input value="{{ schema }}" type="text" class="form-group col-md-2" disabled>
     {% endfor %}
 </div>
 <br><br><br><br><br>

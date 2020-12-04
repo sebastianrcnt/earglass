@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, request, make_response, flash, Response
+from flask import Blueprint, render_template, redirect, request, make_response, flash, Response, send_file
 import services
 import system
 from pprint import pprint
@@ -52,7 +52,8 @@ def evaluate():
         pdsf = services.estimator.pdsf_file_info(idPARSING_DSF)
         if pdsf["TotalStatus"] == "done" and pdsf["Pass"] == "P":
             # task data table 에 추가
-            system.utils.add_pdsf_to_taskdata(pdsf["TaskName"], user_id, idPARSING_DSF)
+            
+            system.utils.add_pdsf_to_taskdata(pdsf["TaskName"], user_id, idPARSING_DSF, pdsf["FK_idORIGIN_DSF"])
 
     flash("평가완료 되었습니다.")
     return redirect("/")
@@ -86,3 +87,21 @@ def csv_file_download_with_stream():
     response.headers["Content-Disposition"] = f"attachment; filename={fname}"
 
     return response
+
+@controller.route("/task/download2")
+def pdsf_file_download():
+    """
+    pdsf csv file download
+    """
+
+    idPARSING_DSF = int(request.args.get('pdsf_id', 0))
+    if idPARSING_DSF != 0:
+        print(idPARSING_DSF)
+        pdsf = services.estimator.pdsf_file_info(idPARSING_DSF)
+    else:
+        return redirect("/my_task")
+
+    filename = pdsf["ParsingFile"]
+    fname = filename.split("/")[-1]
+
+    return send_file(filename, attachment_filename=fname, as_attachment=True)

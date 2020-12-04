@@ -9,10 +9,14 @@ def evaluate_waiting_list(estimator_index):#ROW_NUMBER 지움
     return queryall(sql, (estimator_index, ))
 
 def evaluated_list(estimator_index): #ROW_NUMBER 지움
-    """해당 평가자가 평가한 파일 리스트 (index, taskname, 제출자 id, 평가점수, pass여부, 평가한날짜와시간, 파싱dsf 위치)"""
-    sql = "SELECT P.TaskName, P.SubmitterID, E.Score, E.Pass, E.EndTime, P.ParsingFile\
-    FROM EVALUATION AS E, PARSING_DSF AS P LEFT JOIN TASK AS T ON P.TaskName = T.TaskName \
-    WHERE P.idPARSING_DSF = E.FK_idPARSING_DSF AND E.FK_idEstimator = %s AND E.Status = 'done'"
+    """해당 평가자가 평가한 파일 리스트 (index, taskname, 제출자 id, 평가점수, pass여부, 평가한날짜와시간, 파싱dsf 위치
+    , 원본 데이터 타입 명, 회차, 기간)"""
+    sql = "SELECT P.TaskName, P.SubmitterID, E.Score, E.Pass, E.EndTime, P.ParsingFile, \
+         O.DataTypeName, P.Period, P.Round\
+    FROM EVALUATION AS E, TASK AS T, PARSING_DSF AS P LEFT OUTER JOIN ORIGIN_DATA_TYPE AS O ON O.idORIGIN_DATA_TYPE = P.OriginDataTypeID \
+    WHERE P.idPARSING_DSF = E.FK_idPARSING_DSF \
+        AND P.TaskName = T.TaskName\
+        AND E.FK_idEstimator = %s AND E.Status = 'done'"
     return queryall(sql, (estimator_index, ))
 
 def task_detail(task_name):

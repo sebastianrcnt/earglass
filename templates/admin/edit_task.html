@@ -27,22 +27,12 @@
     </div>
     <div class="form-group">
         <label class="form-group col-md-4">Description</label>
-        <textarea style="margin-left:15px;"cols="30" rows="10" class="form-group col-md-11" readonly>{{ task['Description'] }}</textarea>
+        <!-- <textarea style="margin-left:15px;"cols="30" rows="10" class="form-group col-md-11" readonly></textarea> -->
+        <input value="{{ task['Description'] }}" type="text" class="form-group col-md-11" required name="description">
     </div>
     <div class="form-group">
         <label class="form-group col-md-3">최소 업로드 주기</label>
         <input placeholder="{{ task['MinPeriod'] }}" type="text" class="form-group col-md-2" readonly> week
-    </div>
-    <div class="form-group">
-        <label class="form-group col-md-3">테이블 이름</label>
-        <input placeholder="{{ task['TaskDataTableName'] }}" type="text" class="form-group col-md-2" readonly>
-    </div>
-    <div class="form-group">
-        <label class="form-group col-md-3">스키마</label>
-        {% for schema in task['TaskDataTableSchemaInfo'].split(',') %}
-        <input placeholder="{{ schema }}" type="text" class="form-group col-md-2" readonly>
-        {% endfor %}
-        <!-- <input placeholder="{{ task['TaskDataTableSchemaInfo'] }}" type="text" class="form-group col-md-2" readonly><input placeholder="{{ task['TaskDataTableSchemaInfo'] }}" type="text" class="form-group col-md-2" readonly> -->
     </div>
     <div class="form-group">
         <label class="form-group col-md-3">최대 허용 중복 컬럼 비율</label>
@@ -58,7 +48,7 @@
         <thead>
             <th>원본데이터 타입</th>
             <th>제출파일 수</th>
-            <th>Pass된 파일 수</th>
+            <th>Pass된 Tuple 수</th>
         </thead>
         <tbody>
             {% for data_type in origin_data_types %}
