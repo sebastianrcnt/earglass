@@ -18,39 +18,38 @@
     textarea::-webkit-input-placeholder {color:black;}    
     textarea::-moz-placeholder {color:black} 
 </style>
-<form method="POST" action="/admin/edits">
+<form method="POST" action="/admin/tasks/{{ task['TaskName'] }}">
     <!-- TODO template task info -->
     <div class="form-group">
-        <label class="form-group col-md-3">TaskName</label>
-        <input name="TaskName" placeholder="{{ task['TaskName'] }}" type="text" class="form-group col-md-2" readonly>
+        <label class="form-group">TaskName</label>
+        <input name="Description" value="{{ task['TaskName'] }}" type="text" class="form-control form-input" disabled> 
     </div>
     <div class="form-group">
-        <label class="form-group col-md-3">Description</label>
-        <input name="Description" placeholder="{{ task['Description'] }}" type="text" class="form-group col-md-2" readonly> 
-        <!-- <textarea style="margin-left:15px;"cols="30" rows="10" class="form-group col-md-11" readonly>{{ task['Description'] }}</textarea> -->
+        <label class="form-group">Description</label>
+        <input name="Description" value="{{ task['Description'] }}" type="text" class="form-control form-input" required> 
     </div>
     <div class="form-group">
-        <label class="form-group col-md-3">최소 업로드 주기</label>
-        <input name="MinPeriod" placeholder="{{ task['MinPeriod'] }}" type="text" class="form-group col-md-2" readonly>
+        <label class="form-group">최소 업로드 주기</label>
+        <input name="MinPeriod" value="{{ task['MinPeriod'] }}" type="number" class="form-control" required>
     </div>
     <div class="form-group">
-        <label class="form-group col-md-3">테이블 이름</label>
-        <input name="TaskDataTableName" placeholder="{{ task['TaskDataTableName'] }}" type="text" class="form-group col-md-2" readonly>
+        <label class="form-group">테이블 이름</label>
+        <input name="TaskDataTableName" value="{{ task['TaskDataTableName'] }}" type="text" class="form-control" disabled>
     </div>
     <div class="form-group">
-        <label class="form-group col-md-3">스키마</label>
-        {% for schema in task['TaskDataTableSchemaInfo'].split(',') %}
-        <input placeholder="{{ schema }}" type="text" class="form-group col-md-2" readonly>
+        <label class="form-group">스키마</label>
+        <br>
+          {% for schema in task['TaskDataTableSchemaInfo'].split(',') %}
+        <input value="{{ schema }}" type="text" class="form-group col-md-2" disabled>
         {% endfor %}
-        <!-- <input placeholder="{{ task['TaskDataTableSchemaInfo'] }}" type="text" class="form-group col-md-2" readonly><input placeholder="{{ task['TaskDataTableSchemaInfo'] }}" type="text" class="form-group col-md-2" readonly> -->
     </div>
     <div class="form-group">
-        <label class="form-group col-md-3">최대 허용 중복 컬럼 비율</label>
-        <input placeholder="{{ task['MaxDuplicatedRowRatio'] }}" type="text" class="form-group col-md-2" readonly>
+        <label class="form-group">최대 허용 중복 컬럼 비율(%)</label>
+        <input value="{{ task['MaxDuplicatedRowRatio'] }}" type="number" min="0" max="100" class="form-control" required>
     </div>
     <div class="form-group">
-        <label class="form-group col-md-3">최대 허용 Null 컬럼 비율</label>
-        <input placeholder="{{ task['MaxNullRatioPerColumn'] }}" type="text" class="form-group col-md-2" readonly>
+        <label class="form-group">최대 허용 Null 컬럼 비율(%)</label>
+        <input value="{{ task['MaxNullRatioPerColumn'] }}" type="number" min="0" max="100" class="form-control" required>
     </div>
 </br>
 <h5 style="margin-top: 20px;"><b>원본 데이터 타입</b></h5>
@@ -108,7 +107,7 @@
                 </td>
                 <td>
                     {% if participation['Status'] == "waiting" %}
-                    <a id="task_participation" href="/admin/tasks/agreement?user_id={{ participation['Id'] }}&task_name={{ task['TaskName'] }}&agree=" name="reject" type="submit" class="btn btn-primary">거절</a>
+                    <a id="task_participation" href="/admin/tasks/agreement?user_id={{ participation['Id'] }}&task_name={{ task['TaskName'] }}&agree=False" name="reject" type="submit" class="btn btn-primary">거절</a>
                     {% endif %}
                 </td>
             </tr>
