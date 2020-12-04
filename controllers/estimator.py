@@ -14,8 +14,12 @@ def get_estimator_home():
     tasks = services.estimator.evaluate_waiting_list(user_index)
 
     for task in tasks:
-        task["SubmitterID"] = services.users.get_user_by_index(task["SubmitterID"])["Id"]
-
+        id = services.users.get_userID_by_index(task["SubmitterID"])
+        if id != None:
+            task["SubmitterID"] = id['Id']
+        else:
+            task["SubmitterID"] = "탈퇴회원"
+            
     return render_template("estimator/estimator_home.html", tasks=tasks)
 
 

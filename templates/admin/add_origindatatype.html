@@ -1,48 +1,14 @@
-{% extends "./partials/layout.html" %} {% block body %}
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
 
-<!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
+<body style="font-family:NanumSquare">
 
-<h1>Add Task</h1>
-<br />
-<br />
-<form id="app" @submit.prevent="submit()" action="/admin/tasks" method="POST">
+<form id="app" @submit.prevent="submit()" action="/admin/origindatatype" class="add-content" method="POST">
     <!-- TODO add task handling -->
-    <div class="form-group">
-        <label>태스크 이름</label>
-        <input type="text" v-model="taskName" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>설명</label>
-        <textarea v-model="description" class="form-control"></textarea required>
-    </div>
-    <div class="form-group">
-        <label class="form-group mr-5">최소 업로드 주기</label>
-        <input type="number" min="0" max="24" v-model="minPeriod" class="form-group col-md-2" name="min_period"
-            placeholder="0" required/>
-    </div>
-    <div class="form-group">
-        <label>기본 데이터 타입</label>
-        <div class="form-row">
-            <div class="form-group mr-2">
-                <input type="text" class="form-control" placeholder="기본 필드 이름" v-model="defaultFieldBuffer" />
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" v-on:click="addDefaultField()">
-                    추가하기
-                </button>
-            </div>
-        </div>
-        <ul>
-            <template v-for="defaultField in defaultFields">
-                <li class="mb-2">
-                    <span>[[ defaultField ]]</span>
-                    <button type="button" class="btn btn-info" v-on:click="deleteDefaultField(defaultField)">
-                        삭제
-                    </button>
-                </li>
-            </template>
-        </ul>
-    </div>
+    
     <div class="form-group">
         <label>원본 데이터 타입</label>
         <div class="form-row">
@@ -109,31 +75,8 @@
             </div>
         </div>
     </div>
-    <h5 style="margin-left: 15px; margin-bottom: 10px">
-        <b>시스템 Pass 기준 설정</b>
-    </h5>
-    <div class="form-group">
-        <label class="form-group col-md-3">최대 중복 Tuple 비율(%)</label>
-        <input type="number" min="0" max="100" v-model="maxTupleRatio" class="form-group col-md-2" name="tuple_ratio"
-            placeholder="0" required/>
-    </div>
-    <div class="form-group">
-        <label class="form-group col-md-3">최대 Column별 Null 비율(%)</label>
-        <input type="number" min="0" max="100" v-model="maxNullRatioPerColumn" class="form-group col-md-2"
-            name="tuple_ratio" placeholder="0" required/>
-    </div>
-    <div class="form-group">
-        <label class="form-group col-md-4">
-            <h5><b>평가자 정성평가 Pass 기준설명</b></h5>
-        </label>
-        <textarea style="margin-left: 15px" cols="30" rows="10" class="form-control" name="pass_criteria_description"
-            placeholder="description" v-model="criteriaDescription" required></textarea>
-    </div>
-    <br />
-    <button type="submit" class="btn btn-primary float-right mb-4">
-        Task 생성
-    </button>
 </form>
+</body>
 <script>
     // Errors
     class UnusedDefaultFieldsExistsError extends Error { }
@@ -169,7 +112,7 @@
                     this.validateSchema();
                     const data = this.pack();
                     console.log(JSON.stringify(data, null, 2));
-                    axios.post('/admin/tasks', data).then((response) => {
+                    axios.post('/admin/origindatatype', data).then((response) => {
                         window.location = "/";
                         console.log(response.data);
                     }).catch((err) => {
@@ -327,4 +270,3 @@
         delimiters: ["[[", "]]"],
     });
 </script>
-{% endblock %}

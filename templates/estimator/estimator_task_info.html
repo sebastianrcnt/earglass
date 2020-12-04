@@ -5,7 +5,15 @@
 
 
 {% block body %}
-<h1>Task Info</h1>
+
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
+
+<body style="font-family:NanumSquare">
+<h1 >태스크 정보</h1>
 <br><br>
 <style>
     input::placeholder {color:black;}
@@ -20,35 +28,34 @@
 </style>
 
 <div class="form-group">
-    <label class="form-group col-md-2">Task Name</label>
-    <input placeholder="{{tasks['TaskName']}}" type="text" class="form-group col-md-2" disabled>
+    <label style="font-weight: bold" class="form-group col-md-2">태스크 상태</label>
+    <input placeholder="{{tasks['Status']}}" type="text" class="form-group col-md-2" disabled>
 </div>
 <div class="form-group">
-    <label class="form-group col-md-8">Description</label>
-    <textarea cols="30" rows="5" placeholder="{{tasks['Description']}}" type="text" class="form-group col-md-11" disabled></textarea>
+    <label style="font-weight: bold" class="form-group col-md-2">태스크 이름</label>
+    <input placeholder="{{tasks['TaskName']}}" type="text" class="form-group col-md-5" disabled>
 </div>
-
+<div class="form-group">
+    <label style="font-weight: bold" class="form-group col-md-8">태스크 설명</label>
+    <textarea style="margin-left:10px" rows="3" placeholder="{{tasks['Description']}}" type="text" class="form-group col-md-11" disabled></textarea>
+</div>
 <div class="form-group">
     <label style="font-weight: bold" class="form-group col-md-2">평가자 채점 기준</label>
-    <input placeholder="{{tasks['PassCriteria']}}" type="text" class="form-group col-md-9" disabled>
+    <textarea style="margin-left:10px" rows="3" placeholder="{{tasks['PassCriteria']}}" type="text" class="form-group col-md-11" disabled></textarea>
 </div>
-
 <div class="form-group">
-    <label class="form-group col-md-2">최소 업로드 주기</label>
+    <label style="font-weight: bold" class="form-group col-md-2">최소 업로드 주기</label>
     <input placeholder="{{tasks['MinPeriod']}}" type="text" class="form-group col-md-2" disabled>
-</div>
-<div class="form-group">
-    <label class="form-group col-md-2">태스크 상태</label>
-    <input placeholder="{{tasks['Status']}}" type="text" class="form-group col-md-2" disabled>
 </div>
 <!-- TODO Sync with admin/task_info -->
 <div class="form-group">
-    <label class="form-group">스키마</label>
+    <label style="font-weight: bold" class="form-grou col-md-2">스키마 정보</label>
     <br>
       {% for schema in tasks['TaskDataTableSchemaInfo'].split(',') %}
-    <input value="{{ schema }}" type="text" class="form-group col-md-2" disabled>
+    <input style="margin-left:10px; margin-top:3px" value="{{ schema }}" type="text" class="form-group col-md-2" disabled>
     {% endfor %}
 </div>
 <br><br><br><br><br>
+</body>
 {% endblock %}
 

@@ -1,6 +1,12 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
 
+<body style="font-family:NanumSquare">
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 <h1 class="d-inline-block">내 정보</h1>
 <br><br><br><br><br>
@@ -41,4 +47,5 @@
 <a type="button" class="btn btn-primary mr-2" href='/users/my/edit'>수정</a>
 <a type="button" class="btn btn-primary mr-2" href='/users/my/withdrawal'>탈퇴</a>
 </form>
+</body>
     {% endblock %}

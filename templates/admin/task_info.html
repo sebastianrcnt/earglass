@@ -2,7 +2,13 @@
 {% block body %}
 
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
 
+<body style="font-family:NanumSquare">
 <h1 class="d-inline-block">Task Info</h1>
 <!-- task 삭제 설정해야 함 -->
 </br>
@@ -57,20 +63,25 @@
         </label>
         <textarea cols="30" rows="10" class="form-control" name="PassCriteria" required>{{ task['PassCriteria'] }}</textarea>
     </div>
-    {{  task }}
     <div class="form-group">
         <label class="form-group"> </label>
     </div>
 </br>
 <h5 style="margin-top: 20px;"><b>원본 데이터 타입</b></h5>
-    <a class="btn btn-secondary">원본 데이터 타입 추가</a>
+    <a class="btn btn-secondary" href="/admin/origindatatype">원본 데이터 타입 추가</a>
+    {% include "admin/add_origindatatype.html" %}
     <table style="margin-left: 5px; margin-bottom: 20px;" class="table table-striped table-bordered" id="target-table">
         <thead>
             <th>원본데이터 타입</th>
-            <th>제출파일 수</th>
-            <th>Pass된 파일 수</th>
+            <th>제출 파일 수</th>
+            <th>Pass된 tuple 수</th>
         </thead>
         <tbody>
+            <tr>
+                <td>전체 데이터</td>
+                <td>{{ total_file_num }}</td>
+                <td>{{ count_row_by_odt["total"] }}</td>
+            </tr>
             {% for data_type in origin_data_types %}
             <tr>
                 <td>
@@ -80,7 +91,7 @@
                     {{ data_type['SubmitNum'] }}
                 </td>
                 <td>
-                    {{ data_type['PassNum'] }}
+                    {{ count_row_by_odt[data_type['idORIGIN_DATA_TYPE']] }}
                 </td>
             </tr>
             {% endfor %}
@@ -148,4 +159,5 @@
         $("#target-table2").DataTable();
     })
 </script>
+</body>
 {% endblock %}

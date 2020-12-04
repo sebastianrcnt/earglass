@@ -2,10 +2,11 @@ from database.connection import *
 
 
 def evaluate_waiting_list(estimator_index):#ROW_NUMBER 지움
-    """해당 평가자가 평가할 파일 리스트 (index, taskname, 제출자 id, deadline, 파싱dsf 위치)"""
-    sql = "SELECT P.TaskName, P.SubmitterID, E.Deadline, P.ParsingFile, P.idPARSING_DSF\
-    FROM EVALUATION AS E, PARSING_DSF AS P\
-    WHERE P.idPARSING_DSF = E.FK_idPARSING_DSF AND E.FK_idEstimator = %s AND E.Status = 'ongoing'"
+    """해당 평가자가 평가할 파일 리스트 (index, taskname, 제출자 id, deadline, system score, 파싱dsf 위치)"""
+    sql = "SELECT P.TaskName, P.SubmitterID, E.Deadline, P.SystemScore, P.ParsingFile, P.idPARSING_DSF, \
+        O.DataTypeName, P.Period, P.Round\
+    FROM EVALUATION AS E, PARSING_DSF AS P LEFT OUTER JOIN ORIGIN_DATA_TYPE AS O ON O.idORIGIN_DATA_TYPE = P.OriginDataTypeID\
+    WHERE P.idPARSING_DSF = E.FK_idPARSING_DSF AND E.FK_idEstimator = %s AND E.Status = 'ongoing' ORDER BY E.Deadline DESC"
     return queryall(sql, (estimator_index, ))
 
 def evaluated_list(estimator_index): #ROW_NUMBER 지움
@@ -16,7 +17,7 @@ def evaluated_list(estimator_index): #ROW_NUMBER 지움
     FROM EVALUATION AS E, TASK AS T, PARSING_DSF AS P LEFT OUTER JOIN ORIGIN_DATA_TYPE AS O ON O.idORIGIN_DATA_TYPE = P.OriginDataTypeID \
     WHERE P.idPARSING_DSF = E.FK_idPARSING_DSF \
         AND P.TaskName = T.TaskName\
-        AND E.FK_idEstimator = %s AND E.Status = 'done'"
+        AND E.FK_idEstimator = %s AND E.Status = 'done' ORDER BY E.Deadline DESC"
     return queryall(sql, (estimator_index, ))
 
 def task_detail(task_name):
@@ -39,6 +40,11 @@ def pdsf_file_info(parsing_dsf_id):
     '''parsing_dsf_id를 주면 해당 row의 typename과 parsingfile 반환'''
     sql = "SELECT TaskName, ParsingFile, TotalStatus, Pass, FK_idORIGIN_DSF FROM PARSING_DSF WHERE idPARSING_DSF = %s"
     return queryone(sql, (int(parsing_dsf_id,)))
+
+    
+def odsf_file_info(odsf_id):
+    sql = "SELECT * FROM ORIGIN_DSF WHERE idORIGIN_DSF = %s"
+    return queryone(sql, (odsf_id, ))
 
 def update_evaluation_status(parsing_dsf_id, estimator_index, score, is_passed):
     """평가를 끝냈을 때 db 업데이트"""

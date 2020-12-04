@@ -70,21 +70,20 @@ def save_df(type, file, df):
 def add_pdsf_to_taskdata(task_name, user_id, pdsf_id, odt_id):
 
     pdsf = services.estimator.pdsf_file_info(pdsf_id)
-    odsf_type_id = pdsf["FK_idORIGIN_DSF"]
+    odsf_id = pdsf["FK_idORIGIN_DSF"]
+
+    odsf_type_id = services.estimator.odsf_file_info(odsf_id)["FK_idORIGIN_DATA_TYPE"]
 
     odsf_type = services.submitter.odsf_type_schema_info(odsf_type_id)
     schema_map = json.loads(odsf_type['MappingInfo'])
-    task_data_schema = set(schema_map.keys())
-    pdsf_data_schema = set(schema_map.values())
     schema_map["submitter_name"] = "submitter_name"
     schema_map["origin_type"] = "origin_type"
 
     cols = [schema_map[key] for key in schema_map.keys()]
 
     # pdsf dataframe
-    pdsf_filename = services.estimator.pdsf_file_info(pdsf_id)["ParsingFile"]
-    pdsf_df = pd.read_csv(pdsf_filename, columns, encoding='utf-8')
-    pdsf_df = pdsf_df[cols]
+    pdsf_filename = services.estimator.odsf_file_info(odsf_id)["OriginFile"]
+    pdsf_df = pd.read_csv(pdsf_filename, encoding='utf-8')
 
     # name column
     series1 = {"submitter_name" : [user_id]*(pdsf_df.shape[0]),}
@@ -96,12 +95,14 @@ def add_pdsf_to_taskdata(task_name, user_id, pdsf_id, odt_id):
     # task data table dataframe
     task_data_table_file = services.estimator.task_detail(task_name)["TaskDataTableName"]
     task_data_df = pd.read_csv(task_data_table_file, encoding='utf-8')
+    task_data_df = task_data_df[cols]
 
     # concat pdsf, name
     pdsf_df = pd.concat([pdsf_df, df_name, df_odt], axis=1)
+    pdsf_df = pdsf_df.rename(columns=schema_map)
 
     # concat task data table, pdsf
-    task_data_df = pd.concat([task_data_df, pdsf_df], axis=0)
+    task_data_df = pd.concat([task_data_df, pdsf_df])
     
     # save table data
     file = task_data_table_file.split("/")[-1]

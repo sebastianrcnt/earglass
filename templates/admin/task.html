@@ -17,14 +17,14 @@
               {{ task['ParsingDsfCount'] }}
             </td>
             <td>
-              {{ task['PassedParsingDsfCount'] }} 
+              {{ task['total_passed_row'] }} 
             </td>
             <form>
                 <td>
                     <a class="btn btn-primary" href="/admin/tasks/{{ task['TaskName'] }}" role="button">상세</a>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-primary">튜플 다운로드</button>
+                    <a class="btn btn-primary" href="/admin/task/download/{{ task['TaskName'] }}" role="button">튜플 다운로드</a>
                     <!-- TODO - download -->
                 </td>
             </form>

@@ -66,9 +66,9 @@ def stop_task(task_name):
     '''task 강제 종료'''
     return callproc('StopTask', (task_name,))
 
-def delete_task(task_name):
-    '''task delete'''
-    return callproc('DeleteTask', (task_name,))
+# def delete_task(task_name):
+#     '''task delete'''
+#     return callproc('DeleteTask', (task_name,))
 
 def show_task_participation_list(task_name):
     '''index, 참여자 id, 제출자 평가 점수'''
@@ -84,7 +84,12 @@ def sort_task_participation_list(task_name, status):
         FROM PARTICIPATION AS P, USER AS U \
         WHERE P.FK_idUSER = U.idUSER AND P.FK_TaskName = %s) AS All_Status \
         WHERE All_Status.Status = %s"
-    return queryall(sql, (task_name, status, ))
+    return queryone(sql, (task_name, status, ))
+
+def count_total_task_pdsf(task_name):
+    '''전체 pdsf 파일 수'''
+    sql = "SELECT COUNT(*) AS count FROM PARSING_DSF WHERE TaskName = %s"
+    return queryall(sql, (task_name, ))
 
 
 def add_task(task_name, description, min_period, task_data_table_name,

@@ -1,6 +1,12 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
 
+<body style="font-family:NanumSquare">
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 <h1 class="d-inline-block">내 정보 수정</h1>
 <br><br><br><br><br>
@@ -48,6 +54,6 @@
     <button type="submit" class="btn btn-primary">수정완료</button>
     <br><br><br><br><br>
 </form>
-
+</body>
 <!-- <a type="button" class="btn btn-primary mr-2" href='/users'>수정완료</a> -->
     {% endblock %}

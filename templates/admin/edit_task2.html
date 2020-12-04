@@ -1,7 +1,13 @@
 {% extends "./partials/layout.html" %} {% block body %}
 
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
 
+<body style="font-family:NanumSquare">
 <h1>Task Detail</h1>
 <br />
 <br />
@@ -130,6 +136,7 @@
         Task 생성
     </button>
 </form>
+</body>
 <script>
     const app = new Vue({
         el: "form#app",

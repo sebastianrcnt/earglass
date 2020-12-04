@@ -1,6 +1,12 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
 
+<body style="font-family:NanumSquare">
 <h1 class="d-inline-block">내 정보 수정</h1>
 <br><br><br><br><br>
 <form method="POST" action="/users/admin_edit">
@@ -14,5 +20,5 @@
     </div>
     <button type="submit" class="btn btn-primary">수정완료</button>
 </form>
-
+</body>
     {% endblock %}

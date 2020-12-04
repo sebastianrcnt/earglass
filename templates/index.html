@@ -1,6 +1,13 @@
 {% extends "./partials/layout.html" %}
 {% block head %} {% endblock %}
 {% block body %}
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
+
+<body style="font-family:NanumSquare">
 <form method="POST" action="/users/login">
     <div class="form-group">
         <label for="exampleInputEmail1">ID</label>
@@ -15,4 +22,5 @@
     <button type="submit" class="btn btn-primary">SignIn</button>
     <a type="button" class="btn btn-primary" href='/users/signup'>Signup</a>
 </form>
+</body>
 {% endblock %}

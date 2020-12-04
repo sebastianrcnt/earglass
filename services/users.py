@@ -8,6 +8,10 @@ def get_user_by_id(user_id):
     '''유저 아이디로 유저 가져오기'''
     return queryone("SELECT * FROM USER WHERE Id=%s", (user_id,))
 
+def get_userID_by_index(user_index):
+    '''유저 인덱스로 유저 가져오기'''
+    return queryone("SELECT Id FROM USER WHERE idUSER=%s", (user_index,))
+
 
 def verify_user(user_id, password):
     '''주어진 아이디와 비밀번호랑 일치하는 유저가 있는지의 여부 확인'''

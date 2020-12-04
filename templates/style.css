@@ -1,0 +1,8 @@
+@font-face {
+    src : url("NanumSquare_acR.ttf");
+    font-family: "NanumSquare"
+}
+
+h1 { 
+  font-family: "NanumSquare";
+}

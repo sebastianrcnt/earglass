@@ -1,5 +1,12 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
+
+<body style="font-family:NanumSquare">
 <h2>SignUp Page</h2>
 <form method="POST" action="/users/signup">
     <br>
@@ -77,4 +84,5 @@
     <button type="submit" class="btn btn-primary">Sign Up</button>
     <br><br><br>
 </form>
+</body>
 {% endblock %}

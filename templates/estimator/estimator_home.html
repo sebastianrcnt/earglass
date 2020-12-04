@@ -13,16 +13,22 @@
       height: 500px;
       overflow-x: scroll;
       white-space:nowrap;
-      overflow: visible; 
+      overflow: auto; 
     }
     .wrap img{
         width:300px;
         height:100%;
     }
 </style>
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
 
+<body style="font-family:NanumSquare">
+<h3> 평가 대기 목록</h3>
 <div class="container screen wrap">
-    <h3> 평가 대기 목록</h3>
     <br><br>
     <table class="table table-striped table-bordered" id="target-table">
         <thead>
@@ -30,6 +36,10 @@
             <th>태스크명</th>
             <th>제출자 ID</th>
             <th>Deadline</th>
+            <th>기간</th>
+            <th>회차</th>
+            <th>원본데이터타입</th>
+            <th>시스템점수</th>
             <th>파일</th>
             <th>평가점수</th>
             <th>P/NP</th>
@@ -44,6 +54,10 @@
                 </td>
                 <td>{{ task["SubmitterID"] }}</td>
                 <td>{{ task["Deadline"] }}</td>
+                <td>{{ task["Period"] }}</td>
+                <td>{{ task["Round"] }}</td>
+                <td>{{ task["DataTypeName"] }}</td>
+                <td>{{ task["SystemScore"] }}</td>
                 <form method="POST" action="/estimator/evaluate?idPARSING_DSF={{ task['idPARSING_DSF']}}">
                     <td>
                         <a class="btn btn-primary" href="/estimator/task/download2?pdsf_id={{ task['idPARSING_DSF']}}" role="button">다운로드</a>
@@ -73,5 +87,5 @@
 <!-- <div class="row align-items-end">
     <a type="button" class="btn btn-primary ml-auto" href="/estimator/pdsf_detail">평가완료 목록으로</a>
 </div> -->
-
+</body>
 {% endblock %}

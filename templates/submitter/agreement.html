@@ -1,5 +1,12 @@
 {% extends "./partials/layout.html" %}
 {% block body %}
+<head>
+    <Title >font</Title>
+    <meta charset="utf-8">
+    <link href='../style.css' rel='stylesheet' >
+</head>
+
+<body style="font-family:NanumSquare">
 </br>
 </br>
 <form method="POST" action="/submitter/agree">
@@ -34,12 +41,11 @@
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="disagree" id="exampleRadios2" value="disagree">
+                    <input class="form-check-input" type="radio" name="agree" id="exampleRadios2" value="disagree">
                     <label class="form-check-label" for="exampleRadios2">
                         미동의
                     </label>
                 </div>
-            </div>
                 <div class="invisible">
                     <input type="text" name="task_name" class="form-control" id="task_name" value="{{ task_name }}">
                 </div>
@@ -49,5 +55,5 @@
         </div>
     </div>
 </form>
-
+</body>
 {% endblock %}
