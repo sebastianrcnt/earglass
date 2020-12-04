@@ -40,8 +40,8 @@ checkrow:BEGIN
 
         UPDATE PARSING_DSF
             SET TotalStatus = 'notEstimated'
-            WHERE AverageScore is NULL
-            AND Pass is NULL
+            WHERE (AverageScore is NULL
+            OR Pass is NULL)
             AND TaskName = currentTaskName;
 
         UPDATE PARSING_DSF
