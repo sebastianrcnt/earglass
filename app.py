@@ -35,10 +35,8 @@ def inject_user():
         user = services.users.get_user_by_id(user_id)
         if user["FK_UserTypeName"] == "관리자": return user
         else: return False
-        
-    return dict(is_logged_in=is_logged_in, is_submitter=is_submitter, is_estimator=is_estimator)
 
-    
+    return dict(is_logged_in=is_logged_in, is_submitter=is_submitter, is_estimator=is_estimator)
 
 
 @app.route("/", methods=["GET"])

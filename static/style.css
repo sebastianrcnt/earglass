@@ -7,6 +7,10 @@ h1 {
   font-family: "NanumSquare";
 }
 
-*::placeholder {
+input[type="password"] {
+  font-family: sans-serif !important;
+}
+
+input::placeholder {
   font-family: "NanumSquare";
 }
