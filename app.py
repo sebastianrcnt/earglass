@@ -41,6 +41,7 @@ def inject_user():
 
 
 @app.route("/", methods=["GET"])
+@as_json
 def index():
     user_id = request.cookies.get("user_id")
     user = services.users.get_user_by_id(user_id)

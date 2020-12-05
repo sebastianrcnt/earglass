@@ -7,7 +7,7 @@ from flask import Blueprint, render_template, redirect, request, make_response, 
 # fname = f"{task_name}_{}_{}.csv"
 import services
 import system
-from settings import UPLOAD_DIR
+from settings import *
 import time
 
 controller = Blueprint("submitter", __name__)
@@ -128,6 +128,7 @@ def submit_task():
 
 
 @controller.route("/task/download")
+@as_json
 def csv_file_download_with_stream():
 
     odsf_type_id = int(request.args.get('odsf_type_id', 0))
