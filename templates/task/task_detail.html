@@ -53,21 +53,20 @@
   <div id="LeaderBoard" class="tabcontent">
     {% include "task/task_leader_board.html" %}
   </div>
-
+  
   <div id="My Submit" class="tabcontent">
     {% include "task/task_my_submits.html" %}
   </div>
-
-
-  {% if False %}
+  
+  {% if task_info["Status"] == "ongoing" %}
   <div id="Submit" class="tabcontent">
-    <div class="container">
-      <h1>신청이 우선</h1>
-    </div>
+    {% include "task/task_submit_page.html" %}
   </div>
   {% else %}
   <div id="Submit" class="tabcontent">
-    {% include "task/task_submit_page.html" %}
+    <div class="container">
+      <h2>종료된 태스크입니다.</h2>
+    </div>
   </div>
   {% endif %}
 

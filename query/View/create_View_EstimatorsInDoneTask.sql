@@ -1,11 +1,17 @@
 -- estimators in done task
 
-CREATE VIEW EstimatorsInDoneTask AS
-    SELECT DISTINCT E.FK_idEstimator, ROW_NUMBER() OVER() AS IndexNum, T.TaskName
-    FROM TASK AS T, EVALUATION AS E, PARSING_DSF AS P
-    WHERE T.Status = 'done'
-    AND T.TaskName = P.TaskName
-    AND P.idPARSING_DSF = E.FK_idPARSING_DSF
-    AND E.Status = 'done'
-    GROUP BY E.FK_idEstimator, T.TaskName;
+create definer = earglass@`%` view EstimatorsInDoneTask as
+select distinct `E`.`FK_idEstimator`                             AS `FK_idEstimator`,
+                row_number() over ( partition by `T`.`TaskName`) AS `IndexNum`,
+                `T`.`TaskName`                                   AS `TaskName`
+from `earglass`.`TASK` `T`
+         join `earglass`.`EVALUATION` `E`
+         join `earglass`.`PARSING_DSF` `P`
+where `T`.`Status` = 'done'
+  and `T`.`TaskName` = `P`.`TaskName`
+  and `P`.`idPARSING_DSF` = `E`.`FK_idPARSING_DSF`
+  and `E`.`Status` = 'done'
+group by `E`.`FK_idEstimator`, `T`.`TaskName`;
+
+
 

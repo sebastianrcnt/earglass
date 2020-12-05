@@ -1,10 +1,14 @@
 -- submitters in done task
 
-CREATE VIEW SubmittersInDoneTask AS
-    SELECT DISTINCT P.SubmitterId, ROW_NUMBER() over (PARTITION BY T.TaskName) AS IndexNum, T.TaskName
-    FROM PARSING_DSF AS P, TASK AS T
-    WHERE T.Status = 'done'
-    AND T.TaskName = P.TaskName
-    AND P.SubmitNum = 1;
+create definer = earglass@`%` view SubmittersInDoneTask as
+select distinct `P`.`SubmitterID`                                AS `SubmitterId`,
+                row_number() over ( partition by `T`.`TaskName`) AS `IndexNum`,
+                `T`.`TaskName`                                   AS `TaskName`
+from `earglass`.`PARSING_DSF` `P`
+         join `earglass`.`TASK` `T`
+where `T`.`Status` = 'done'
+  and `T`.`TaskName` = `P`.`TaskName`
+  and `P`.`SubmitNum` = 1;
+
 
 

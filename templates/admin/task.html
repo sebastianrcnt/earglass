@@ -2,6 +2,7 @@
 <table class="table table-striped table-bordered" id="target-table">
     <thead>
         <th>태스크명</th>
+        <th>태스크 상태</th>
         <th>제출파일 수</th>
         <th>Pass된 Tuple 수</th>
         <th>튜플 다운로드</th>
@@ -11,6 +12,9 @@
         <tr>
             <td>
               <a href="/admin/tasks/{{ task['TaskName'] }}">{{ task['TaskName'] }}</a>
+            </td>
+            <td>
+                <a href="/admin/tasks/{{ task['TaskName'] }}">{{ task['Status'] }}</a>
             </td>
             <td>
               {{ task['ParsingDsfCount'] }}
