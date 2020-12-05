@@ -18,6 +18,14 @@
     textarea::-webkit-input-placeholder {color:black;}    
     textarea::-moz-placeholder {color:black} 
 </style>
+<script>
+  const defaultFields = [
+      {% set defaultFields = task['TaskDataTableSchemaInfo'].split(',') %}
+      {% for field in defaultFields %}
+        '{{ field }}',
+      {% endfor %}
+    ]
+</script>
 <form method="POST" action="/admin/tasks/{{ task['TaskName'] }}">
     <!-- TODO template task info -->
     <div class="form-group">
@@ -37,7 +45,7 @@
         <input name="TaskDataTableName" value="{{ task['TaskDataTableName'] }}" type="text" class="form-control" disabled>
     </div>
     <div class="form-group">
-        <label class="form-group">스키마</label>
+        <label class="form-group">스키마(기본 데이터 필드)</label>
         <br>
           {% for schema in task['TaskDataTableSchemaInfo'].split(',') %}
         <input value="{{ schema }}" type="text" class="form-group col-md-2" disabled>
@@ -56,9 +64,6 @@
             <h5><b>평가자 정성평가 Pass 기준설명</b></h5>
         </label>
         <textarea cols="30" rows="10" class="form-control" name="PassCriteria" required>{{ task['PassCriteria'] }}</textarea>
-    </div>
-    <div class="form-group">
-        <label class="form-group"> </label>
     </div>
 </br>
 <h5 style="margin-top: 20px;"><b>원본 데이터 타입</b></h5>
