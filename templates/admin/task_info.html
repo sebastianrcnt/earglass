@@ -192,9 +192,15 @@
         />
       </div>
       <div class="col">
-        <select name="" id="" class="form-control">
+        <select
+          name=""
+          id=""
+          class="form-control"
+          v-model="subFields[subFieldName]"
+        >
           <option
             v-for="defaultField in defaultFields"
+            :value="defaultField"
             :selected="defaultField == subField ? 'selected' : null "
           >
             [[ defaultField ]]
@@ -202,7 +208,13 @@
         </select>
       </div>
       <div class="col">
-        <button class="btn btn-danger" type="button" @click="deleteSubField(subFieldName)">x</button>
+        <button
+          class="btn btn-danger"
+          type="button"
+          @click="deleteSubField(subFieldName)"
+        >
+          x
+        </button>
       </div>
     </div>
     <div class="form-row">
@@ -211,22 +223,34 @@
           type="text"
           class="form-control"
           placeholder="필드 이름"
-          v-model="subFieldBuffer"
+          v-model="newSubFieldName"
         />
       </div>
       <div class="col">
-        <select name="" id="" class="form-control">
-          <option v-for="defaultField in defaultFields">
+        <select
+          name=""
+          id=""
+          class="form-control"
+          v-model="newDefaultFieldName"
+        >
+          <!-- <option value="" selected="selected">선택</option> -->
+          <option v-for="defaultField in defaultFields" :value="defaultField">
             [[ defaultField ]]
           </option>
         </select>
       </div>
       <div class="col">
-        <button class="btn btn-success" type="button" @click="addSubField(subFieldName, defaultField)">+</button>
+        <button class="btn btn-success" type="button" @click="addSubField()">
+          +
+        </button>
       </div>
     </div>
   </div>
-  <button type="button" class="btn btn-success float-right mb-6">
+  <button
+    type="button"
+    class="btn btn-success float-right mb-6"
+    @click="submit()"
+  >
     추가하기
   </button>
 
@@ -282,9 +306,15 @@
       {% endfor %}
     </tbody>
   </table>
-  {{ origin_data_types }}
+  <!-- {{ origin_data_types }} -->
   <br />
-  <!-- <button style="margin-left: 10px; margin-top:20px;" type="submit" class="btn btn-primary float-right mb-4">삭제</button> -->
+  <button
+    type="button"
+    class="btn btn-secondary float-right mb-4 ml-1"
+    @click="stop()"
+  >
+    종료
+  </button>
   <button type="submit" class="btn btn-primary float-right">수정</button>
 </form>
 <style>
@@ -313,24 +343,74 @@
     el: "form#app",
     data: {
       defaultFields: [], // ["defaultField1", "defaultField2"],
-      subFields: { subField1: "dateUpdated", subField2: "categories" },
+      subFields: {},
+      subFieldsBuffer: {},
       odsfName: "",
-      subFieldBuffer: "",
+      newSubFieldName: "",
+      newDefaultFieldName: "",
     },
     created() {
       this.defaultFields = defaultFields;
     },
     methods: {
-      submit() {},
+      submit() {
+        if (!this.odsfName) {
+          alert("빈칸을 채워주세요");
+          return;
+        }
+        let usedDefaultFields = [];
+        for (let subFieldName in this.subFields) {
+          const defaultField = this.subFields[subFieldName];
+          usedDefaultFields.push(defaultField);
+        }
+
+        for (let defaultField of this.defaultFields) {
+          if (!usedDefaultFields.includes(defaultField)) {
+            alert(
+              `기본 데이터 필드를 모두 사용해주세요. ${defaultField} missing.`
+            );
+            return;
+          }
+        }
+
+        const json = {
+          name: this.odsfName,
+          subFields: this.subFields,
+          defaultFields: this.defaultFields,
+        };
+
+        alert(JSON.stringify(json));
+        axios
+          .post("/admin/tasks-ajax/add-odt/{{ task['TaskName'] }}", json)
+          .then(() => {
+            alert("성공적으로 추가되었습니다");
+            // window.location.reload();
+          })
+          .catch((error) => {
+            alert("오류가 발생했습니다");
+            console.log(error);
+          });
+      },
+      stop() {
+        axios
+          .get("/admin/tasks-ajax/stop/{{ task['TaskName'] }}")
+          .then(() => {
+            alert("태스크 종료 완료");
+          })
+          .catch((error) => {
+            alert("오류가 발생했습니다");
+            console.log(error);
+          });
+      },
       // Senders
       pack() {},
-      addSubField(subFieldName, defaultField) {
-        if (Object.keys(this.subFields).includes(subFieldName)) {
-          alert("이미 존재하는 필드입니다");
-        } else if (!this.defaultFields.includes(defaultField)) {
-          alert("오류! 해당 기본 필드는 존재하지 않습니다");
+      addSubField() {
+        if (!(this.newSubFieldName && this.newDefaultFieldName)) {
+          alert("빈칸을 채워주세요");
         }
-        this.subFields[subFieldName] = defaultField;
+        this.subFields[this.newSubFieldName] = this.newDefaultFieldName;
+        this.newSubFieldName = "";
+        this.newDefaultFieldName = "";
         // vm.$forceUpdate();
       },
       deleteSubField(subFieldName) {

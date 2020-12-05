@@ -65,6 +65,22 @@ def get_task_page(task_name):
         odt['MappingInfo'] = json.loads(odt['MappingInfo'])
     return render_template("admin/task_info.html", task_name=task_name,task=task, origin_data_types=origin_data_types, task_participation=task_participation, count_row_by_odt=count_row_by_odt, total_file_num= total_file_num)
 
+@controller.route("/tasks-ajax/add-odt/<task_name>", methods=["POST"])
+def add_odsf(task_name):
+    js = request.get_json()
+    data_type_name = js.get('name')
+    schema_info = ','.join(js.get('defaultFields'))
+    mapping_info = json.dumps(js.get('subFields'))
+    services.admin.add_origin_data_type(task_name, data_type_name, schema_info, mapping_info)
+    return "Successfully Added", 201
+
+@controller.route("/tasks-ajax/stop/<task_name>", methods=["GET"])
+def stop_task(task_name):
+    print("Stopping Task...")
+    services.admin.stop_task(task_name)
+    print("Stopped Task")
+    return "Successfully Stopped", 200
+
 @controller.route("/tasks/agreement", methods=["GET"])
 def confirm_agreement():
     """
@@ -186,31 +202,31 @@ def edit_task(task_name):
 
     return redirect(redirect_url)
 
-@controller.route("/origindatatype", methods=["POST"])
-def add_datatypename(task_name):
-    '''태스크에 origin data type 추가 엔드포인트'''
-    # TODO add origin date type
-    js = request.get_json()
-    # originDataTypes = js["originDataTypes"]
-    # task_name = js["taskName"]
+# @controller.route("/origindatatype", methods=["POST"])
+# def add_datatypename(task_name):
+#     '''태스크에 origin data type 추가 엔드포인트'''
+#     # TODO add origin date type
+#     js = request.get_json()
+#     # originDataTypes = js["originDataTypes"]
+#     # task_name = js["taskName"]
     
-    # for data_type_name, columns in originDataTypes.items():
-    #     schema_info = list(columns.keys())
-    #     schema_info = ",".join(schema_info)
-    #     mapping_info = json.dumps(columns)
+#     # for data_type_name, columns in originDataTypes.items():
+#     #     schema_info = list(columns.keys())
+#     #     schema_info = ",".join(schema_info)
+#     #     mapping_info = json.dumps(columns)
 
-    #     services.admin.add_origin_data_type(task_name, data_type_name, schema_info, mapping_info)
-    # redirect_url = f"/admin/tasks/{task_name}"
-    # return redirect(redirect_url)
+#     #     services.admin.add_origin_data_type(task_name, data_type_name, schema_info, mapping_info)
+#     # redirect_url = f"/admin/tasks/{task_name}"
+#     # return redirect(redirect_url)
 
-    print(js)
-    return ""
+#     print(js)
+#     return ""
 
-# @controller.route("/tasks", methods=["DELETE"])
-# def delete_task():
-#     '''태스크 삭제 엔드포인트'''
-#     # TODO delete task
-#     return "Uncompleted"
+# # @controller.route("/tasks", methods=["DELETE"])
+# # def delete_task():
+# #     '''태스크 삭제 엔드포인트'''
+# #     # TODO delete task
+# #     return "Uncompleted"
 
 
 # USERS

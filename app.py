@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 from controllers import users, admin, task, submitter, estimator
 from werkzeug.wrappers import Request
 import services
+from settings import as_json
 import os
 
 
