@@ -1,13 +1,6 @@
--- 원본 데이터 타입 추가
-
-DELIMITER //
-
-CREATE PROCEDURE InsertOriginDataType
-            (IN currTaskName                 Varchar(45),
-             IN newDataTypeName             Varchar(45),
-             IN newSchemaInfo               Varchar(1000),
-             IN newMappingInfo              LONGTEXT)
-
+create
+    definer = earglass@`%` procedure InsertOriginDataType(IN currTaskName varchar(45), IN newDataTypeName varchar(45),
+                                                          IN newSchemaInfo varchar(1000), IN newMappingInfo longtext)
 checkexist:BEGIN
 
     DECLARE varSubmitNum    Int(11);
@@ -20,12 +13,10 @@ checkexist:BEGIN
         ROLLBACK;
     LEAVE checkexist;
     END IF;
-    
+
     INSERT INTO ORIGIN_DATA_TYPE (TaskName, SchemaInfo, MappingInfo, DataTypeName)
         VALUES (currTaskName, newSchemaInfo, newMappingInfo, newDataTypeName);
 
 -- END checkexist
-END checkexist
-//
+END checkexist;
 
-DELIMITER ;

@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, redirect, request, make_response, flash, send_file
+from flask import Blueprint, render_template, redirect, request, make_response, flash, send_file, Response
 import services
 import system
 import pandas as pd
+from io import StringIO
 import json
 from database.connection import queryall, queryone
 
@@ -260,13 +261,39 @@ def get_admin_estimator_page(estimator_index):
 # Create Read Update Delete(CRUD)
 
 
+# @controller.route("/task/download/<task_name>")
+# def pdsf_file_download(task_name):
+#     """
+#     pdsf csv file download
+#     """
+
+#     filename = services.admin.task_info(task_name)["TaskDataTableName"]
+#     fname = filename.split("/")[-1].encode('utf-8')
+
+#     return send_file(filename, attachment_filename=fname, as_attachment=True)
+
+
+
 @controller.route("/task/download/<task_name>")
-def pdsf_file_download(task_name):
+def csv_file_download_with_stream(task_name):
     """
     pdsf csv file download
     """
-
+    
     filename = services.admin.task_info(task_name)["TaskDataTableName"]
     fname = filename.split("/")[-1]
+    temp_df = pd.read_csv(filename, encoding='utf-8')
 
-    return send_file(filename, attachment_filename=fname, as_attachment=True)
+    # 그 결과를 앞서 만든 IO stream에 저장
+    output_stream = StringIO()
+
+    temp_df.to_csv(output_stream, index=False, encoding='utf-8')
+    response = Response(
+        output_stream.getvalue(),
+        mimetype='text/csv; charset=utf-8',
+        content_type='application/octet-stream',
+    )
+
+    response.headers["Content-Disposition"] = f"attachment; filename={fname}".encode('utf-8')
+
+    return response

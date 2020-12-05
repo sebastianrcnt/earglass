@@ -84,28 +84,10 @@ def csv_file_download_with_stream():
     temp_df.to_csv(output_stream, index=False, encoding='utf-8')
     response = Response(
         output_stream.getvalue(),
-        mimetype='text/csv',
+        mimetype='text/csv; charset=utf-8',
         content_type='application/octet-stream',
     )
 
-    response.headers["Content-Disposition"] = f"attachment; filename={fname}"
+    response.headers["Content-Disposition"] = f"attachment; filename={fname}".encode('utf-8')
 
     return response
-
-@controller.route("/task/download2")
-def pdsf_file_download():
-    """
-    pdsf csv file download
-    """
-
-    idPARSING_DSF = int(request.args.get('pdsf_id', 0))
-    if idPARSING_DSF != 0:
-        print(idPARSING_DSF)
-        pdsf = services.estimator.pdsf_file_info(idPARSING_DSF)
-    else:
-        return redirect("/my_task")
-
-    filename = pdsf["ParsingFile"]
-    fname = filename.split("/")[-1]
-
-    return send_file(filename, attachment_filename=fname, as_attachment=True)

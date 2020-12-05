@@ -1,10 +1,7 @@
--- after task is done, update user score
-
-DELIMITER //
-
-CREATE TRIGGER AfterTaskDoneUpdateEstimatorScore
-AFTER UPDATE ON TASK
-FOR EACH ROW
+create definer = earglass@`%` trigger AfterTaskDoneUpdateEstimatorScore
+    after update
+    on TASK
+    for each row
 BEGIN
     DECLARE curTaskName             varchar(45);
     DECLARE varIndex               INT(11);
@@ -23,12 +20,11 @@ BEGIN
 
     SET curTaskName = NEW.TaskName;
     SET varIndex = 0;
-
     IF (NEW.Status = 'done') THEN
 
         SELECT  COUNT(*) INTO varEstimatorNum
         FROM EstimatorsInDoneTask
-        WHERE TaskName = curTaskName;
+        WHERE TaskName = curTaskName LIMIT 1;
 
         myloop: LOOP
             SET varIndex = varIndex + 1;
@@ -55,34 +51,50 @@ BEGIN
                                     FROM PARSING_DSF
                                     WHERE TaskName = curTaskName);
 
-            SELECT AVG(Score), STD(Score) INTO varAvgScore, varSTDScore
+            SELECT AVG(Score) INTO varAvgScore
             FROM EVALUATION
             WHERE Status = 'done'
             AND FK_idPARSING_DSF IN (SELECT idPARSING_DSF
                                     FROM PARSING_DSF
                                     WHERE TaskName = curTaskName);
+
+            SELECT STD(Score) INTO varSTDScore
+            FROM EVALUATION
+            WHERE Status = 'done'
+            AND FK_idPARSING_DSF IN (SELECT idPARSING_DSF
+                                    FROM PARSING_DSF
+                                    WHERE TaskName = curTaskName);
+
             IF varAvgScore IS NULL THEN
                 SET varAvgScore = 0;
             END IF;
 
             IF varSTDScore IS NULL THEN
-                SET varSTDScore = 0;
+                SET varSTDScore = 1;
             END IF;
 
             SET varSmallIndex = 0;
             SET varOutlierCount = 0;
 
-            smallloop: LOOP
-                SET varSmallIndex = varSmallIndex + 1;
+            DROP TEMPORARY TABLE IF EXISTS NormZtable;
 
-                SELECT ABS((Score - varAvgScore)/varSTDScore) INTO varNormZ
+            CREATE TEMPORARY TABLE  IF NOT EXISTS NormZtable AS
+                SELECT ABS((Score - varAvgScore)/varSTDScore) AS NormZ, ROW_NUMBER() OVER() AS IndexNum
                 FROM EVALUATION
                 WHERE FK_idEstimator = varFK_idEstimator
                 AND Status = 'done'
                 AND FK_idPARSING_DSF IN (SELECT idPARSING_DSF
-                                    FROM PARSING_DSF
-                                    WHERE TaskName = curTaskName)
+                                FROM PARSING_DSF
+                                WHERE TaskName = curTaskName)
                 AND Score IS NOT NULL;
+
+            smallloop: LOOP
+                SET varSmallIndex = varSmallIndex + 1;
+                SET varNormZ = NULL;
+
+                SELECT NormZ INTO varNormZ
+                FROM NormZtable
+                WHERE IndexNum=varSmallIndex;
 
                 IF varNormZ > 1 THEN
                     SET varOutlierCount = varOutlierCount + 1;
@@ -123,8 +135,5 @@ BEGIN
             END IF;
         END LOOP myloop;
     END IF;
-END; //
-
-DELIMITER ;
-
+END;
 

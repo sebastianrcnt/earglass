@@ -1,13 +1,6 @@
--- 평가를 끝냈을 때 db 업데이트
-
-DELIMITER //
-
-CREATE PROCEDURE UpdateEvaluationStatus
-            (IN     varFK_idPARSING_DSF     Int(11),
-             IN     varFK_idEstimator       Int(11),
-             IN     varScore                Int(11),
-             IN     varPass                 varchar(45))
-
+create
+    definer = earglass@`%` procedure UpdateEvaluationStatus(IN varFK_idPARSING_DSF int, IN varFK_idEstimator int,
+                                                            IN varScore int, IN varPass varchar(45))
 checkexist: BEGIN
     -- check pass is not P or NP
     IF varPass != 'P' AND varPass != 'NP' THEN
@@ -20,7 +13,7 @@ checkexist: BEGIN
     -- check score is positive number
     IF (varScore < 0) THEN
         SELECT 'score value is invalid'
-        AS InvalidScoreValueErrorMessage;
+        AS InvalidScoreValuesErrorMessage;
         ROLLBACK;
         LEAVE checkexist;
     END IF;
@@ -42,7 +35,5 @@ checkexist: BEGIN
         SELECT 'evaluation does not exist'
         AS UpdateEvaluationStatusErrorMessage;
     END IF;
-END
-//
+END;
 
-DELIMITER ;

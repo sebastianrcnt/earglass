@@ -5,8 +5,6 @@ from pprint import pprint
 import json
 from . import estimator
 
-# CRUD
-
 # GET
 def get_waiting_dsf_by_estimator_index(estimator_index):
     '''평가자 평가할 파싱 파일 현황'''
@@ -66,10 +64,6 @@ def stop_task(task_name):
     '''task 강제 종료'''
     return callproc('StopTask', (task_name,))
 
-# def delete_task(task_name):
-#     '''task delete'''
-#     return callproc('DeleteTask', (task_name,))
-
 def show_task_participation_list(task_name):
     '''index, 참여자 id, 제출자 평가 점수'''
     sql = "SELECT P.Status, U.Id, U.UserScore \
@@ -107,66 +101,7 @@ def get_all_tasks():
         FROM TASK"
     return queryall(sql)
 
-# def user_exists(user_id):
-#     '''user_id가 존재하면 true, 존재하지 않으면 false'''
-#     user = queryone("SELECT * FROM USER WHERE Id=%d", (user_id, ))
-#     if user:
-#         return True
-#     return False
-
-# # Exists
-# def task_exists(task_name):
-#     '''taskname이 존재하면 true, 존재하지 않으면 false'''
-#     task = queryone("SELECT * FROM TASK WHERE TaskName=%s", (task_name, ))
-#     if task:
-#         return True
-#     return False
-
-# def data_type_name_exists(task_name, data_type_name):
-#     '''data type name이 존재하면 true, 존재하지 않으면 false'''
-#     assert task_exists(task_name)
-#     found = queryone("SELECT * FROM ORIGIN_DATA_TYPE WHERE TaskName=%s AND DataTypeName=%s", (task_name, data_type_name))
-#     if not found:
-#         return False
-#     return True
-
-# # Doesn't Exists
-# def get_default_fields_of_task(task_name):
-#     '''해당 task의 고유 스키마 정보 반환'''
-#     task = queryone("SELECT (TaskDataTableSchemaInfo) FROM TASK WHERE `TaskName`=%s", (task_name, ))
-#     result = task['TaskDataTableSchemaInfo'].split(',')
-#     return result
-
-# def set_default_fields_of_task(task_name, default_fields):
-#     '''해당 tastk의 고유 스키마 정보 수정(삽입)'''
-#     assert task_exists(task_name)
-#     default_fields = ",".join(default_fields)
-#     execute("UPDATE TASK SET TaskDataTableSchemaInfo=%s WHERE TaskName=%s", (default_fields, task_name))
 
 def add_origin_data_type(task_name, data_type_name, schema_info, mapping_info):
     '''해당 task의 원본 데이터 타입 정보 추가'''
     return callproc('InsertOriginDataType', (task_name, data_type_name, schema_info, mapping_info))
-
-# def remove_origin_data_type(task_name, data_type_name):
-#     '''해당 task name에서 특정 origin data type 삭제'''
-#     assert task_exists(task_name)
-#     execute("DELETE FROM ORIGIN_DATA_TYPE WHERE DataTypeName=%s AND TaskName=%s", (data_type_name, task_name))
-
-# def get_mapping_info(task_name, data_type_name):
-#     '''mapping info 리턴'''
-#     assert task_exists(task_name)
-#     assert data_type_name_exists(task_name, data_type_name)
-#     original_data_type = queryone("SELECT (MappingInfo) FROM ORIGIN_DATA_TYPE")
-#     mapping_info = original_data_type['MappingInfo']
-#     return mapping_info
-
-# def set_mapping_info(task_name, data_type_name, mapping_info):
-#     '''mapping info 업데이트'''
-#     assert task_exists(task_name)
-#     assert data_type_name_exists(task_name, data_type_name)
-#     used_default_fields = set(mapping_info.values())
-#     allowed_default_fields = set(get_default_fields_of_task(task_name))
-#     print(used_default_fields.issubset(allowed_default_fields))
-#     if used_default_fields.issubset(allowed_default_fields):
-#         execute("UPDATE ORIGIN_DATA_TYPE SET MappingInfo=%s WHERE DataTypeName=%s AND TaskName=%s", (json.dumps(mapping_info), data_type_name, task_name))
-

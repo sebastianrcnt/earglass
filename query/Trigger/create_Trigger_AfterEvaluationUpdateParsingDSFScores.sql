@@ -22,11 +22,13 @@ Begin
 			SELECT SUM(E.Score * U.UserScore) INTO varScoreSum
 			FROM EVALUATION AS E, USER AS U
 			WHERE E.FK_idEstimator = U.idUSER
-			AND E.FK_idPARSING_DSF = varidPARSING_DSF;
+			AND E.FK_idPARSING_DSF = varidPARSING_DSF
+			AND E.Score IS NOT NULL;
 			
 			SELECT COUNT(E.idEVALUATION) INTO varEvaluationNum
 			FROM EVALUATION AS E
-			WHERE E.FK_idPARSING_DSF = varidPARSING_DSF;
+			WHERE E.FK_idPARSING_DSF = varidPARSING_DSF
+			AND E.Score IS NOT NULL;
 
 			SET varAverageScore = varScoreSum / (60*varEvaluationNum);
             IF varAverageScore > 100 THEN
@@ -36,14 +38,12 @@ Begin
 			SELECT COUNT(*) INTO varPassCount
 			FROM EVALUATION
 			WHERE FK_idPARSING_DSF = varidPARSING_DSF
-			AND Pass = 'P'
-			AND Pass IS NOT NULL;
+			AND Pass = 'P';
 
 			SELECT COUNT(*) INTO varNonPassCount
 			FROM EVALUATION
 			WHERE FK_idPARSING_DSF = varidPARSING_DSF
-			AND Pass = 'NP'
-			AND Pass IS NOT NULL;
+			AND Pass = 'NP';
 
 			IF (varPassCount - varNonPassCount) > 0 THEN
 				SET varTotalPass = 'P';

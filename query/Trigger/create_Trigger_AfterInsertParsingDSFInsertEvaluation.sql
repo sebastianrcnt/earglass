@@ -1,10 +1,7 @@
--- parsing dsf 만들어질 때 자동으로 평가자 3명 배정
-
-DELIMITER //
-
-CREATE Trigger AfterInsertParsingDSFInsertEvaluation
-AFTER INSERT ON PARSING_DSF
-FOR EACH ROW
+create definer = earglass@`%` trigger AfterInsertParsingDSFInsertEvaluation
+    after insert
+    on PARSING_DSF
+    for each row
 triggers: Begin
 
 	DECLARE varEstimatorNum INT(11);
@@ -21,7 +18,9 @@ triggers: Begin
 		LEAVE triggers;
 	END IF;
 
-	CREATE TEMPORARY TABLE IF NOT EXISTS RandomEstimatorIDs AS
+	DROP TEMPORARY TABLE IF EXISTS RandomEstimatorIDs;
+
+	CREATE TEMPORARY TABLE RandomEstimatorIDs AS
 	    SELECT *
 	    FROM RandomEstimatorID;
 
@@ -62,6 +61,5 @@ triggers: Begin
 		END LOOP myloop2;
 	END IF;
 
-END triggers
-//
-DELIMITER ;
+END triggers;
+

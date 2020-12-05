@@ -1,10 +1,11 @@
+# -- coding: utf-8 --
+
 import os
 from io import StringIO
 import json
 import pandas as pd
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, redirect, request, make_response, flash, Response
-# fname = f"{task_name}_{}_{}.csv"
 import services
 import system
 from settings import *
@@ -128,7 +129,6 @@ def submit_task():
 
 
 @controller.route("/task/download")
-@as_json
 def csv_file_download_with_stream():
 
     odsf_type_id = int(request.args.get('odsf_type_id', 0))
@@ -154,9 +154,8 @@ def csv_file_download_with_stream():
     
     response = Response(
         output_stream.getvalue(),
-        mimetype='text/csv',
+        mimetype='text/csv; charset=utf-8',
         content_type='application/octet-stream',
     )
-    response.headers["Content-Disposition"] = f"attachment; filename={filename}.csv"
-
+    response.headers["Content-Disposition"] = f"attachment; filename={filename}.csv".encode('utf-8')
     return response

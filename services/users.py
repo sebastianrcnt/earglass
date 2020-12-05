@@ -22,12 +22,10 @@ def verify_user(user_id, password):
         return False
     return True
 
-
 def sign_up(user_id, password, name, birth, phonenumber, gender, address, role):
     '''새로운 유저 생성'''
     return callproc('InsertNewUser', (user_id, password, name,
                                       birth, phonenumber, gender, address, role))
-
 
 def withdrawal(user_id, password):
     '''회원 탈퇴'''

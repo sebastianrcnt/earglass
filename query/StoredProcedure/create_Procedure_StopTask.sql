@@ -1,10 +1,5 @@
--- 관리자가 task를 강제 종료 하면 모든 TABLE의  status를 done으로 업데이트
-
-DELIMITER //
-
-CREATE PROCEDURE StopTask
-            (IN currentTaskName             Varchar(45))
-
+create
+    definer = earglass@`%` procedure StopTask(IN currentTaskName varchar(45))
 checkrow:BEGIN
 
     DECLARE varRowCount     Int;
@@ -25,42 +20,38 @@ checkrow:BEGIN
 
 	-- if (varRowCount = 1) then task exists in database.
     IF (varRowCount = 1) THEN
+
         UPDATE TASK
             SET Status = 'done'
             WHERE TaskName = currentTaskName;
-
+        
+        UPDATE PARTICIPATION
+            SET Status = 'done'
+            WHERE FK_TaskName = currentTaskName;
+        
         UPDATE EVALUATION
             SET Status = 'notEstimated',
                 EndTime = NOW()
             WHERE FK_idPARSING_DSF IN (SELECT idPARSING_DSF
                                         FROM PARSING_DSF
                                         WHERE TaskName = currentTaskName)
-            AND (Score IS NULL
-            OR Pass IS NULL);
+            AND Score IS NULL;
 
         UPDATE PARSING_DSF
             SET TotalStatus = 'notEstimated'
-            WHERE (AverageScore is NULL
-            OR Pass is NULL)
+            WHERE AverageScore is NULL
             AND TaskName = currentTaskName;
 
         UPDATE PARSING_DSF
             SET TotalStatus = 'done'
             WHERE TotalScore is not NULL
-            AND Pass is not NULL
             AND TaskName = currentTaskName;
-
-        UPDATE PARTICIPATION
-            SET Status = 'done'
-            WHERE FK_TaskName = currentTaskName;
-
+        
         SELECT 'Stopping task successfully'
             AS StopTaskSuccessMessage;
 
     END IF;
 
 -- END checkrow
-END checkrow
-//
+END checkrow;
 
-DELIMITER ;

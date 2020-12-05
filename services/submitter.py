@@ -10,11 +10,11 @@ def tasklist_detail(user_index):
 
 def participating_tasklist(user_index):
     """참여자가 참여중인 태스크 정보 taskname, submit_num, pass 수"""
-    sql = "SELECT SQ.TaskName, SQ.Status, MAX(COALESCE(D.SubmitNum, 0)) AS Submit_num, \
-    SUM(CASE COALESCE(D.Pass, 'NP') WHEN 'P' THEN 1 ELSE 0 END) AS Pass_num \
+    sql = "SELECT SQ.TaskName, SQ.Status, MAX(COALESCE(D.SubmitNum, 0)) AS Submit_num,\
+    SUM(IF(COALESCE(D.Pass, 'NP') = 'P' and D.TotalStatus = 'done', 1, 0)) AS Pass_num\
     FROM (SELECT T.TaskName, COALESCE(P.Status, '') AS Status\
         FROM TASK AS T LEFT OUTER JOIN PARTICIPATION AS P ON P.FK_TaskName = T.TaskName AND P.FK_idUSER = %s) AS SQ\
-    LEFT OUTER JOIN PARSING_DSF AS D ON D.TaskName = SQ.TaskName \
+    LEFT OUTER JOIN PARSING_DSF AS D ON D.TaskName = SQ.TaskName\
     WHERE (SQ.Status = 'ongoing' OR SQ.Status = 'done') GROUP BY SQ.TaskName"
     return queryall(sql, (user_index,))
 

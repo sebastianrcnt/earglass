@@ -1,19 +1,8 @@
--- 관리자가 task table에 정보 insert
--- taskname, description, 최소업로드주기, table 이름, 스키마, 원본 데이터 타입,
--- 시스템 pass 기준, 평가자 pass 기준
-
-DELIMITER //
-
-CREATE PROCEDURE InsertNewTask
-            (IN newTaskName             Varchar(45),
-             IN newDescription          Varchar(45),
-             IN newMinPeriod            Int(11),
-             IN newTaskDataTableName    varchar(100),
-             IN newMaxDuplicatedRowRatio    Float,
-             IN newMaxNullRatioPerColumn    Float,
-             IN newPassCriteria             text,
-             IN newTaskDataTableSchemaInfo  text)
-
+create
+    definer = earglass@`%` procedure InsertNewTask(IN newTaskName varchar(45), IN newDescription text,
+                                                   IN newMinPeriod int, IN newTaskDataTableName varchar(100),
+                                                   IN newMaxDuplicatedRowRatio float, IN newMaxNullRatioPerColumn float,
+                                                   IN newPassCriteria text, IN newTaskDataTableSchemaInfo text)
 checkdupli:BEGIN
 
     DECLARE varRowCount  Int;
@@ -36,10 +25,6 @@ checkdupli:BEGIN
 
 	-- if (varRowCount = 0) then task does not exist in database.
     IF (varRowCount = 0) THEN
-    inserttask:BEGIN
-	    -- Rollback everything if unable to complete it.
-	    START TRANSACTION;
-
         -- get idUSER surrogate key value, check for validity.
         SELECT idUSER INTO varIdManager
         FROM USER
@@ -56,12 +41,8 @@ checkdupli:BEGIN
 
         SELECT 'Insert new task successfully'
             AS InsertNewTaskSuccessMessage;
-
-      -- END inserttask
-    END inserttask;
+        
     END IF;
 -- END checkdupli
-END checkdupli
-//
+END checkdupli;
 
-DELIMITER ;

@@ -1,17 +1,10 @@
--- 관리자 승인/거절 ->participation status = accepted, 거절시 reject
-
-DELIMITER //
-
-CREATE PROCEDURE UpdateParticipationStatus
-            (IN     varFK_TaskName      Varchar(45),
-             IN     varFK_idUSER        int(11),
-             IN     newStatus           Varchar(45),
-             IN     newComment          text)
-
+create
+    definer = earglass@`%` procedure UpdateParticipationStatus(IN varFK_TaskName varchar(45), IN varFK_idUSER int,
+                                                               IN newStatus varchar(45), IN newComment text)
 BEGIN
     IF (newStatus = 'ongoing' or newStatus = 'reject') THEN
         -- If exists participation row
-        IF EXISTS 
+        IF EXISTS
         (SELECT * FROM PARTICIPATION
          WHERE  PARTICIPATION.FK_TaskName = varFK_TaskName
             AND PARTICIPATION.FK_idUSER = varFK_idUSER
@@ -28,11 +21,9 @@ BEGIN
         AS UpdateParticipationStausResults;
 
     ELSE
-        -- print message        
+        -- print message
         SELECT 'Invalid participation status value'
         AS UpdateParticipationStatusErrorMessage;
     END IF;
-END
-//
+END;
 
-DELIMITER ;

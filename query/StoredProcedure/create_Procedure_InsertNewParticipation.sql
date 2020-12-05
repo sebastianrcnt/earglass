@@ -1,11 +1,5 @@
--- 제출자 참여시 Participation table에 insert / waiting
-
-DELIMITER //
-
-CREATE PROCEDURE InsertNewParticipation
-            (IN     newFK_TaskName         Varchar(45),
-             IN     newFK_idUSER           Int(11))
-
+create
+    definer = earglass@`%` procedure InsertNewParticipation(IN newFK_TaskName varchar(45), IN newFK_idUSER int)
 checkexist: BEGIN
     IF EXISTS (SELECT * FROM PARTICIPATION
                 WHERE FK_TaskName = newFK_TaskName
@@ -19,7 +13,5 @@ checkexist: BEGIN
     INSERT INTO PARTICIPATION (FK_TaskName, FK_idUSER, Status)
         VALUES(newFK_TaskName, newFK_idUSER, 'waiting');
 
-END
-//
+END;
 
-DELIMITER ;

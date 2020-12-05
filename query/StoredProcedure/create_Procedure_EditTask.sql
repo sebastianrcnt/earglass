@@ -1,21 +1,9 @@
--- 관리자가 task table에서 특정 row의 정보 edit
--- 수정된 정보 update
--- task_name, description, min_period, status, task_data_table_name, deadline, max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria
-
-DELIMITER //
-
-CREATE PROCEDURE EditTask
-            (IN currentTaskName             Varchar(45),
-             IN newDescription              Text,
-             IN newMinPeriod                Int(11),
-             IN newStatus                   Varchar(45),
-             IN newTaskDataTableName        Varchar(100),
-             IN newMaxDuplicatedRowRatio    Float,
-             IN newMaxNullRatioPerColumn    Float,
-             IN newPassCriteria             Text)
-
+create
+    definer = earglass@`%` procedure EditTask(IN currentTaskName varchar(45), IN newDescription text,
+                                              IN newMinPeriod int, IN newMaxDuplicatedRowRatio float,
+                                              IN newMaxNullRatioPerColumn float, IN newPassCriteria text)
 checkrow:BEGIN
-    
+
     DECLARE varRowCount     Int;
 
     -- check to see if currentTaskName exist in database
@@ -37,19 +25,16 @@ checkrow:BEGIN
     IF (varRowCount = 1) THEN
         UPDATE TASK
         SET Description = newDescription, MinPeriod = newMinPeriod,
-            Status = newStatus, TaskDataTableName = newTaskDataTableName,
             MaxDuplicatedRowRatio = newMaxDuplicatedRowRatio,
             MaxNullRatioPerColumn = newMaxNullRatioPerColumn,
             PassCriteria = newPassCriteria
         WHERE TaskName = currentTaskName;
-        
+
         SELECT 'Edit task info successfully'
             AS EditTaskSuccessMessage;
 
     END IF;
 
 -- END checkrow
-END checkrow
-//
+END checkrow;
 
-DELIMITER ;

@@ -1,2 +1,13 @@
+{% extends "./partials/layout.html" %}
+
+{% block head %}
+{% endblock %}
+
+
+{% block body %}
 <h1>{{ message }}</h1>
-<a href="javascript:history.back()">뒤로가기</a>
+<!-- <a href="javascript:history.back()">뒤로가기</a> -->
+<div>
+    <a type="button" class="btn btn-primary btn-lg btn-block" href="javascript:history.back()">뒤로가기</a>
+</div>
+{% endblock %}

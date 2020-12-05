@@ -1,17 +1,8 @@
--- USER 회원가입
-
-DELIMITER //
-
-CREATE PROCEDURE InsertNewUser
-            (IN newID               Varchar(45),
-             IN newPassword         Varchar(45),
-             IN newName             Varchar(45),
-             IN newBirth            Varchar(8),
-             IN newPhoneNumber     Varchar(13),
-             IN newGender           Varchar(1),
-             IN newAddress          Varchar(100),
-             IN newFK_TypeName      Varchar(45))
-
+create
+    definer = earglass@`%` procedure InsertNewUser(IN newID varchar(45), IN newPassword varchar(45),
+                                                   IN newName varchar(45), IN newBirth varchar(8),
+                                                   IN newPhoneNumber varchar(13), IN newGender varchar(1),
+                                                   IN newAddress varchar(100), IN newFK_TypeName varchar(45))
 checkdupli:BEGIN
 
     DECLARE varRowCount     Varchar(45);
@@ -44,7 +35,5 @@ checkdupli:BEGIN
 
     END IF;
 -- END checkdupli
-END checkdupli
-//
+END checkdupli;
 
-DELIMITER ;

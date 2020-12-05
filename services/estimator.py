@@ -49,7 +49,3 @@ def odsf_file_info(odsf_id):
 def update_evaluation_status(parsing_dsf_id, estimator_index, score, is_passed):
     """평가를 끝냈을 때 db 업데이트"""
     return callproc('UpdateEvaluationStatus', (parsing_dsf_id, estimator_index, score, is_passed))
-
-# def update_system_score(parsing_dsf_id, system_score):
-#     '''파일이 제출되었을 때, system score 받아와서 DB 업데이트'''
-#     return callproc('UpdateSystemScore', (parsing_dsf_id, system_score))

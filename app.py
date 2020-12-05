@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, redirect
 from controllers import users, admin, task, submitter, estimator
 from werkzeug.wrappers import Request
 import services
-from settings import as_json
 import os
+import logging
+from logging.handlers import RotatingFileHandler
+import traceback
 
 
 
@@ -41,7 +43,6 @@ def inject_user():
 
 
 @app.route("/", methods=["GET"])
-@as_json
 def index():
     user_id = request.cookies.get("user_id")
     user = services.users.get_user_by_id(user_id)
@@ -69,4 +70,8 @@ app.register_blueprint(estimator.controller, url_prefix="/estimator")
 
 
 # run
+handler = RotatingFileHandler('app.log', maxBytes=100000, backupCount=3)
+logger = logging.getLogger('tdm')
+logger.setLevel(logging.ERROR)
+logger.addHandler(handler)
 app.run(port=8080, host="0.0.0.0", debug=True)

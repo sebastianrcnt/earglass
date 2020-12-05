@@ -1,12 +1,6 @@
--- USER 회원가입
-
-DELIMITER //
-
-CREATE PROCEDURE DeleteUser
-            (IN curId               Varchar(45),
-             IN curPassword         Varchar(45))
-
-checkdupli:BEGIN
+create
+    definer = earglass@`%` procedure DeleteUser(IN curId varchar(45), IN curPassword varchar(45))
+checkrow:BEGIN
 
     DECLARE RowCount     Varchar(45);
 
@@ -20,7 +14,7 @@ checkdupli:BEGIN
         SELECT 'Wrong Password'
             AS WrongPasswordErrorMessage;
             ROLLBACK;
-        LEAVE checkupli;
+        LEAVE checkrow;
     END IF;
 
     -- if password matches then delete user from the table
@@ -32,8 +26,6 @@ checkdupli:BEGIN
             AS DeleteUserSuccessMessage;
 
     END IF;
--- END checkdupli
-END checkdupli
-//
+-- END checkrow
+END checkrow;
 
-DELIMITER ;

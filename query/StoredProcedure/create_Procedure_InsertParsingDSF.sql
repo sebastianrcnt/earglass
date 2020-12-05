@@ -1,17 +1,8 @@
--- OriginDSF가 Pass하면 ParsingDSF로 저장
-
-DELIMITER //
-
-CREATE PROCEDURE InsertParsingDSF
-            (IN newTaskName                 Varchar(45),
-             IN newParsingFile              Longtext,
-             IN newOriginDataTypeID         Varchar(45),
-             IN newSubmitterID              Int(11),
-             IN newPeriod                   Varchar(45),
-             IN newFK_idORIGIN_DSF          Int(11),
-             IN newRound                    Int(11),
-             IN newSystemScore              Float)
-
+create
+    definer = earglass@`%` procedure InsertParsingDSF(IN newTaskName varchar(45), IN newParsingFile longtext,
+                                                      IN newOriginDataTypeID int, IN newSubmitterID int,
+                                                      IN newPeriod varchar(45), IN newFK_idORIGIN_DSF int,
+                                                      IN newRound int, IN newSystemScore float)
 checkexist:BEGIN
 
     DECLARE varidORIGIN_DSF Int(11);
@@ -22,7 +13,7 @@ checkexist:BEGIN
     FROM ORIGIN_DSF
     WHERE idORIGIN_DSF = newFK_idORIGIN_DSF;
 
-    IF varidORIGIN_DSF = 0 
+    IF varidORIGIN_DSF = 0
     THEN SELECT 'Origin DSF does not exist'
             AS OriginDSFErrorMessage;
             ROLLBACK;
@@ -44,7 +35,5 @@ checkexist:BEGIN
     END IF;
 
 -- END checkexist
-END checkexist
-//
+END checkexist;
 
-DELIMITER ;

@@ -2,7 +2,9 @@
 
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 
-<h1 class="d-inline-block">Task Info</h1>
+<h1 class="d-inline-block">Task Info  </h1>
+<button type="button" class="btn btn-primary mr-2">{{task['Status']}}</button>
+<br><br>
 <!-- task 삭제 설정해야 함 -->
 <style>
   input::placeholder {
@@ -379,6 +381,7 @@
           defaultFields: this.defaultFields,
         };
 
+        
         alert(JSON.stringify(json));
         axios
           .post("/admin/tasks-ajax/add-odt/{{ task['TaskName'] }}", json)
