@@ -6,3 +6,7 @@
 h1 { 
   font-family: "NanumSquare";
 }
+
+*::placeholder {
+  font-family: "NanumSquare";
+}
