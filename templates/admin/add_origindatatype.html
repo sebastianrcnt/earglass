@@ -97,7 +97,9 @@
             subFieldBuffer: {},
             subFieldMapBuffer: {},
         },
-        created() { },
+        created() { 
+            this.defaultFields = defaultFields;
+        },
         methods: {
             submit() {
                 try {

@@ -30,6 +30,15 @@
   textarea::-moz-placeholder {
     color: black;
   }
+
+  .pill {
+    border-radius: 3px;
+    border: 1px solid black;
+    display: inline-block;
+    padding: 5px;
+    margin-bottom: 3px;
+    margin-right: 3px;
+  }
 </style>
 <script>
   const defaultFields = [
@@ -39,7 +48,7 @@
       {% endfor %}
     ]
 </script>
-<form method="POST" action="/admin/tasks/{{ task['TaskName'] }}">
+<form id="app" method="POST" action="/admin/tasks/{{ task['TaskName'] }}">
   <!-- TODO template task info -->
   <div class="form-group">
     <label class="form-group">TaskName</label>
@@ -85,12 +94,7 @@
     <label class="form-group">스키마(기본 데이터 필드)</label>
     <br />
     {% for schema in task['TaskDataTableSchemaInfo'].split(',') %}
-    <input
-      value="{{ schema }}"
-      type="text"
-      class="form-group col-md-2"
-      disabled
-    />
+    <div class="pill">{{ schema }}</div>
     {% endfor %}
   </div>
   <div class="form-group">
@@ -131,8 +135,8 @@
 {{ task['PassCriteria'] }}</textarea
     >
   </div>
-  <h5 style="margin-top: 20px"><b>원본 데이터 타입</b></h5>
-  {% include "admin/add_origindatatype.html" %}
+  <h4 style="margin-top: 20px"><b>원본 데이터 타입</b></h4>
+  <h5><b>원본 데이터 타입 목록</b></h5>
   <table
     style="margin-left: 5px; margin-bottom: 20px"
     class="table table-striped table-bordered"
@@ -142,24 +146,92 @@
       <th>원본데이터 타입</th>
       <th>제출 파일 수</th>
       <th>Pass된 tuple 수</th>
+      <th>매핑정보</th>
     </thead>
     <tbody>
       <tr>
         <td>전체 데이터</td>
         <td>{{ total_file_num }}</td>
         <td>{{ count_row_by_odt["total"] }}</td>
+        <td>N/A</td>
       </tr>
       {% for data_type in origin_data_types %}
       <tr>
         <td>{{ data_type['DataTypeName'] }}</td>
         <td>{{ data_type['SubmitNum'] }}</td>
         <td>{{ count_row_by_odt[data_type['idORIGIN_DATA_TYPE']] }}</td>
+        <td>
+          {% set mappingInfo = data_type['MappingInfo'] %} {% for subField in
+          mappingInfo %} {% set defaultField = mappingInfo[subField] %}
+          <div class="pill">{{ subField }} - {{ defaultField }}</div>
+          {% endfor %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
+  <h5><b>원본 데이터 타입 추가하기</b></h5>
+  <div class="form-group">
+    <div class="form-row mb-2">
+      <div class="col">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="원본 데이터 타입 이름"
+          v-model="odsfName"
+        />
+      </div>
+    </div>
+    <div v-for="(subField, subFieldName) in subFields" class="form-row mb-1">
+      <div class="col">
+        <input
+          type="text"
+          class="form-control"
+          :value="subFieldName"
+          disabled
+        />
+      </div>
+      <div class="col">
+        <select name="" id="" class="form-control">
+          <option
+            v-for="defaultField in defaultFields"
+            :selected="defaultField == subField ? 'selected' : null "
+          >
+            [[ defaultField ]]
+          </option>
+        </select>
+      </div>
+      <div class="col">
+        <button class="btn btn-danger" type="button" @click="deleteSubField(subFieldName)">x</button>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="필드 이름"
+          v-model="subFieldBuffer"
+        />
+      </div>
+      <div class="col">
+        <select name="" id="" class="form-control">
+          <option v-for="defaultField in defaultFields">
+            [[ defaultField ]]
+          </option>
+        </select>
+      </div>
+      <div class="col">
+        <button class="btn btn-success" type="button" @click="addSubField(subFieldName, defaultField)">+</button>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-success float-right mb-6">
+    추가하기
+  </button>
+
   <!-- 참여현황으로 sort되도록 jquery 적용해야함 -->
-  <h5 style="margin-top: 20px"><b>참여명단</b></h5>
+  <h5 style="margin-top: 60px"><b>참여명단</b></h5>
   <table
     style="margin-left: 5px; margin-bottom: 20px"
     class="table table-striped table-bordered"
@@ -210,6 +282,7 @@
       {% endfor %}
     </tbody>
   </table>
+  {{ origin_data_types }}
   <br />
   <!-- <button style="margin-left: 10px; margin-top:20px;" type="submit" class="btn btn-primary float-right mb-4">삭제</button> -->
   <button type="submit" class="btn btn-primary float-right">수정</button>
@@ -221,13 +294,54 @@
 </style>
 <script>
   $(document).ready(function () {
-    $("#target-table").DataTable();
+    $("#target-table").DataTable({
+      columnDefs: [{ width: "40%", targets: 3 }],
+    });
   });
 </script>
 <script>
   $(document).ready(function () {
-    $("#target-table2").DataTable();
+    $("#target-table2").DataTable({
+      columnDefs: [{ "max-width": "40%", targets: 3 }],
+    });
   });
 </script>
+<script>
+  // Errors
 
+  const app = new Vue({
+    el: "form#app",
+    data: {
+      defaultFields: [], // ["defaultField1", "defaultField2"],
+      subFields: { subField1: "dateUpdated", subField2: "categories" },
+      odsfName: "",
+      subFieldBuffer: "",
+    },
+    created() {
+      this.defaultFields = defaultFields;
+    },
+    methods: {
+      submit() {},
+      // Senders
+      pack() {},
+      addSubField(subFieldName, defaultField) {
+        if (Object.keys(this.subFields).includes(subFieldName)) {
+          alert("이미 존재하는 필드입니다");
+        } else if (!this.defaultFields.includes(defaultField)) {
+          alert("오류! 해당 기본 필드는 존재하지 않습니다");
+        }
+        this.subFields[subFieldName] = defaultField;
+        // vm.$forceUpdate();
+      },
+      deleteSubField(subFieldName) {
+        if (!Object.keys(this.subFields).includes(subFieldName)) {
+          alert("오류! 존재하지 않는 필드 이름입니다");
+        }
+        Vue.delete(this.subFields, subFieldName);
+        // vm.$forceUpdate();
+      },
+    },
+    delimiters: ["[[", "]]"],
+  });
+</script>
 {% endblock %}

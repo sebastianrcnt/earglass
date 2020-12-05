@@ -55,7 +55,7 @@ def task_info(task_name):
 
 def task_info_origin_data_type(task_name):
     '''태스크 정보에서 원본 데이터 타입 별로 제출 파일 수, Pass된 파일 수 보여주기'''
-    sql = "SELECT ODT.idORIGIN_DATA_TYPE, ODT.DataTypeName, COUNT(P.idPARSING_DSF) AS SubmitNum, \
+    sql = "SELECT ODT.*, COUNT(P.idPARSING_DSF) AS SubmitNum, \
             SUM(CASE COALESCE(P.Pass, 'NP') WHEN 'P' THEN 1 ELSE 0 END) AS PassNum \
             FROM ORIGIN_DATA_TYPE AS ODT LEFT OUTER JOIN PARSING_DSF AS P ON P.OriginDataTypeID = ODT.idORIGIN_DATA_TYPE \
             WHERE ODT.TaskName = %s \

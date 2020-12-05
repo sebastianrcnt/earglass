@@ -53,6 +53,7 @@ def get_task_page(task_name):
     task_participation = services.admin.show_task_participation_list(task_name)
 
     task['TaskDataTableName'] = task['TaskDataTableName'].split("/")[-1]
+    # task['SchemaInfo'] = json.loads(task['SchemaInfo'])
 
     odt_list = []
     for odt in origin_data_types:
@@ -60,6 +61,8 @@ def get_task_page(task_name):
     count_row_by_odt = system.utils.count_row_by_origin_type(task_name, odt_list)
     total_file_num = services.admin.count_total_task_pdsf(task_name)[0]["count"]
 
+    for odt in origin_data_types:
+        odt['MappingInfo'] = json.loads(odt['MappingInfo'])
     return render_template("admin/task_info.html", task_name=task_name,task=task, origin_data_types=origin_data_types, task_participation=task_participation, count_row_by_odt=count_row_by_odt, total_file_num= total_file_num)
 
 @controller.route("/tasks/agreement", methods=["GET"])
