@@ -29,6 +29,10 @@ BEGIN
         myloop: LOOP
             SET varIndex = varIndex + 1;
 
+            IF varEstimatorNum = 0 THEN
+                LEAVE myloop;
+            end if;
+
             SELECT FK_idEstimator INTO varFK_idEstimator
             FROM EstimatorsInDoneTask
             WHERE TaskName = curTaskName
@@ -51,25 +55,21 @@ BEGIN
                                     FROM PARSING_DSF
                                     WHERE TaskName = curTaskName);
 
-            SELECT AVG(Score) INTO varAvgScore
+            SELECT IFNULL(AVG(Score),0) INTO varAvgScore
             FROM EVALUATION
             WHERE Status = 'done'
             AND FK_idPARSING_DSF IN (SELECT idPARSING_DSF
                                     FROM PARSING_DSF
                                     WHERE TaskName = curTaskName);
 
-            SELECT STD(Score) INTO varSTDScore
+            SELECT IFNULL(STD(Score),0) INTO varSTDScore
             FROM EVALUATION
             WHERE Status = 'done'
             AND FK_idPARSING_DSF IN (SELECT idPARSING_DSF
                                     FROM PARSING_DSF
                                     WHERE TaskName = curTaskName);
 
-            IF varAvgScore IS NULL THEN
-                SET varAvgScore = 0;
-            END IF;
-
-            IF varSTDScore IS NULL THEN
+            IF varSTDScore = 0 THEN
                 SET varSTDScore = 1;
             END IF;
 
@@ -91,7 +91,11 @@ BEGIN
             smallloop: LOOP
                 SET varSmallIndex = varSmallIndex + 1;
                 SET varNormZ = NULL;
-
+                
+                IF varEvaluationNum = 0 THEN
+                    LEAVE smallloop;
+                end if;
+                
                 SELECT NormZ INTO varNormZ
                 FROM NormZtable
                 WHERE IndexNum=varSmallIndex;
@@ -103,6 +107,7 @@ BEGIN
                 IF varSmallIndex = varEvaluationNum THEN
                     LEAVE smallloop;
                 END IF;
+                
             END LOOP smallloop;
 
 
@@ -117,7 +122,14 @@ BEGIN
                 AND E.FK_idPARSING_DSF IN (SELECT idPARSING_DSF
                                     FROM PARSING_DSF
                                     WHERE TaskName = curTaskName);
-
+            
+            IF varEvaluationNum = 0 THEN
+                SET varOutlierCount = 0;
+                SET varGoodEvaluationNum = 0;
+                SET varEvaluationNum = 1;
+                SET varFileNum = 1;
+            end if;
+            
             SET newEstimatorScore = 40*varEvaluationNum/varFileNum
                                     + 30*(1-(varOutlierCount/varEvaluationNum))
                                     + 30*varGoodEvaluationNum/varEvaluationNum;

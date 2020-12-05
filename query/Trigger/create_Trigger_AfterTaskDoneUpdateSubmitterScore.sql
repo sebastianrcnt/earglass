@@ -28,7 +28,9 @@ BEGIN
         myloop:
         LOOP
             SET varIndex = varIndex + 1;
-
+            IF varSubmitNum = 0 THEN
+                LEAVE myloop;
+            end if;
             SELECT SubmitterID
             INTO varSubmitterID
             FROM SubmittersInDoneTask
@@ -44,7 +46,7 @@ BEGIN
               AND Pass = 'P'
             AND TotalStatus = 'done';
 
-            SELECT MAX(SubmitNum)
+            SELECT IFNULL(MAX(SubmitNum),0)
             INTO varSubmitNum
             FROM PARSING_DSF
             WHERE TaskName = curTaskName
@@ -52,14 +54,14 @@ BEGIN
               AND SubmitNum IS NOT NULL;
 
             -- total score 평균 계산
-            SELECT MAX(TotalScore)
+            SELECT IFNULL(MAX(TotalScore),0)
             INTO varMaxTotalScore
             FROM PARSING_DSF
             WHERE TaskName = curTaskName
               AND TotalStatus = 'done'
             AND TotalScore IS NOT NULL;
 
-            SELECT AVG(TotalScore)
+            SELECT IFNULL(AVG(TotalScore),0)
             INTO varAvgTotalScore
             FROM PARSING_DSF
             WHERE TaskName = curTaskName
@@ -73,6 +75,16 @@ BEGIN
             ELSE
                 SET varSubmitNumRatio = (900 + varSubmitNum) / 1000;
             END IF;
+
+            IF varSubmitNum = 0 THEN
+                SET varSubmitNum = 1;
+                SET varPassNum = 0;
+            end if;
+
+            IF varMaxTotalScore = 0 THEN
+                SET varMaxTotalScore = 1;
+                SET varAvgTotalScore = 0;
+            end if;
 
             SET newSubmitterScore = (varPassNum / varSubmitNum) * 40
                 + 50 * (varAvgTotalScore / varMaxTotalScore)
