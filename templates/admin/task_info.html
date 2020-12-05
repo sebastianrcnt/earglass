@@ -1,22 +1,35 @@
-{% extends "./partials/layout.html" %}
-{% block body %}
+{% extends "./partials/layout.html" %} {% block body %}
 
 <!-- form 제출로 묶어서 Task 추가되도록 설정해야함 -->
 
 <h1 class="d-inline-block">Task Info</h1>
 <!-- task 삭제 설정해야 함 -->
-</br>
-</br>
 <style>
-    input::placeholder {color:black;}
-    input::-ms-input-placeholder {color: black;}
-    input::-webkit-input-placeholder {color:black;}    
-    input::-moz-placeholder {color:black} 
+  input::placeholder {
+    color: black;
+  }
+  input::-ms-input-placeholder {
+    color: black;
+  }
+  input::-webkit-input-placeholder {
+    color: black;
+  }
+  input::-moz-placeholder {
+    color: black;
+  }
 
-    textarea::placeholder {color:black;}
-    textarea::-ms-input-placeholder {color: black;}
-    textarea::-webkit-input-placeholder {color:black;}    
-    textarea::-moz-placeholder {color:black} 
+  textarea::placeholder {
+    color: black;
+  }
+  textarea::-ms-input-placeholder {
+    color: black;
+  }
+  textarea::-webkit-input-placeholder {
+    color: black;
+  }
+  textarea::-moz-placeholder {
+    color: black;
+  }
 </style>
 <script>
   const defaultFields = [
@@ -27,136 +40,194 @@
     ]
 </script>
 <form method="POST" action="/admin/tasks/{{ task['TaskName'] }}">
-    <!-- TODO template task info -->
-    <div class="form-group">
-        <label class="form-group">TaskName</label>
-        <input name="Description" value="{{ task['TaskName'] }}" type="text" class="form-control form-input" disabled> 
-    </div>
-    <div class="form-group">
-        <label class="form-group">Description</label>
-        <input name="Description" value="{{ task['Description'] }}" type="text" class="form-control form-input" required> 
-    </div>
-    <div class="form-group">
-        <label class="form-group">최소 업로드 주기</label>
-        <input name="MinPeriod" value="{{ task['MinPeriod'] }}" type="number" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label class="form-group">테이블 이름</label>
-        <input name="TaskDataTableName" value="{{ task['TaskDataTableName'] }}" type="text" class="form-control" disabled>
-    </div>
-    <div class="form-group">
-        <label class="form-group">스키마(기본 데이터 필드)</label>
-        <br>
-          {% for schema in task['TaskDataTableSchemaInfo'].split(',') %}
-        <input value="{{ schema }}" type="text" class="form-group col-md-2" disabled>
-        {% endfor %}
-    </div>
-    <div class="form-group">
-        <label class="form-group">최대 중복 Tuple 비율(%)</label>
-        <input name="MaxDuplicatedRowRatio" value="{{ task['MaxDuplicatedRowRatio'] }}" type="number" min="0" max="100" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label class="form-group">최대 column별 null 비율(%)</label>
-        <input name="MaxNullRatioPerColumn" value="{{ task['MaxNullRatioPerColumn'] }}" type="number" min="0" max="100" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label class="form-group">
-            <h5><b>평가자 정성평가 Pass 기준설명</b></h5>
-        </label>
-        <textarea cols="30" rows="10" class="form-control" name="PassCriteria" required>{{ task['PassCriteria'] }}</textarea>
-    </div>
-</br>
-<h5 style="margin-top: 20px;"><b>원본 데이터 타입</b></h5>
-    <a class="btn btn-secondary" href="/admin/origindatatype">원본 데이터 타입 추가</a>
-    {% include "admin/add_origindatatype.html" %}
-    <table style="margin-left: 5px; margin-bottom: 20px;" class="table table-striped table-bordered" id="target-table">
-        <thead>
-            <th>원본데이터 타입</th>
-            <th>제출 파일 수</th>
-            <th>Pass된 tuple 수</th>
-        </thead>
-        <tbody>
-            <tr>
-                <td>전체 데이터</td>
-                <td>{{ total_file_num }}</td>
-                <td>{{ count_row_by_odt["total"] }}</td>
-            </tr>
-            {% for data_type in origin_data_types %}
-            <tr>
-                <td>
-                    {{ data_type['DataTypeName'] }}
-                </td>
-                <td>
-                    {{ data_type['SubmitNum'] }}
-                </td>
-                <td>
-                    {{ count_row_by_odt[data_type['idORIGIN_DATA_TYPE']] }}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    </br>
-    <!-- 참여현황으로 sort되도록 jquery 적용해야함 -->
-    <h5 style="margin-top: 20px;"><b>참여명단</b></h5>
-    <table style="margin-left: 5px; margin-bottom: 20px;" class="table table-striped table-bordered" id="target-table2">
-        <thead>
-            <th>현황</th>
-            <th>참여자ID</th>
-            <th>제출자 점수</th>
-            <th>승인</th>
-            <th>거절</th>
-        </thead>
-        <tbody>
-            {% for participation in task_participation %}
-            <tr>
-                <td>
-                    {{ participation['Status'] }}
-                </td>
-                <td>
-                    {{ participation['Id'] }}
-                </td>
-                <td>
-                    {{ participation['UserScore'] }}
-                </td>
-                <td>
-                    {% if participation['Status'] == "waiting" %}
-                    <a id="task_participation" href="/admin/tasks/agreement?user_id={{ participation['Id'] }}&task_name={{ task['TaskName'] }}&agree=True" name="approve" type="submit" class="btn btn-primary">승인</a>
-                    {% elif participation['Status'] == "ongoing" %}
-                    <button type="button" class="btn btn-primary mr-2" disabled>참가중</button>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if participation['Status'] == "waiting" %}
-                    <a id="task_participation" href="/admin/tasks/agreement?user_id={{ participation['Id'] }}&task_name={{ task['TaskName'] }}&agree=False" name="reject" type="submit" class="btn btn-primary">거절</a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <!-- <button style="margin-left: 10px; margin-top:20px;" type="submit" class="btn btn-primary float-right mb-4">삭제</button> -->
-    <button type="submit" class="btn btn-primary float-right">수정</button>
+  <!-- TODO template task info -->
+  <div class="form-group">
+    <label class="form-group">TaskName</label>
+    <input
+      name="Description"
+      value="{{ task['TaskName'] }}"
+      type="text"
+      class="form-control form-input"
+      disabled
+    />
+  </div>
+  <div class="form-group">
+    <label class="form-group">Description</label>
+    <input
+      name="Description"
+      value="{{ task['Description'] }}"
+      type="text"
+      class="form-control form-input"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label class="form-group">최소 업로드 주기</label>
+    <input
+      name="MinPeriod"
+      value="{{ task['MinPeriod'] }}"
+      type="number"
+      class="form-control"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label class="form-group">테이블 이름</label>
+    <input
+      name="TaskDataTableName"
+      value="{{ task['TaskDataTableName'] }}"
+      type="text"
+      class="form-control"
+      disabled
+    />
+  </div>
+  <div class="form-group">
+    <label class="form-group">스키마(기본 데이터 필드)</label>
+    <br />
+    {% for schema in task['TaskDataTableSchemaInfo'].split(',') %}
+    <input
+      value="{{ schema }}"
+      type="text"
+      class="form-group col-md-2"
+      disabled
+    />
+    {% endfor %}
+  </div>
+  <div class="form-group">
+    <label class="form-group">최대 중복 Tuple 비율(%)</label>
+    <input
+      name="MaxDuplicatedRowRatio"
+      value="{{ task['MaxDuplicatedRowRatio'] }}"
+      type="number"
+      min="0"
+      max="100"
+      class="form-control"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label class="form-group">최대 column별 null 비율(%)</label>
+    <input
+      name="MaxNullRatioPerColumn"
+      value="{{ task['MaxNullRatioPerColumn'] }}"
+      type="number"
+      min="0"
+      max="100"
+      class="form-control"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label class="form-group">
+      <h5><b>평가자 정성평가 Pass 기준설명</b></h5>
+    </label>
+    <textarea
+      cols="30"
+      rows="10"
+      class="form-control"
+      name="PassCriteria"
+      required
+    >
+{{ task['PassCriteria'] }}</textarea
+    >
+  </div>
+  <h5 style="margin-top: 20px"><b>원본 데이터 타입</b></h5>
+  {% include "admin/add_origindatatype.html" %}
+  <table
+    style="margin-left: 5px; margin-bottom: 20px"
+    class="table table-striped table-bordered"
+    id="target-table"
+  >
+    <thead>
+      <th>원본데이터 타입</th>
+      <th>제출 파일 수</th>
+      <th>Pass된 tuple 수</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>전체 데이터</td>
+        <td>{{ total_file_num }}</td>
+        <td>{{ count_row_by_odt["total"] }}</td>
+      </tr>
+      {% for data_type in origin_data_types %}
+      <tr>
+        <td>{{ data_type['DataTypeName'] }}</td>
+        <td>{{ data_type['SubmitNum'] }}</td>
+        <td>{{ count_row_by_odt[data_type['idORIGIN_DATA_TYPE']] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <!-- 참여현황으로 sort되도록 jquery 적용해야함 -->
+  <h5 style="margin-top: 20px"><b>참여명단</b></h5>
+  <table
+    style="margin-left: 5px; margin-bottom: 20px"
+    class="table table-striped table-bordered"
+    id="target-table2"
+  >
+    <thead>
+      <th>현황</th>
+      <th>참여자ID</th>
+      <th>제출자 점수</th>
+      <th>승인</th>
+      <th>거절</th>
+    </thead>
+    <tbody>
+      {% for participation in task_participation %}
+      <tr>
+        <td>{{ participation['Status'] }}</td>
+        <td>{{ participation['Id'] }}</td>
+        <td>{{ participation['UserScore'] }}</td>
+        <td>
+          {% if participation['Status'] == "waiting" %}
+          <a
+            id="task_participation"
+            href="/admin/tasks/agreement?user_id={{ participation['Id'] }}&task_name={{ task['TaskName'] }}&agree=True"
+            name="approve"
+            type="submit"
+            class="btn btn-primary"
+            >승인</a
+          >
+          {% elif participation['Status'] == "ongoing" %}
+          <button type="button" class="btn btn-primary mr-2" disabled>
+            참가중
+          </button>
+          {% endif %}
+        </td>
+        <td>
+          {% if participation['Status'] == "waiting" %}
+          <a
+            id="task_participation"
+            href="/admin/tasks/agreement?user_id={{ participation['Id'] }}&task_name={{ task['TaskName'] }}&agree=False"
+            name="reject"
+            type="submit"
+            class="btn btn-primary"
+            >거절</a
+          >
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br />
+  <!-- <button style="margin-left: 10px; margin-top:20px;" type="submit" class="btn btn-primary float-right mb-4">삭제</button> -->
+  <button type="submit" class="btn btn-primary float-right">수정</button>
 </form>
-</br>
-</br>
-</br>
-</br>
 <style>
-    #target-table {
-        min-height: 50px;
-    }
+  #target-table {
+    min-height: 50px;
+  }
 </style>
 <script>
-    $(document).ready(function() {
-        $("#target-table").DataTable();
-    })
+  $(document).ready(function () {
+    $("#target-table").DataTable();
+  });
 </script>
 <script>
-    $(document).ready(function() {
-        $("#target-table2").DataTable();
-    })
+  $(document).ready(function () {
+    $("#target-table2").DataTable();
+  });
 </script>
 
 {% endblock %}
