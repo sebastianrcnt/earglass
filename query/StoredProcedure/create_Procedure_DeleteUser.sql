@@ -1,5 +1,5 @@
 create
-    definer = earglass@`%` procedure DeleteUser(IN curId varchar(45), IN curPassword varchar(45))
+    definer = team9@`%` procedure DeleteUser(IN curId varchar(45), IN curPassword varchar(45))
 checkrow:BEGIN
 
     DECLARE RowCount     Varchar(45);

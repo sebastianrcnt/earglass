@@ -10,7 +10,6 @@ def get_user():
     # 쿠키가 있다 -> 로그인된 유저라면
     user_id = request.cookies.get("user_id")
     user = services.users.get_user_by_id(user_id)
-    print(user['FK_UserTypeName'])
 
     if user:  # 로그인 된 경우
         if user['FK_UserTypeName'] == "관리자" :
@@ -26,7 +25,6 @@ def get_user():
 def edit_user():
     user_id = request.cookies.get("user_id")
     user = services.users.get_user_by_id(user_id)
-    print(request.form)
     data = request.form
 
     # check validation by
@@ -46,16 +44,6 @@ def edit_user():
         flash("전화번호 형식이 알맞지 않습니다. XXX-XXXX-XXXX")
         return render_template("back.html")
 
-    # 디비가 구축되고 나면 해야함!!!
-    # TODO
-    # [{'InsertNewUserErrorMessage': 'User ID already exists.'}]
-    # [{'InsertNewUserSuccessMessage': 'Insert new User successfully'}]
-    try:
-        log = services.users.modify_user_info(user_id, data["password"], data["name"], data["birth"], data["phonenumber"], data["address"])
-        log_type = log[0].keys()[0]
-        log_value = log[0].items()[0]
-    except:
-        pass
     return redirect("/users/")
 
 
@@ -90,7 +78,6 @@ def get_signup_page():
 
 @controller.route("/signup", methods=["POST"])
 def sign_up():
-    print(request.form)
     data = request.form
 
     # check validation by
@@ -110,33 +97,27 @@ def sign_up():
         flash("전화번호 형식이 알맞지 않습니다. XXX-XXXX-XXXX")
         return render_template("back.html")
 
-    # 디비가 구축되고 나면 해야함!!!
-    # [{'InsertNewUserErrorMessage': 'User ID already exists.'}]
-    # [{'InsertNewUserSuccessMessage': 'Insert new User successfully'}]
-    try:
-        # try sign up
-        log = services.users.sign_up(data["id"], data["password"], data["name"], data["birth"], data["phonenumber"], data["gender"], data["address"], data["role"])
-        print(log)
-        log_type = log[0].keys()[0]
-        log_value = log[0].items()[0]
-        print(log_type, log_value)
-    except:
-        pass
+    # try sign up
+    log = services.users.sign_up(data["id"], data["password"], data["name"], data["birth"], data["phonenumber"], data["gender"], data["address"], data["role"])
+    log = log[0].popitem()
 
+    if log[0] == 'InsertNewUserErrorMessage' and log[1] == 'User ID already exists.':
+        flash("이미 존재하는 아이디입니다.")
+        return render_template("back.html")
+
+    flash("회원가입이 완료되었습니다.")
     return redirect("/")
 
 @controller.route("/my/edit", methods=["GET"])
 def edit():
     user_id = request.cookies.get("user_id")
     user = services.users.get_user_by_id(user_id)
-    print(user)
     return render_template("auth/modify_my.html",user=user)
 
 @controller.route("/admin_edit", methods=["GET"])
 def get_admin_edit_page():
     user_id = request.cookies.get("user_id")
     user = services.users.get_user_by_id(user_id)
-    print(user)
     return render_template("auth/modify_admin.html",user=user)
 
 @controller.route("/admin_edit", methods=["POST"])
@@ -151,12 +132,8 @@ def admin_edit():
     phonenumber = user['PhoneNum']
     address = user['Address']
 
-    print(user)
-    print(user_id, password, name, birth, phonenumber, address)
-
     try :
         log = services.users.modify_user_info(user_id, password, name, birth, phonenumber, address)
-        print(log)
     except:
         pass
 
@@ -178,7 +155,6 @@ def withdrawal():
     password = request.form.get("password")
     if user_pw==password:
         log = services.users.withdrawal(user_id, user_pw)
-        print(log)
         flash("성공적으로 탈퇴되었습니다")
         return redirect("/")
     else:

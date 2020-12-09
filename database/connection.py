@@ -22,9 +22,9 @@ def connect():
 
 def queryone(sql, fmt=tuple()):
     '''쿼리문을 실행시키고, 찾은 항목 중 첫번째 튜플 반환'''
+    conn = connect()
+    cur = conn.cursor()
     try:
-        conn = connect()
-        cur = conn.cursor()
         cur.execute(sql, fmt)
         return cur.fetchone()
     except Exception as e:
@@ -37,9 +37,9 @@ def queryone(sql, fmt=tuple()):
 
 def queryall(sql, fmt=tuple()):
     '''쿼리문을 실행시키고, 찾은 항목 전체 튜플 리스트 반환'''
+    conn = connect()
+    cur = conn.cursor()
     try:
-        conn = connect()
-        cur = conn.cursor()
         cur.execute(sql, fmt)
         return cur.fetchall()
     except Exception as e:
@@ -51,9 +51,9 @@ def queryall(sql, fmt=tuple()):
 
 def execute(sql, fmt=tuple()):
     '''쿼리문을 실행시키고, 변화를 저장'''
+    conn = connect()
+    cur = conn.cursor()
     try:
-        conn = connect()
-        cur = conn.cursor()
         cur.execute(sql, fmt)
         conn.commit()
     except Exception as e:
@@ -65,9 +65,9 @@ def execute(sql, fmt=tuple()):
 
 def callproc(sql, fmt=tuple()):
     '''프로시져를 실행시키고, 변화를 저장'''
+    conn = connect()
+    cur = conn.cursor()
     try:
-        conn = connect()
-        cur = conn.cursor()
         cur.callproc(sql, fmt)
         message = cur.fetchall()
         conn.commit()

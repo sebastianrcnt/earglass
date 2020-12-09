@@ -1,5 +1,5 @@
 create
-    definer = earglass@`%` procedure InsertNewParticipation(IN newFK_TaskName varchar(45), IN newFK_idUSER int)
+    definer = team9@`%` procedure InsertNewParticipation(IN newFK_TaskName varchar(45), IN newFK_idUSER int)
 checkexist: BEGIN
     IF EXISTS (SELECT * FROM PARTICIPATION
                 WHERE FK_TaskName = newFK_TaskName

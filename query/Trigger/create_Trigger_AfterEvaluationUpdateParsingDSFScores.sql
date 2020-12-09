@@ -1,4 +1,4 @@
-create definer = earglass@`%` trigger AfterEvaluationUpdateParsingDSFScores
+create definer = team9@`%` trigger AfterEvaluationUpdateParsingDSFScores
     after update
     on EVALUATION
     for each row

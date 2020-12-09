@@ -1,4 +1,4 @@
-create definer = earglass@`%` trigger AfterUpdateTaskNameUpdateForeignTaskName
+create definer = team9@`%` trigger AfterUpdateTaskNameUpdateForeignTaskName
     after update
     on TASK
     for each row

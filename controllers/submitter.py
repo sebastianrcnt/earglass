@@ -24,7 +24,6 @@ def get_submitter_home():
 @controller.route("/agreement", methods=["GET"])
 def agreement():
     task_name = request.args.get('task_name', 0)
-    print(task_name)
     return render_template("submitter/agreement.html", task_name = task_name)
 
 
@@ -33,7 +32,6 @@ def submitter_home():
     agree = request.form.get("agree")
     task_name = request.form.get("task_name")
     user_index = request.cookies.get("user_index")
-    print(agree)
     if agree == "agree":
         # agreement processing code
         services.submitter.insert_participation(task_name, user_index)
@@ -78,7 +76,6 @@ def submit_task():
     try:
         # new task processing code
         file.save(path)
-        print(path, period, task_name, user_index, origin_data_type_id, round)
         services.submitter.submit_odsf(path, period, task_name, user_index, origin_data_type_id, round)
         origin_dsf_id = services.submitter.search_odsf_by_filepath(path)['idORIGIN_DSF']
     except:
@@ -102,7 +99,6 @@ def submit_task():
     validation = system.validation.validate_odsf_data(fname, mnr, mdr)
 
     # check duplicate tuple
-    print(validation)
     if not validation['duplicate_ratio']:
         flash("중복 튜플 비율이 기준을 벗어납니다.")
         return redirect("/")
@@ -143,7 +139,6 @@ def csv_file_download_with_stream():
     # schema에 맞는 df 생성
     #승수형 기다리기
     schema = json.loads(odsf_type['MappingInfo'])
-    print(schema)
     schema = list(schema.keys())
     temp_df = pd.DataFrame(columns=schema)
 

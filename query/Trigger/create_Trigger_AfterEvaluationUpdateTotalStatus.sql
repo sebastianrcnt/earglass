@@ -1,4 +1,4 @@
-create definer = earglass@`%` trigger AfterEvaluationUpdateTotalStatus
+create definer = team9@`%` trigger AfterEvaluationUpdateTotalStatus
     after update
     on EVALUATION
     for each row

@@ -1,5 +1,5 @@
 create
-    definer = earglass@`%` procedure EditTask(IN currentTaskName varchar(45), IN newDescription text,
+    definer = team9@`%` procedure EditTask(IN currentTaskName varchar(45), IN newDescription text,
                                               IN newMinPeriod int, IN newMaxDuplicatedRowRatio float,
                                               IN newMaxNullRatioPerColumn float, IN newPassCriteria text)
 checkrow:BEGIN

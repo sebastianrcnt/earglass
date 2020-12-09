@@ -1,4 +1,4 @@
-create definer = earglass@`%` trigger AfterDeleteUserUpdateForeignSubmitter
+create definer = team9@`%` trigger AfterDeleteUserUpdateForeignSubmitter
     after delete
     on USER
     for each row

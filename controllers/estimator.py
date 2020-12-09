@@ -69,7 +69,6 @@ def csv_file_download_with_stream():
     """
     idPARSING_DSF = int(request.args.get('pdsf_id', 0))
     if idPARSING_DSF != 0:
-        print(idPARSING_DSF)
         pdsf = services.estimator.pdsf_file_info(idPARSING_DSF)
     else:
         return redirect("/my_task")

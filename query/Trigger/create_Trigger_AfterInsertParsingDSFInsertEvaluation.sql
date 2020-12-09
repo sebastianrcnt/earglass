@@ -1,4 +1,4 @@
-create definer = earglass@`%` trigger AfterInsertParsingDSFInsertEvaluation
+create definer = team9@`%` trigger AfterInsertParsingDSFInsertEvaluation
     after insert
     on PARSING_DSF
     for each row

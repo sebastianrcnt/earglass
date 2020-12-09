@@ -1,5 +1,5 @@
 create
-    definer = earglass@`%` procedure StopTask(IN currentTaskName varchar(45))
+    definer = team9@`%` procedure StopTask(IN currentTaskName varchar(45))
 checkrow:BEGIN
 
     DECLARE varRowCount     Int;

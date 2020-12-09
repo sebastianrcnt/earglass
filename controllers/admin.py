@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, redirect, request, make_response, flash, send_file, Response
 import services
 import system
@@ -36,8 +37,12 @@ def get_admin_page():
             LEFT JOIN PARSING_DSF AS P ON E.FK_idPARSING_DSF = P.idPARSING_DSF WHERE E.FK_idEstimator=%s AND E.Status = 'ongoing' ", (user_index, ))
         estimator['Tasks'] = participating_tasks
 
-
-    users = submitters + estimators
+    if len(submitters) == 0:
+        users = estimators
+    elif len(estimators) == 0:
+        users = submitters
+    else:
+        users = submitters + estimators
     return render_template("admin/index.html", users=users, tasks=tasks)
 
 @controller.route("/add_task", methods=["GET"])
@@ -77,9 +82,7 @@ def add_odsf(task_name):
 
 @controller.route("/tasks-ajax/stop/<task_name>", methods=["GET"])
 def stop_task(task_name):
-    print("Stopping Task...")
     services.admin.stop_task(task_name)
-    print("Stopped Task")
     return "Successfully Stopped", 200
 
 @controller.route("/tasks/agreement", methods=["GET"])
@@ -89,7 +92,6 @@ def confirm_agreement():
     """
     # TODO 관리자인지 확인 필요
 
-    print(request.args)
     user_id = request.args.get('user_id', False)
     user_index = services.users.get_user_by_id(user_id)["idUSER"]
     task_name = request.args.get('task_name', False)
@@ -98,7 +100,6 @@ def confirm_agreement():
     
     if not (user_id and task_name and agree):
         flash("잘못된 승인절차입니다.")
-        print(agree)
         return redirect(f"/admin/tasks/{task_name}")
     
     if agree == 'True':
@@ -117,32 +118,6 @@ def confirm_agreement():
 def task_add():
     '''태스크 추가 엔드포인트'''
     js = request.get_json()
-#     {
-#   "taskName": "태스크 이름",
-#   "description": "설명설명",
-#   "minPeriod": "",
-#   "tableName": "",
-#   "defaultFields": [
-#     "컬럼1",
-#     "컬럼2",
-#     "컬럼3"
-#   ],
-#   "originDataTypes": {
-#     "원데타1": {
-#       "컬컬럼럼1": "컬럼1",
-#       "컬컬럼럼2": "컬럼2",
-#       "컬컬럼럼3": "컬럼3"
-#     },
-#     "원데타2": {
-#       "유유승승수수": "컬럼1",
-#       "이이학학림림": "컬럼2",
-#       "정정규규식식": "컬럼3"
-#     }
-#   },
-#   "maxTupleRatio": "10",
-#   "maxNullRatioPerColumn": "20",
-#   "criteriaDescription": "이렇게 이렇게 이렇게 해주세용"
-# }
 
     task_name = js["taskName"]
     description = js["description"]
@@ -160,15 +135,13 @@ def task_add():
     js["defaultFields"].append("origin_type")
     task_data_df = pd.DataFrame(columns=js["defaultFields"])
     task_data_table_name = system.utils.save_df("table_data", task_data_table_name, task_data_df)
-    print(originDataTypes)
 
     services.admin.add_task(task_name, description, min_period, task_data_table_name, max_duplicated_row_ratio, max_null_ratio_per_column, pass_criteria, defaultFields)
 
     for data_type_name, columns in originDataTypes.items():
         schema_info = list(columns.keys())
         schema_info = ",".join(schema_info)
-        mapping_info = json.dumps(columns)
-        print(mapping_info)
+        mapping_info = json.dumps(columns, ensure_ascii=False)
 
         services.admin.add_origin_data_type(task_name, data_type_name, schema_info, mapping_info)
     redirect_url = f"/admin/tasks/{task_name}"
@@ -187,48 +160,13 @@ def edit_task(task_name):
     MaxDuplicatedRowRatio = float(MaxDuplicatedRowRatio)
     MaxNullRatioPerColumn = request.form.get('MaxNullRatioPerColumn')
     MaxNullRatioPerColumn = float(MaxNullRatioPerColumn)
-    print(type(MaxDuplicatedRowRatio), type(MaxNullRatioPerColumn))
     PassCriteria = request.form.get("PassCriteria")
 
     services.admin.edit_task(TaskName, Description, MinPeriod, MaxDuplicatedRowRatio, MaxNullRatioPerColumn, PassCriteria)
 
-    # task_name=data["TaskName"]
-    # task = services.admin.task_info(task_name)
-    # origin_data_types = services.admin.task_info_origin_data_type(task_name)
-    # print(origin_data_types)
-    # task_participation = services.admin.show_task_participation_list(task_name)
-
-    # return render_template("/admin/edit_task.html",task=task,origin_data_types=origin_data_types,task_participation=task_participation)
     redirect_url = f"/admin/tasks/{task_name}"
 
     return redirect(redirect_url)
-
-# @controller.route("/origindatatype", methods=["POST"])
-# def add_datatypename(task_name):
-#     '''태스크에 origin data type 추가 엔드포인트'''
-#     # TODO add origin date type
-#     js = request.get_json()
-#     # originDataTypes = js["originDataTypes"]
-#     # task_name = js["taskName"]
-    
-#     # for data_type_name, columns in originDataTypes.items():
-#     #     schema_info = list(columns.keys())
-#     #     schema_info = ",".join(schema_info)
-#     #     mapping_info = json.dumps(columns)
-
-#     #     services.admin.add_origin_data_type(task_name, data_type_name, schema_info, mapping_info)
-#     # redirect_url = f"/admin/tasks/{task_name}"
-#     # return redirect(redirect_url)
-
-#     print(js)
-#     return ""
-
-# # @controller.route("/tasks", methods=["DELETE"])
-# # def delete_task():
-# #     '''태스크 삭제 엔드포인트'''
-# #     # TODO delete task
-# #     return "Uncompleted"
-
 
 # USERS
 # /user
@@ -259,20 +197,6 @@ def get_admin_estimator_page(estimator_index):
 
     return render_template("admin/estimator.html",user=user,tasks=tasks)
 # Create Read Update Delete(CRUD)
-
-
-# @controller.route("/task/download/<task_name>")
-# def pdsf_file_download(task_name):
-#     """
-#     pdsf csv file download
-#     """
-
-#     filename = services.admin.task_info(task_name)["TaskDataTableName"]
-#     fname = filename.split("/")[-1].encode('utf-8')
-
-#     return send_file(filename, attachment_filename=fname, as_attachment=True)
-
-
 
 @controller.route("/task/download/<task_name>")
 def csv_file_download_with_stream(task_name):

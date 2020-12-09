@@ -9,24 +9,31 @@ def encoding(file):
 
     try:
         df = pd.read_csv(filename)
+        df.to_csv(filename, index=False)
+        return True
+    except Exception as e:
+        print(e)
+
+    try:
+        df = pd.read_csv(filename)
         df.to_csv(filename, encoding='utf-8', index=False)
         return True
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
     try:
         df = pd.read_csv(filename, encoding='euc-kr')
         df.to_csv(filename, encoding='utf-8', index=False)
         return True
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
     try:
         df = pd.read_csv(filename, encoding='cp949')
         df.to_csv(filename, encoding='utf-8', index=False)
         return True
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
     return False
 

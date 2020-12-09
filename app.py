@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect
 from controllers import users, admin, task, submitter, estimator
 from werkzeug.wrappers import Request
@@ -74,4 +75,4 @@ handler = RotatingFileHandler('app.log', maxBytes=100000, backupCount=3)
 logger = logging.getLogger('tdm')
 logger.setLevel(logging.ERROR)
 logger.addHandler(handler)
-app.run(port=8080, host="0.0.0.0", debug=True)
+app.run(port=3034, host="0.0.0.0", debug=True)

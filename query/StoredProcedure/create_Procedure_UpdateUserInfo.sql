@@ -1,5 +1,5 @@
 create
-    definer = earglass@`%` procedure UpdateUserInfo(IN varId varchar(45), IN newPassword varchar(45),
+    definer = team9@`%` procedure UpdateUserInfo(IN varId varchar(45), IN newPassword varchar(45),
                                                     IN newName varchar(45), IN newBirthDate varchar(8),
                                                     IN newPhoneNum varchar(13), IN newAddress varchar(100))
 checkexist:BEGIN

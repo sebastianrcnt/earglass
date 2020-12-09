@@ -1,5 +1,5 @@
 create
-    definer = earglass@`%` procedure InsertNewUser(IN newID varchar(45), IN newPassword varchar(45),
+    definer = team9@`%` procedure InsertNewUser(IN newID varchar(45), IN newPassword varchar(45),
                                                    IN newName varchar(45), IN newBirth varchar(8),
                                                    IN newPhoneNumber varchar(13), IN newGender varchar(1),
                                                    IN newAddress varchar(100), IN newFK_TypeName varchar(45))

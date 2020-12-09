@@ -1,5 +1,5 @@
 create
-    definer = earglass@`%` procedure UpdateEvaluationStatus(IN varFK_idPARSING_DSF int, IN varFK_idEstimator int,
+    definer = team9@`%` procedure UpdateEvaluationStatus(IN varFK_idPARSING_DSF int, IN varFK_idEstimator int,
                                                             IN varScore int, IN varPass varchar(45))
 checkexist: BEGIN
     -- check pass is not P or NP

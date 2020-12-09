@@ -1,5 +1,5 @@
 create
-    definer = earglass@`%` procedure InsertNewTask(IN newTaskName varchar(45), IN newDescription text,
+    definer = team9@`%` procedure InsertNewTask(IN newTaskName varchar(45), IN newDescription text,
                                                    IN newMinPeriod int, IN newTaskDataTableName varchar(100),
                                                    IN newMaxDuplicatedRowRatio float, IN newMaxNullRatioPerColumn float,
                                                    IN newPassCriteria text, IN newTaskDataTableSchemaInfo text)

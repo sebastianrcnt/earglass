@@ -1,5 +1,5 @@
 create
-    definer = earglass@`%` procedure UpdateParticipationStatus(IN varFK_TaskName varchar(45), IN varFK_idUSER int,
+    definer = team9@`%` procedure UpdateParticipationStatus(IN varFK_TaskName varchar(45), IN varFK_idUSER int,
                                                                IN newStatus varchar(45), IN newComment text)
 BEGIN
     IF (newStatus = 'ongoing' or newStatus = 'reject') THEN

@@ -1,4 +1,4 @@
-create definer = earglass@`%` trigger AfterTaskDoneUpdateSubmitterScore
+create definer = team9@`%` trigger AfterTaskDoneUpdateSubmitterScore
     after update
     on TASK
     for each row

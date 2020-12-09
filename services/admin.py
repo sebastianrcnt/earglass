@@ -42,8 +42,6 @@ def update_participation_status(task_name, user_index, new_status, comment):
 def edit_task(TaskName, Description, MinPeriod, MaxDuplicatedRowRatio, MaxNullRatioPerColumn, PassCriteria):
     '''수정된 정보 update'''
     sql = 'UPDATE TASK SET Description = %s, MinPeriod = %s, MaxDuplicatedRowRatio = %s, MaxNullRatioPerColumn = %s, PassCriteria = %s WHERE TaskName = %s;'
-
-    print((Description, MinPeriod, MaxDuplicatedRowRatio, MaxNullRatioPerColumn, PassCriteria, TaskName))
     execute(sql, (Description, MinPeriod, MaxDuplicatedRowRatio, MaxNullRatioPerColumn, PassCriteria, TaskName))
 
 def task_info(task_name):
